@@ -1,0 +1,857 @@
+---
+// Six Pillars — port of pristine-pillars.jsx. Each pillar pairs explanatory copy
+// (eyebrow, headline, lede, bulleted feature list) with an illustrative Stage card.
+// The illustrations here are simplified representations of the rich JSX originals;
+// the structural design (alternating sides, Stage chrome, type roles) is preserved.
+
+interface Pillar {
+  n: string;
+  eyebrow: string;
+  title: string;
+  lede: string;
+  bullets: Array<{ k: string; v: string }>;
+  illustration: 'crud' | 'prompt' | 'apps' | 'analysis' | 'domain' | 'oauth';
+  side: 'left' | 'right';
+}
+
+const pillars: Pillar[] = [
+  {
+    n: '01',
+    eyebrow: 'POLYMORPHIC CRUD',
+    title: 'Eight tools serve every model in your domain.',
+    lede: 'Most MCP frameworks scale tool count with model count. mcp-rune keeps the surface flat: eight polymorphic tools accept the model name as a parameter and dispatch to the right resolver. Add the hundredth model — the tool list still reads list_models, find_records, create_model.',
+    bullets: [
+      { k: 'Compound IDs for nested resources', v: 'titles/42/assets/7 — no separate nested tools' },
+      { k: 'Bulk operations built-in',           v: 'bulk_action_models handles batch create / update / delete' },
+      { k: 'Category-driven auth',               v: 'tools declare DATA / STRATEGY / DOMAIN — the framework infers requirements' },
+    ],
+    illustration: 'crud',
+    side: 'left',
+  },
+  {
+    n: '02',
+    eyebrow: 'PROMPT STRATEGIES',
+    title: 'Make a 25-field form fillable by an agent.',
+    lede: 'Three strategies — stateless, hybrid, and stateful — adapt validation UX to form complexity. The hybrid path validates fields on demand; the stateful path walks the agent through one section at a time, reporting progress and catching errors before the final write.',
+    bullets: [
+      { k: 'derivePromptSchema(Model)',     v: 'fieldDefinitions come straight from your model spec' },
+      { k: 'fieldGroups + sections',        v: 'tell the agent which fields belong together and why' },
+      { k: 'PromptContentGenerator pipeline', v: 'flow diagram → guidance → sections → summary → reference tables' },
+    ],
+    illustration: 'prompt',
+    side: 'right',
+  },
+  {
+    n: '03',
+    eyebrow: 'INTERACTIVE MCP APPS',
+    title: 'Schema-driven UI rendered inside the host.',
+    lede: 'Tools handle text. Apps render real interactive UI — forms, lists, detail views, search, autocomplete pickers, multi-selects — inside Claude Desktop and other MCP-Apps hosts. Six generic factories cover the surface; adding a new model form is one registry entry and zero new HTML.',
+    bullets: [
+      { k: 'Six app types',                    v: 'Model Form · List View · Record Detail · Search View · Autocomplete · Multi-Select' },
+      { k: 'Two-column / sectioned layouts',   v: 'derived from fieldGroups; no per-model markup' },
+      { k: 'Live association lookups',         v: 'autocomplete pickers fetch through the same EndpointResolver' },
+    ],
+    illustration: 'apps',
+    side: 'left',
+  },
+  {
+    n: '04',
+    eyebrow: 'ANALYSIS MEMORIES',
+    title: 'Map-reduce thousands of records — without the context window.',
+    lede: '"What are people complaining about this quarter?" doesn\'t fit in 100k tokens. mcp-rune\'s analysis layer ingests entire datasets into local pgvector, groups them into themes, and returns aggregates instead of raw rows. The agent acts on findings, not on records.',
+    bullets: [
+      { k: 'analysis_ingest',                  v: 'batch records by 256, embed with all-MiniLM-L6-v2, 1h TTL by default' },
+      { k: 'analysis_query + analysis_act',    v: 'cluster, filter, stratify, count — without flooding context' },
+      { k: 'analysis_store',                   v: 'promote a finding from ephemeral to persistent for cross-session use' },
+    ],
+    illustration: 'analysis',
+    side: 'right',
+  },
+  {
+    n: '05',
+    eyebrow: 'DOMAIN INTELLIGENCE',
+    title: 'Workflows, business rules, and knowledge agents can read.',
+    lede: 'The Domain module encodes business logic explicitly: WorkflowDefinition for multi-step operations, business rules the agent validates before write, and a knowledge store for terminology and policy. suggest_workflow lets the agent ask the framework what to do next.',
+    bullets: [
+      { k: 'Workflows',              v: 'declarative step graphs; get_workflow_step walks the agent through' },
+      { k: 'check_business_rules',   v: 'preflight validation against your domain invariants' },
+      { k: 'get_domain_context',     v: 'definitions, synonyms, links — surface the vocabulary on demand' },
+    ],
+    illustration: 'domain',
+    side: 'left',
+  },
+  {
+    n: '06',
+    eyebrow: 'OAUTH 2.1 + PKCE',
+    title: 'Production OAuth — discovery, DCR, PKCE, audience-restricted tokens.',
+    lede: 'Built on openid-client with mandatory PKCE on every flow. Discovery via RFC 9728 + 8414. Dynamic Client Registration via RFC 7591, or use a Client ID Metadata Document with no pre-shared secret. RFC 8707 resource indicators bind tokens to your server\'s audience.',
+    bullets: [
+      { k: 'Three client strategies',     v: 'pre-registered · DCR · CIMD — your call' },
+      { k: 'Audience-restricted tokens',  v: 'aud is checked on every request; mismatched tokens are rejected' },
+      { k: 'Cached introspection',        v: '60s TTL, 100-entry LRU — auto refresh with 5-minute buffer' },
+    ],
+    illustration: 'oauth',
+    side: 'right',
+  },
+];
+
+const tools = [
+  'list_models', 'find_records', 'create_model', 'update_model',
+  'delete_model', 'search_records', 'get_filters_guide', 'bulk_action_models',
+];
+const models = [
+  ['Book', '📖'], ['User', '◐'], ['Project', '◇'], ['Order', '▤'],
+  ['Asset', '▣'], ['Activity', '◉'], ['Invoice', '▦'], ['Team', '◈'],
+];
+---
+<section class="pillars">
+  <div class="pr-wrap pillars-intro">
+    <div class="intro-grid">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-chip">§ FRAMEWORK</span><span class="eyebrow-bar"></span><span>SIX PILLARS</span></div>
+        <h2 class="pr-display section-title">
+          One spec. <span class="muted">Six</span> production surfaces.
+        </h2>
+      </div>
+      <p class="intro-copy">
+        Each pillar is generated from the same <code>attributesConfig</code>.
+        No duplicated config. No glue. No drift between agent, UI, and API.
+      </p>
+    </div>
+  </div>
+
+  <div class="pr-wrap pillars-rows">
+    {pillars.map((p) => (
+      <article class:list={['row', p.side === 'left' ? 'illu-first' : 'text-first']}>
+        <div class="row-illu">
+          <div class="stage">
+            <div class="stage-chrome">
+              <span class="stage-tag">{p.eyebrow.toLowerCase()}</span>
+              <span class="flex-spacer" />
+              <span class="stage-meta">pillar {p.n}</span>
+            </div>
+            <div class="stage-body">
+              {p.illustration === 'crud' && (
+                <div class="illu-crud">
+                  <div class="illu-side">
+                    <div class="illu-label">YOUR MODELS · N</div>
+                    <div class="illu-models">
+                      {models.map(([name, icon]) => (
+                        <div class="model-cell">
+                          <span class="model-icon">{icon}</span>
+                          <span>{name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div class="illu-hub">
+                    <div class="hub-orb">
+                      <span class="hub-num">8</span>
+                      <span class="hub-label">polymorphic</span>
+                      <span class="hub-label">tools</span>
+                    </div>
+                  </div>
+                  <div class="illu-side">
+                    <div class="illu-label">TOOLS · 8 (CONSTANT)</div>
+                    <div class="illu-tools">
+                      {tools.map((t) => (
+                        <div class="tool-cell">
+                          <span class="tool-dot"></span>
+                          <span>{t}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {p.illustration === 'prompt' && (
+                <div class="illu-prompt">
+                  <div class="illu-label">THREE STRATEGIES · ONE API</div>
+                  {[
+                    { name: 'stateless', range: '< 10 fields',  active: false },
+                    { name: 'hybrid',    range: '10–20 fields', active: true  },
+                    { name: 'stateful',  range: '20+ fields',   active: false },
+                  ].map((t) => (
+                    <div class:list={['strategy', { active: t.active }]}>
+                      <span class="strategy-name">{t.name}</span>
+                      <span class="strategy-range">{t.range}</span>
+                      {t.active && <span class="strategy-active">● ACTIVE</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {p.illustration === 'apps' && (
+                <div class="illu-apps">
+                  <div class="apps-window">
+                    <div class="apps-window-head">
+                      <span class="apps-tab">+ Create book</span>
+                      <span class="flex-spacer" />
+                      <span class="apps-meta">schema-driven · two-column</span>
+                    </div>
+                    <div class="apps-fields">
+                      <div class="field span2">
+                        <label>TITLE</label>
+                        <div class="field-input focused">Designing Data-Intensive Applications</div>
+                      </div>
+                      <div class="field">
+                        <label>AUTHOR</label>
+                        <div class="field-input">Martin Kleppmann</div>
+                      </div>
+                      <div class="field">
+                        <label>STATUS</label>
+                        <div class="field-input">
+                          <span class="ok-dot"></span><span>reading</span>
+                          <span class="flex-spacer" /><span class="caret">▾</span>
+                        </div>
+                      </div>
+                      <div class="field">
+                        <label>RATING · 1–5</label>
+                        <div class="field-input stars">★★★★<span class="off">★</span></div>
+                      </div>
+                      <div class="field">
+                        <label>PAGES READ</label>
+                        <div class="field-input">312 <span class="muted">/ 624</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {p.illustration === 'analysis' && (
+                <div class="illu-analysis">
+                  <div class="illu-label">FIVE-TOOL PIPELINE</div>
+                  <div class="pipeline">
+                    {['ingest', 'query', 'act', 'store', 'clear'].map((t, i, arr) => (
+                      <>
+                        <span class="pipe-tool">{t}</span>
+                        {i < arr.length - 1 && <span class="pipe-bar"></span>}
+                      </>
+                    ))}
+                  </div>
+                  <div class="clusters">
+                    {[
+                      { name: 'performance',  n: 1243, pct: 92 },
+                      { name: 'billing',      n: 982,  pct: 73 },
+                      { name: 'integrations', n: 741,  pct: 55 },
+                      { name: 'onboarding',   n: 516,  pct: 38 },
+                    ].map((c) => (
+                      <div class="cluster">
+                        <span class="cluster-name">{c.name}</span>
+                        <div class="cluster-bar"><div class="cluster-fill" style={`width: ${c.pct}%`}></div></div>
+                        <span class="cluster-n">{c.n.toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {p.illustration === 'domain' && (
+                <div class="illu-domain">
+                  <div class="illu-label">WORKFLOW · onboard_new_user</div>
+                  <div class="workflow">
+                    {[
+                      { name: 'create_user',  tool: 'create_model · user',  status: 'done'    },
+                      { name: 'assign_role',  tool: 'update_model · user',  status: 'active'  },
+                      { name: 'send_welcome', tool: 'send_notification',    status: 'pending' },
+                    ].map((step, i, arr) => (
+                      <>
+                        <div class:list={['wf-step', step.status]}>
+                          <div class="wf-step-head">
+                            <span class="wf-step-mark">{step.status === 'done' ? '✓' : i + 1}</span>
+                            <span class="wf-step-name">{step.name}</span>
+                          </div>
+                          <div class="wf-step-tool">{step.tool}</div>
+                        </div>
+                        {i < arr.length - 1 && <span class="wf-arrow">→</span>}
+                      </>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {p.illustration === 'oauth' && (
+                <div class="illu-oauth">
+                  <div class="illu-label">FLOW · DISCOVERY → AUTHORIZE → TOKEN</div>
+                  <div class="oauth-steps">
+                    {[
+                      { step: '01', title: 'Discovery', method: 'GET',  path: '/.well-known/oauth-protected-resource' },
+                      { step: '02', title: 'Authorize', method: 'GET',  path: '/oauth/authorize?code_challenge=…' },
+                      { step: '03', title: 'Token',     method: 'POST', path: '/oauth/token' },
+                    ].map((s) => (
+                      <div class="oauth-step">
+                        <div class="oauth-head">
+                          <span class="oauth-num">{s.step}</span>
+                          <span class="oauth-title">{s.title}</span>
+                        </div>
+                        <div class="oauth-line">
+                          <span class:list={['method', s.method.toLowerCase()]}>{s.method}</span>
+                          <span class="oauth-path">{s.path}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div class="rfc-strip">
+                    <span class="rfc-label">IMPLEMENTED:</span>
+                    {['RFC 6749', 'RFC 7591', 'RFC 7636 (PKCE)', 'RFC 8414', 'RFC 8707', 'RFC 9728'].map((r) => (
+                      <span class="rfc">{r}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div class="row-text">
+          <div class="eyebrow">
+            <span class="eyebrow-chip">{p.n}</span>
+            <span class="eyebrow-bar"></span>
+            <span>{p.eyebrow}</span>
+          </div>
+          <h3 class="pr-display pillar-title">{p.title}</h3>
+          <p class="pillar-lede">{p.lede}</p>
+          <ul class="pillar-bullets">
+            {p.bullets.map((b) => (
+              <li>
+                <span class="bullet-check">✓</span>
+                <span><strong>{b.k}</strong> <span class="muted">— {b.v}</span></span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .pillars { position: relative; }
+  .pillars-intro { padding: 120px 32px 24px; }
+  .intro-grid {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 40px;
+  }
+  .section-title {
+    font-size: 64px;
+    margin: 0;
+    max-width: 820px;
+    line-height: 0.98;
+  }
+  .muted { color: var(--ink-3); }
+  .intro-copy {
+    max-width: 360px;
+    font-size: 14.5px;
+    color: var(--ink-3);
+    margin: 0;
+    line-height: 1.6;
+  }
+  .intro-copy code {
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--acc-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.4px;
+    margin-bottom: 14px;
+  }
+  .eyebrow-chip {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--acc-2);
+    background: rgba(124, 92, 255, 0.10);
+    border: 1px solid rgba(124, 92, 255, 0.28);
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0;
+  }
+  .eyebrow-bar { width: 18px; height: 1px; background: rgba(124, 92, 255, 0.55); }
+
+  .pillars-rows { padding: 24px 32px 96px; }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+    padding: 64px 0;
+    border-top: 1px solid var(--line);
+  }
+  .row.illu-first .row-illu { order: 0; }
+  .row.illu-first .row-text { order: 1; padding-left: 24px; }
+  .row.text-first .row-illu { order: 1; }
+  .row.text-first .row-text { order: 0; padding-right: 24px; }
+
+  .pillar-title {
+    font-size: 38px;
+    margin: 0;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    max-width: 480px;
+  }
+  .pillar-lede {
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: var(--ink-3);
+    margin-top: 20px;
+    margin-bottom: 18px;
+    max-width: 520px;
+  }
+  .pillar-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-width: 520px;
+  }
+  .pillar-bullets li {
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    gap: 12px;
+    padding: 10px 0;
+    border-top: 1px solid var(--line);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .pillar-bullets strong { color: var(--ink); font-weight: 500; letter-spacing: -0.005em; }
+  .bullet-check {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: rgba(124, 92, 255, 0.10);
+    border: 1px solid rgba(124, 92, 255, 0.35);
+    color: var(--acc-2);
+    font-size: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Geist Mono', monospace;
+    margin-top: 3px;
+  }
+
+  /* Stage card */
+  .stage {
+    position: relative;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line-2);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.65),
+                0 0 0 1px rgba(124, 92, 255, 0.06);
+    min-height: 460px;
+  }
+  .stage-chrome {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(13, 13, 18, 0.7);
+    backdrop-filter: blur(6px);
+    position: relative;
+    z-index: 2;
+  }
+  .stage-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .stage-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--acc-2);
+  }
+  .flex-spacer { flex: 1; }
+  .stage-body { padding: 28px; }
+  .illu-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.4px;
+    margin-bottom: 14px;
+  }
+
+  /* 01 CRUD illustration */
+  .illu-crud {
+    display: grid;
+    grid-template-columns: 1fr 180px 1fr;
+    gap: 20px;
+    align-items: center;
+  }
+  .illu-side { display: flex; flex-direction: column; gap: 8px; }
+  .illu-models { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .model-cell {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .model-icon { color: var(--acc-2); width: 12px; text-align: center; }
+  .illu-hub {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hub-orb {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 40%, rgba(124, 92, 255, 0.18), rgba(124, 92, 255, 0.04) 70%);
+    border: 1px solid rgba(124, 92, 255, 0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--acc-2);
+    box-shadow: 0 0 0 8px rgba(124, 92, 255, 0.04),
+                0 0 60px -10px rgba(124, 92, 255, 0.5);
+  }
+  .hub-num {
+    font-family: 'Geist', sans-serif;
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    color: #fff;
+    line-height: 1;
+  }
+  .hub-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.4px;
+    margin-top: 2px;
+  }
+  .illu-tools { display: flex; flex-direction: column; gap: 5px; }
+  .tool-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: rgba(124, 92, 255, 0.06);
+    border: 1px solid rgba(124, 92, 255, 0.20);
+    border-radius: 6px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink);
+  }
+  .tool-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--acc-2);
+  }
+
+  /* 02 Prompt illustration */
+  .illu-prompt { display: flex; flex-direction: column; gap: 10px; }
+  .strategy {
+    padding: 12px 14px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .strategy.active {
+    background: rgba(124, 92, 255, 0.07);
+    border-color: rgba(124, 92, 255, 0.32);
+  }
+  .strategy-name {
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .strategy.active .strategy-name { color: var(--acc-2); }
+  .strategy-range {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+  }
+  .strategy-active {
+    margin-left: auto;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--acc-2);
+    letter-spacing: 0.4px;
+  }
+
+  /* 03 Apps illustration */
+  .illu-apps { display: flex; }
+  .apps-window {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 14px 40px -20px rgba(0, 0, 0, 0.6);
+  }
+  .apps-window-head {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-2);
+  }
+  .apps-tab {
+    font-family: 'Geist', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .apps-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+  }
+  .apps-fields {
+    padding: 16px 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+  }
+  .field.span2 { grid-column: span 2; }
+  .field label {
+    display: block;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+  }
+  .field-input {
+    padding: 8px 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--line-2);
+    border-radius: 6px;
+    font-size: 13.5px;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .field-input.focused {
+    border-color: var(--acc);
+    box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.12);
+  }
+  .field-input.stars { color: var(--acc-2); letter-spacing: 4px; font-size: 16px; }
+  .field-input.stars .off { color: var(--ink-5); }
+  .ok-dot { width: 7px; height: 7px; border-radius: 50%; background: #7ee2c1; }
+  .caret { color: var(--ink-4); }
+
+  /* 04 Analysis illustration */
+  .illu-analysis { display: flex; flex-direction: column; gap: 16px; }
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .pipe-tool {
+    padding: 6px 11px;
+    background: rgba(124, 92, 255, 0.06);
+    border: 1px solid rgba(124, 92, 255, 0.25);
+    border-radius: 6px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--acc-2);
+  }
+  .pipe-bar {
+    flex: 1;
+    height: 1px;
+    background: rgba(124, 92, 255, 0.25);
+    min-width: 6px;
+  }
+  .clusters {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .cluster {
+    display: grid;
+    grid-template-columns: 110px 1fr 56px;
+    gap: 10px;
+    align-items: center;
+  }
+  .cluster-name {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .cluster-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--bg-3);
+    border: 1px solid var(--line-2);
+    overflow: hidden;
+  }
+  .cluster-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--acc), var(--acc-2));
+  }
+  .cluster-n {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 05 Domain illustration */
+  .illu-domain { display: flex; flex-direction: column; gap: 16px; }
+  .workflow {
+    display: grid;
+    grid-template-columns: 1fr 22px 1fr 22px 1fr;
+    align-items: center;
+    gap: 0;
+  }
+  .wf-step {
+    padding: 10px 12px;
+    background: var(--bg-3);
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+  }
+  .wf-step.active {
+    background: rgba(124, 92, 255, 0.10);
+    border-color: rgba(124, 92, 255, 0.45);
+  }
+  .wf-step-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .wf-step-mark {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: var(--bg-2);
+    color: var(--ink-4);
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line-2);
+  }
+  .wf-step.done .wf-step-mark { background: #7ee2c1; color: var(--bg); border: none; }
+  .wf-step.active .wf-step-mark { background: var(--acc-2); color: var(--bg); border: none; }
+  .wf-step-name {
+    font-family: 'Geist', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .wf-step-tool {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+  }
+  .wf-arrow {
+    color: var(--acc-2);
+    text-align: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 14px;
+  }
+
+  /* 06 OAuth illustration */
+  .illu-oauth { display: flex; flex-direction: column; gap: 14px; }
+  .oauth-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .oauth-step {
+    padding: 14px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .oauth-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .oauth-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+    background: rgba(124, 92, 255, 0.08);
+    border: 1px solid rgba(124, 92, 255, 0.25);
+    padding: 2px 7px;
+    border-radius: 3px;
+  }
+  .oauth-title {
+    font-family: 'Geist', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .oauth-line {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .method {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+  }
+  .method.get {
+    background: rgba(126, 226, 193, 0.08);
+    border: 1px solid rgba(126, 226, 193, 0.4);
+    color: #7ee2c1;
+  }
+  .method.post {
+    background: rgba(240, 198, 116, 0.10);
+    border: 1px solid rgba(240, 198, 116, 0.45);
+    color: #f0c674;
+  }
+  .oauth-path {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-2);
+    word-break: break-all;
+  }
+  .rfc-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line-2);
+  }
+  .rfc-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.4px;
+    margin-right: 8px;
+  }
+  .rfc {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    padding: 2px 7px;
+    background: var(--bg-2);
+    border: 1px solid var(--line-2);
+    color: var(--ink-2);
+    border-radius: 3px;
+  }
+</style>

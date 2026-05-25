@@ -1,0 +1,141 @@
+---
+import DocIcon from './DocIcon.astro';
+import { findGuide } from '../../data/guides';
+
+const featured: Array<{ slug: string; tag: string; excerpt: string }> = [
+  { slug: 'quickstart',      tag: 'START', excerpt: '10 minutes to a running MCP server. Scaffold, declare one model, ship.' },
+  { slug: 'prompt-creation', tag: 'CORE',  excerpt: 'The DSL at the heart of mcp-rune. Sections, field groups, three strategies.' },
+  { slug: 'mcp-apps',        tag: 'APPS',  excerpt: 'Build rich UIs that render inside Claude Desktop. Bi-directional protocol.' },
+];
+
+const cards = featured.map((f) => ({ ...f, meta: findGuide(f.slug) }));
+---
+<section class="featured">
+  <div class="docs-wrap featured-inner">
+    <div class="featured-head">
+      <span class="featured-eyebrow">★ FEATURED</span>
+      <span class="featured-bar" />
+      <a class="featured-view-all" href="#all">view all ↗</a>
+    </div>
+
+    <div class="featured-grid">
+      {cards.map((card, i) => card.meta && (
+        <a class="featured-card" href={`/docs/${card.meta.guide.slug}`}>
+          <div class="card-index">0{i + 1} / 03</div>
+          <div class="card-icon">
+            <DocIcon name={card.meta.guide.icon} size={22} />
+          </div>
+          <div class="card-tag">{card.tag}</div>
+          <div class="card-title">{card.meta.guide.label}</div>
+          <div class="card-excerpt">{card.excerpt}</div>
+          <div class="card-foot">
+            <span>{card.meta.guide.read}</span>
+            <span class="card-cta">Read →</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .featured { border-bottom: 1px solid var(--line); }
+  .featured-inner { padding: 56px 32px; }
+  .featured-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .featured-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--acc-2);
+    letter-spacing: 0.5px;
+  }
+  .featured-bar {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .featured-view-all {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+  .featured-view-all:hover { color: var(--ink); }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .featured-card {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    min-height: 220px;
+    position: relative;
+    color: inherit;
+  }
+  .featured-card:hover {
+    border-color: rgba(124, 92, 255, 0.45);
+  }
+  .card-index {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+  }
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: rgba(124, 92, 255, 0.08);
+    border: 1px solid rgba(124, 92, 255, 0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--acc-2);
+    margin-bottom: 20px;
+  }
+  .card-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .card-title {
+    font-family: 'Geist', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .card-excerpt {
+    font-size: 14px;
+    color: var(--ink-3);
+    line-height: 1.55;
+    flex: 1;
+  }
+  .card-foot {
+    margin-top: 22px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line-2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .card-cta { color: var(--acc-2); }
+</style>

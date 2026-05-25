@@ -1,0 +1,533 @@
+---
+// Pristine landing hero — port of PrHero in page-landing-pristine.jsx.
+// Includes the announcement pill, gradient headline, lede, CTA row with copyable
+// install command, meta strip, the source-model → derived-surfaces showcase,
+// and the founding-adopter callout.
+
+const derived: Array<[string, string, string]> = [
+  ['prompt',   'BookPrompt',       'sections · validation · askPrompts'],
+  ['tools',    '5 CRUD tools',     'list · find · create · update · delete'],
+  ['search',   'SearchService',    'theme_id, duration_min · paginated'],
+  ['analysis', 'AnalysisMemories', 'pgvector · 384-dim · k=24'],
+  ['oauth',    'OAuth 2.0',        'PRM · DCR · authorize · token'],
+  ['app',      'ui://book/create', 'fieldsets · two-column layout'],
+];
+---
+<section class="hero">
+  <div class="hero-glow pr-glow"></div>
+  <div class="hero-grid pr-grid-faint"></div>
+
+  <div class="pr-wrap hero-top">
+    <a href="/docs/mcp-apps" class="announce">
+      <span class="badge-new">NEW</span>
+      <span>v0.1.0-alpha · MCP Apps for CRUD, schema-derived</span>
+      <span class="announce-cta">Read →</span>
+    </a>
+
+    <h1 class="pr-display headline">
+      The framework for
+      <span class="headline-grad">model-driven MCP servers.</span>
+    </h1>
+
+    <p class="lede">
+      Declare your models once. <span class="hi">mcp-rune</span> derives the prompts agents
+      can follow, generic CRUD tools, semantic search, OAuth 2.0, and rich MCP Apps —
+      from the same spec.
+    </p>
+
+    <div class="cta-row">
+      <a class="pr-btn acc cta-primary" href="/docs/mcp-apps">
+        Get started <span class="arr">→</span>
+      </a>
+      <div class="install">
+        <span class="install-prompt">$</span>
+        <span class="pr-mono install-cmd">npm i mcp-rune</span>
+        <button type="button" class="install-copy" data-copy="npm i mcp-rune">COPY</button>
+      </div>
+    </div>
+
+    <div class="meta-strip">
+      <span>MIT</span>
+      <span class="meta-bar"></span>
+      <span>Node 20+ / Bun</span>
+      <span class="meta-bar"></span>
+      <span>TypeScript &amp; JavaScript</span>
+      <span class="meta-bar"></span>
+      <span>Zero external services</span>
+    </div>
+  </div>
+
+  <div class="pr-wrap hero-showcase-wrap">
+    <div class="showcase">
+      <div class="showcase-chrome">
+        <div class="chrome-dots">
+          <span /><span /><span />
+        </div>
+        <div class="chrome-title">
+          ~/library-mcp · <span class="hi">rune dev</span>
+        </div>
+        <div class="chrome-status">
+          <span class="status-dot"></span>
+          <span>ready in 412ms</span>
+        </div>
+      </div>
+
+      <div class="showcase-body">
+        <div class="showcase-source">
+          <div class="showcase-source-head">
+            <span class="pr-tag">src/models/book.ts</span>
+            <span class="flex-spacer" />
+            <span class="source-of-truth">source of truth</span>
+          </div>
+          <pre class="source-code"><span class="c-com">// one declarative class — that's it</span>
+<span class="c-key">export class</span> <span class="c-name">Book</span> <span class="c-key">extends</span> <span class="c-fn">BaseModel</span> &#123;
+  <span class="c-com">static</span> <span class="c-num">attributes</span> = &#123;
+    title:        <span class="c-key">string</span>().<span class="c-fn">required</span>(),
+    theme_id:     <span class="c-key">enum</span>(<span class="c-name">Theme</span>),
+    duration_min: <span class="c-key">integer</span>().<span class="c-fn">range</span>(<span class="c-num">30</span>, <span class="c-num">180</span>),
+    summary:      <span class="c-key">text</span>().<span class="c-fn">embed</span>(),
+  &#125;
+  <span class="c-com">static</span> <span class="c-num">filters</span> = &#123; theme_id, duration_min &#125;
+  <span class="c-com">static</span> <span class="c-num">api</span> = &#123; base: <span class="c-str">'/api/v1/books'</span> &#125;
+&#125;</pre>
+          <div class="derives">
+            <span class="derives-label">↳ derives</span>
+            <span class="derives-bar"></span>
+            <span>6 surfaces</span>
+          </div>
+        </div>
+
+        <div class="showcase-derived">
+          <div class="showcase-derived-head">
+            <span class="pr-tag">derived surfaces</span>
+            <span class="flex-spacer" />
+            <span class="derived-meta">generated · 0 lines hand-written</span>
+          </div>
+          {derived.map(([kind, name, sub]) => (
+            <div class="derived-row">
+              <span class="derived-kind">{kind}</span>
+              <span class="derived-name">{name}</span>
+              <span class="derived-sub">{sub}</span>
+              <span class="derived-arr">→</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <a href="#adopters" class="founding-callout">
+      <div class="founding-chip">
+        <div class="founding-tag">FOUNDING ADOPTER</div>
+        <div class="founding-seat">
+          <span class="founding-seat-pre">Seat</span>
+          <span>01</span>
+        </div>
+      </div>
+      <div class="founding-seats">
+        {['01', '02', '03'].map((n, i) => (
+          <div class:list={['seat', { active: i === 0 }]}>
+            <span class="seat-dot"></span>
+            <span class="seat-num">SEAT {n}</span>
+            <span class="flex-spacer" />
+            <span class="seat-status">OPEN</span>
+          </div>
+        ))}
+      </div>
+      <div class="founding-side">
+        <div class="founding-pitch">
+          Three founding seats. Lifetime LTS, direct line to the maintainer, vote on every RFC.
+        </div>
+        <div class="founding-link">Read the charter →</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<style>
+  .hero { position: relative; overflow: hidden; }
+  .hero-glow { z-index: 0; }
+  .hero-grid {
+    position: absolute;
+    inset: 0 0 30% 0;
+    opacity: 0.6;
+    z-index: 0;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 80%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 80%);
+  }
+  .hero-top {
+    position: relative;
+    z-index: 1;
+    padding: 88px 32px 56px;
+    text-align: center;
+  }
+  .announce {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(124, 92, 255, 0.07);
+    border: 1px solid rgba(124, 92, 255, 0.25);
+    padding: 5px 5px 5px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--ink-2);
+    margin-bottom: 32px;
+  }
+  .badge-new {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+    letter-spacing: 0.5px;
+  }
+  .announce-cta {
+    padding: 4px 10px;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .headline {
+    font-size: 84px;
+    margin: 0;
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .headline-grad {
+    background-image: linear-gradient(180deg, #ffffff 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .lede {
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--ink-3);
+    margin: 28px auto 0;
+    max-width: 640px;
+    letter-spacing: -0.01em;
+  }
+  .lede .hi { color: var(--ink-2); }
+
+  .cta-row {
+    display: inline-flex;
+    gap: 12px;
+    margin-top: 36px;
+    align-items: center;
+  }
+  .cta-primary { height: 44px; padding: 0 20px; font-size: 14px; }
+  .install {
+    height: 44px;
+    display: inline-flex;
+    align-items: stretch;
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .install-prompt {
+    width: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--acc-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 14px;
+    border-right: 1px solid var(--line-2);
+    background: var(--bg-2);
+  }
+  .install-cmd {
+    padding: 0 16px;
+    font-size: 13.5px;
+    align-self: center;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  .install-copy {
+    border: none;
+    border-left: 1px solid var(--line-2);
+    background: transparent;
+    padding: 0 14px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .install-copy:hover { color: var(--ink); }
+
+  .meta-strip {
+    margin-top: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-4);
+  }
+  .meta-bar { width: 1px; height: 12px; background: var(--line-2); }
+
+  /* showcase */
+  .hero-showcase-wrap { position: relative; z-index: 1; padding: 40px 32px 88px; }
+  .showcase {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line-2);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(124, 92, 255, 0.08);
+  }
+  .showcase-chrome {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-3);
+  }
+  .chrome-dots { display: flex; gap: 6px; }
+  .chrome-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background: var(--line-3);
+  }
+  .chrome-title {
+    flex: 1;
+    text-align: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+  .chrome-title .hi { color: var(--ink-2); }
+  .chrome-status {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+  }
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    background: #7ee2c1;
+    box-shadow: 0 0 8px #7ee2c1;
+  }
+
+  .showcase-body {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    min-height: 480px;
+  }
+  .showcase-source { padding: 24px 28px; border-right: 1px solid var(--line); }
+  .showcase-source-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .flex-spacer { flex: 1; }
+  .source-of-truth {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+  }
+  .source-code {
+    margin: 0;
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--c-plain);
+  }
+  .source-code .c-com { color: var(--c-com); }
+  .source-code .c-key { color: var(--c-key); }
+  .source-code .c-str { color: var(--c-str); }
+  .source-code .c-num { color: var(--c-num); }
+  .source-code .c-fn  { color: var(--c-fn); }
+  .source-code .c-name { color: #fff; }
+
+  .derives {
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line-2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+  .derives-label { color: var(--acc-2); }
+  .derives-bar { flex: 1; height: 1px; background: var(--line-2); }
+
+  .showcase-derived {
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .showcase-derived-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .derived-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+  }
+  .derived-row {
+    display: grid;
+    grid-template-columns: 80px 200px 1fr 20px;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .derived-kind {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+    background: rgba(124, 92, 255, 0.08);
+    padding: 3px 7px;
+    border-radius: 4px;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+  .derived-name {
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .derived-sub { font-size: 12.5px; color: var(--ink-3); }
+  .derived-arr { color: var(--ink-4); text-align: right; }
+
+  /* founding callout */
+  .founding-callout {
+    display: flex;
+    align-items: stretch;
+    margin-top: 56px;
+    background: linear-gradient(90deg, rgba(124, 92, 255, 0.06) 0%, transparent 60%);
+    border: 1px solid var(--line-2);
+    border-radius: 12px;
+    overflow: hidden;
+    color: inherit;
+  }
+  .founding-chip {
+    padding: 22px 26px;
+    border-right: 1px solid var(--line-2);
+    background: rgba(124, 92, 255, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 200px;
+  }
+  .founding-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .founding-seat {
+    font-family: 'Geist', sans-serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .founding-seat-pre { color: var(--ink-3); }
+
+  .founding-seats {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    padding: 0 26px;
+    gap: 16px;
+  }
+  .seat {
+    flex: 1;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+  }
+  .seat.active { border-color: rgba(124, 92, 255, 0.35); }
+  .seat-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--acc);
+    box-shadow: 0 0 10px var(--acc);
+  }
+  .seat-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+    letter-spacing: 0.3px;
+  }
+  .seat-status {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(124, 92, 255, 0.08);
+    border: 1px solid rgba(124, 92, 255, 0.25);
+  }
+
+  .founding-side {
+    padding: 22px 26px;
+    border-left: 1px solid var(--line-2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 280px;
+    text-align: right;
+  }
+  .founding-pitch {
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+  .founding-link {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--acc-2);
+    letter-spacing: 0.3px;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.install-copy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const text = btn.dataset.copy ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = btn.textContent;
+        btn.textContent = 'COPIED';
+        setTimeout(() => { btn.textContent = original; }, 1200);
+      } catch {
+        /* clipboard unavailable; do nothing */
+      }
+    });
+  });
+</script>

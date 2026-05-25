@@ -1,0 +1,190 @@
+---
+import { getEntry, render } from 'astro:content';
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import DocsSidebar from '../../components/DocsSidebar.astro';
+import DocsBadge from '../../components/docs/DocsBadge.astro';
+import Toc from '../../components/docs/Toc.astro';
+import { FLAT_GUIDES, findGuide } from '../../data/guides';
+
+export async function getStaticPaths() {
+  // Only generate routes for guides whose markdown file exists on disk.
+  return FLAT_GUIDES
+    .filter(({ guide }) => guide.status === 'live' && guide.file)
+    .map(({ guide }) => ({ params: { slug: guide.slug } }));
+}
+
+const { slug } = Astro.params;
+const meta = findGuide(slug!);
+if (!meta) {
+  return Astro.redirect('/404');
+}
+const { guide, section, prev, next, flatIndex, total } = meta;
+
+const entryId = guide.file!.replace(/\.md$/, '');
+const entry = await getEntry('guides', entryId);
+if (!entry) {
+  throw new Error(`Markdown entry not found for guide ${guide.slug} (file: ${guide.file})`);
+}
+const { Content, headings } = await render(entry);
+---
+<DocsLayout title={`${guide.label} · mcp-rune docs`} description={guide.blurb}>
+  <section class="guide">
+    <div class="guide-inner docs-wrap">
+      <DocsSidebar activeSlug={guide.slug} />
+
+      <article class="guide-content">
+        <div class="breadcrumb">
+          <a href="/docs/mcp-apps">Docs</a>
+          <span>/</span>
+          <a href="#">{section.title}</a>
+          <span>/</span>
+          <span class="crumb-current">{guide.label}</span>
+          <span class="flex-spacer" />
+          <DocsBadge kind={guide.status} />
+        </div>
+
+        <div class="section-eyebrow">
+          SECTION {section.num} · GUIDE {String(flatIndex + 1).padStart(2, '0')} OF {String(total).padStart(2, '0')}
+        </div>
+
+        <div class="meta-strip">
+          <div class="meta-cell">
+            <div class="meta-label">Reading</div>
+            <div class="meta-value">{guide.read}</div>
+          </div>
+          {guide.tags?.[0] && (
+            <div class="meta-cell">
+              <div class="meta-label">Topic</div>
+              <div class="meta-value">{guide.tags.join(' · ')}</div>
+            </div>
+          )}
+          <div class="meta-cell">
+            <div class="meta-label">Spec</div>
+            <div class="meta-value">v0.1.0-alpha</div>
+          </div>
+          <div class="meta-cell">
+            <div class="meta-label">Source</div>
+            <div class="meta-value">{guide.file}</div>
+          </div>
+        </div>
+
+        <div class="docs-prose">
+          <Content />
+        </div>
+
+        <div class="pager">
+          {prev ? (
+            <a href={prev.guide.status === 'live' ? `/docs/${prev.guide.slug}` : '#'} class:list={['pager-link', { disabled: prev.guide.status !== 'live' }]}>
+              <div class="pager-tag">← PREV</div>
+              <div class="pager-label">{prev.guide.label}</div>
+            </a>
+          ) : <span class="pager-link disabled" aria-hidden="true"></span>}
+
+          {next ? (
+            <a href={next.guide.status === 'live' ? `/docs/${next.guide.slug}` : '#'} class:list={['pager-link', 'right', { disabled: next.guide.status !== 'live' }]}>
+              <div class="pager-tag">NEXT →</div>
+              <div class="pager-label">{next.guide.label}</div>
+            </a>
+          ) : <span class="pager-link disabled" aria-hidden="true"></span>}
+        </div>
+      </article>
+
+      <Toc headings={headings} sourceFile={guide.file} />
+    </div>
+  </section>
+</DocsLayout>
+
+<style>
+  .guide-inner {
+    padding: 40px 32px 80px;
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  .guide-content {
+    flex: 1;
+    min-width: 0;
+    max-width: 760px;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.3px;
+    margin-bottom: 28px;
+  }
+  .breadcrumb a {
+    color: var(--ink-3);
+  }
+  .breadcrumb a:hover { color: var(--ink); }
+  .crumb-current { color: var(--ink-2); }
+  .flex-spacer { flex: 1; }
+
+  .section-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.4px;
+    color: var(--acc-2);
+    margin-bottom: 14px;
+  }
+
+  .meta-strip {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 36px;
+  }
+  .meta-cell {
+    flex: 1;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .meta-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-4);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .meta-value {
+    font-size: 13px;
+    color: var(--ink);
+    margin-top: 2px;
+  }
+
+  .pager {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .pager-link {
+    flex: 1;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    text-decoration: none;
+  }
+  .pager-link.right { text-align: right; }
+  .pager-link.disabled { background: transparent; border-color: transparent; }
+  .pager-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.4px;
+  }
+  .pager-label {
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    margin-top: 4px;
+  }
+</style>

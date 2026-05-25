@@ -1,0 +1,117 @@
+---
+import type { GuideIcon } from '../../data/guides';
+
+interface Props {
+  name: GuideIcon;
+  size?: number;
+}
+const { name, size = 22 } = Astro.props;
+---
+{name === 'bolt' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
+  </svg>
+)}
+{name === 'schema' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="3" y="3" width="7" height="5" />
+    <rect x="14" y="3" width="7" height="5" />
+    <rect x="3" y="11" width="7" height="5" />
+    <rect x="14" y="11" width="7" height="5" />
+    <rect x="3" y="19" width="7" height="2" />
+    <rect x="14" y="19" width="7" height="2" />
+  </svg>
+)}
+{name === 'layers' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+    <path d="M2 17l10 5 10-5" />
+    <path d="M2 12l10 5 10-5" />
+  </svg>
+)}
+{name === 'wrench' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M14.7 6.3a4 4 0 0 0-4.6 5.4L3 19l2 2 7.3-7.1a4 4 0 0 0 5.4-4.6L15.3 12 12 8.7l2.7-2.4z" />
+  </svg>
+)}
+{name === 'net' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+  </svg>
+)}
+{name === 'flow' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="3" y="3" width="6" height="6" />
+    <rect x="15" y="3" width="6" height="6" />
+    <rect x="3" y="15" width="6" height="6" />
+    <rect x="15" y="15" width="6" height="6" />
+    <path d="M9 6h6M9 18h6M6 9v6M18 9v6" />
+  </svg>
+)}
+{name === 'app' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="3" y="4" width="18" height="14" rx="2" />
+    <path d="M3 8h18M7 12h6M7 15h4" />
+  </svg>
+)}
+{name === 'search' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-4-4" />
+  </svg>
+)}
+{name === 'form' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="3" y="4" width="18" height="16" rx="2" />
+    <path d="M7 9h10M7 13h10M7 17h6" />
+  </svg>
+)}
+{name === 'brain' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M12 4a4 4 0 0 0-4 4v8a4 4 0 0 0 8 0V8a4 4 0 0 0-4-4z" />
+    <path d="M12 8v8M8 12h8" />
+  </svg>
+)}
+{name === 'sample' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="6" cy="6" r="2" />
+    <circle cx="12" cy="12" r="2" />
+    <circle cx="18" cy="18" r="2" />
+    <circle cx="18" cy="6" r="2" />
+    <circle cx="6" cy="18" r="2" />
+    <path d="M3 21l18-18" stroke-dasharray="2 3" />
+  </svg>
+)}
+{name === 'ghost' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M5 11a7 7 0 0 1 14 0v9l-3-2-2 2-2-2-2 2-2-2-3 2v-9z" />
+    <circle cx="9" cy="11" r="1" fill="currentColor" />
+    <circle cx="15" cy="11" r="1" fill="currentColor" />
+  </svg>
+)}
+{name === 'scope' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 1v4M12 19v4M1 12h4M19 12h4" />
+  </svg>
+)}
+{name === 'key' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="7" cy="17" r="4" />
+    <path d="m10 14 9-9M16 6l3 3M14 8l3 3" />
+  </svg>
+)}
+{name === 'globe' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M3 9h18M3 15h18M12 3a12 12 0 0 1 0 18M12 3a12 12 0 0 0 0 18" />
+  </svg>
+)}
+{name === 'book' && (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4V4z" />
+    <path d="M4 16a4 4 0 0 1 4-4h12" />
+  </svg>
+)}

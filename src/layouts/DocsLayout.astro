@@ -1,0 +1,18 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import TopNav from '../components/TopNav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description } = Astro.props;
+---
+<BaseLayout title={title} description={description}>
+  <TopNav active="docs" wide />
+  <main>
+    <slot />
+  </main>
+  <Footer />
+</BaseLayout>

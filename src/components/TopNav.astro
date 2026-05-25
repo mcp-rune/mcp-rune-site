@@ -1,0 +1,139 @@
+---
+import Logo from './Logo.astro';
+
+interface Props {
+  active?: 'docs' | 'ref' | 'cli' | 'adopt' | 'log' | null;
+  /** Wider container for the docs-section pages (1440px), narrower for landing (1240px). */
+  wide?: boolean;
+}
+const { active = null, wide = false } = Astro.props;
+
+const links: Array<{ label: string; key: NonNullable<Props['active']>; href: string }> = [
+  { label: 'Docs',      key: 'docs',  href: '/docs' },
+  { label: 'Reference', key: 'ref',   href: '#' },
+  { label: 'CLI',       key: 'cli',   href: '#' },
+  { label: 'Adopters',  key: 'adopt', href: '#' },
+  { label: 'Changelog', key: 'log',   href: '#' },
+];
+---
+<header class="topnav">
+  <div class="topnav-inner" style={wide ? 'max-width: 1440px;' : 'max-width: 1240px;'}>
+    <a href="/" class="brand">
+      <Logo size={24} />
+      <span class="brand-name">mcp-rune</span>
+      <span class="version">0.1.0</span>
+    </a>
+    <nav class="links">
+      {links.map(({ label, key, href }) => (
+        <a href={href} class:list={['nav-link', { on: key === active }]}>{label}</a>
+      ))}
+    </nav>
+    <div class="search">
+      <span>⌕</span>
+      <span class="search-label">Search docs</span>
+      <span class="flex-spacer" />
+      <span class="kbd">⌘K</span>
+    </div>
+    <div class="actions">
+      <a class="pr-btn ghost compact" href="https://github.com/mcp-rune/mcp-rune">
+        <span class="star">★</span>
+        <span>1,243</span>
+      </a>
+      <a class="pr-btn compact" href="/docs/quickstart">
+        Get started <span class="arr">→</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .topnav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    backdrop-filter: blur(12px);
+    background: rgba(7, 7, 10, 0.75);
+    border-bottom: 1px solid var(--line);
+  }
+  .topnav-inner {
+    margin: 0 auto;
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-name {
+    font-family: 'Geist', sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+  }
+  .version {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    padding: 2px 6px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+  .links {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+  }
+  .nav-link {
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    font-weight: 450;
+    color: var(--ink-3);
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  .nav-link.on {
+    color: var(--ink);
+    background: var(--surface);
+    border-color: var(--line);
+  }
+  .search {
+    height: 32px;
+    width: 240px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+  .search-label { color: var(--ink-2); }
+  .flex-spacer { flex: 1; }
+  .kbd {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    padding: 2px 5px;
+    background: var(--bg);
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    color: var(--ink-3);
+    flex-shrink: 0;
+  }
+  .actions {
+    display: flex;
+    gap: 8px;
+  }
+  .pr-btn.compact { height: 32px; padding: 0 12px; font-size: 13px; }
+  .star { color: var(--ink-3); }
+</style>

@@ -1,0 +1,167 @@
+---
+import { FLAT_GUIDES } from '../../data/guides';
+
+const total = FLAT_GUIDES.length;
+const live = FLAT_GUIDES.filter((g) => g.guide.status === 'live').length;
+const wip = total - live;
+---
+<section class="docs-hero">
+  <div class="docs-hero-glow" />
+  <div class="docs-hero-grid pr-grid-faint" />
+
+  <div class="docs-wrap docs-hero-inner">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-badge">DOCS</span>
+      <span class="eyebrow-meta">v0.1.0-alpha · synced with main · 25 May 2026</span>
+    </div>
+
+    <div class="hero-headline">
+      <h1 class="pr-display title">
+        The <span class="grad">Guides</span>.
+      </h1>
+      <p class="hero-copy">
+        Read the framework end to end, or jump to the part you need. Every guide is paired
+        with runnable examples in TypeScript and JavaScript, and links straight to its
+        source on GitHub.
+      </p>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-big pr-display">{total}</div>
+        <div class="stat-label">guides</div>
+        <div class="stat-sub">across 7 sections</div>
+      </div>
+      <div class="stat">
+        <div class="stat-big pr-display">{live}</div>
+        <div class="stat-label">live</div>
+        <div class="stat-sub">{wip} in progress</div>
+      </div>
+      <div class="stat">
+        <div class="stat-big pr-display">~180</div>
+        <div class="stat-label">pages of docs</div>
+        <div class="stat-sub">~3,800 lines of MD</div>
+      </div>
+      <div class="stat">
+        <a href="https://github.com/mcp-rune/mcp-rune" class="stat-link">
+          <div class="stat-big pr-display">↗</div>
+          <div class="stat-label">on GitHub</div>
+          <div class="stat-sub">mcp-rune / mcp-rune</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .docs-hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  .docs-hero-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124, 92, 255, 0.16), transparent 60%);
+    pointer-events: none;
+  }
+  .docs-hero-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    -webkit-mask-image: radial-gradient(ellipse 60% 80% at 50% 0%, black 30%, transparent 80%);
+    mask-image: radial-gradient(ellipse 60% 80% at 50% 0%, black 30%, transparent 80%);
+  }
+  .docs-hero-inner {
+    position: relative;
+    padding: 72px 32px 56px;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 12px 4px 4px;
+    background: rgba(124, 92, 255, 0.07);
+    border: 1px solid rgba(124, 92, 255, 0.25);
+    border-radius: 999px;
+    margin-bottom: 28px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+  }
+  .eyebrow-badge {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.5px;
+  }
+  .eyebrow-meta {
+    color: var(--ink-3);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+  }
+
+  .hero-headline {
+    display: flex;
+    align-items: flex-end;
+    gap: 80px;
+    margin-bottom: 24px;
+  }
+  .title {
+    font-size: 88px;
+    margin: 0;
+    flex: 1;
+    letter-spacing: -0.04em;
+  }
+  .grad {
+    background-image: linear-gradient(180deg, #ffffff 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-copy {
+    width: 360px;
+    padding-bottom: 18px;
+    font-size: 17px;
+    color: var(--ink-2);
+    line-height: 1.5;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--line-2);
+    margin-top: 32px;
+  }
+  .stat, .stat-link {
+    padding: 24px 32px 0 0;
+    color: inherit;
+  }
+  .stat:not(:last-child) {
+    border-right: 1px solid var(--line-2);
+  }
+  .stat-big {
+    font-size: 44px;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .stat-sub {
+    font-size: 12.5px;
+    color: var(--ink-4);
+    margin-top: 2px;
+  }
+  .stat-link { display: block; text-decoration: none; }
+  .stat-link:hover .stat-big { color: var(--acc-2); }
+</style>

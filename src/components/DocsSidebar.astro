@@ -1,0 +1,124 @@
+---
+import { SECTIONS, FLAT_GUIDES } from '../data/guides';
+
+interface Props {
+  activeSlug?: string;
+}
+const { activeSlug } = Astro.props;
+---
+<aside class="docs-sidebar">
+  <div class="sidebar-version">v0.1.0-alpha · {FLAT_GUIDES.length} guides</div>
+  <div class="sidebar-filter">
+    <span>⌕</span>
+    <span>Filter guides…</span>
+  </div>
+
+  {SECTIONS.map((section) => (
+    <div class="sidebar-section">
+      <div class="section-heading">
+        <span class="section-num">{section.num}.</span>
+        <span>{section.title}</span>
+      </div>
+      <ul class="section-list">
+        {section.guides.map((guide) => {
+          const on = guide.slug === activeSlug;
+          const href = guide.status === 'live' ? `/docs/${guide.slug}` : '#';
+          return (
+            <li>
+              <a href={href} class:list={['guide-link', { on, disabled: guide.status !== 'live' }]}>
+                <span class="guide-label">{guide.label}</span>
+                {guide.status !== 'live' && (
+                  <span class="guide-status">{guide.status}</span>
+                )}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  ))}
+</aside>
+
+<style>
+  .docs-sidebar {
+    width: 256px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+  .sidebar-version {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.5px;
+    color: var(--ink-4);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .sidebar-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    margin-bottom: 22px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+  .sidebar-section { margin-bottom: 22px; }
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-num { color: var(--acc-2); }
+  .section-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .guide-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px 5px 10px;
+    border-radius: 5px;
+    font-size: 13px;
+    letter-spacing: -0.005em;
+    color: var(--ink-2);
+    border-left: 2px solid transparent;
+  }
+  .guide-link:hover { color: var(--ink); }
+  .guide-link.on {
+    color: var(--ink);
+    background: rgba(124, 92, 255, 0.08);
+    border-left-color: var(--acc);
+    padding-left: 8px;
+  }
+  .guide-link.disabled {
+    color: var(--ink-3);
+    cursor: default;
+  }
+  .guide-label { flex: 1; }
+  .guide-status {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9.5px;
+    color: #f0c674;
+    letter-spacing: 0.4px;
+  }
+</style>

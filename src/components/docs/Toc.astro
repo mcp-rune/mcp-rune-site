@@ -1,0 +1,116 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  sourceFile?: string;
+}
+const { headings, sourceFile } = Astro.props;
+
+// Show only level-2 headings in the on-this-page nav; level-3s would crowd it.
+const items = headings.filter((h) => h.depth === 2);
+---
+<aside class="toc">
+  <div class="toc-heading">On this page</div>
+  <ul class="toc-list">
+    {items.map((h) => (
+      <li>
+        <a href={`#${h.slug}`}>{h.text}</a>
+      </li>
+    ))}
+  </ul>
+
+  {sourceFile && (
+    <div class="toc-source">
+      <div class="toc-source-heading">Source</div>
+      <a
+        href={`https://github.com/mcp-rune/mcp-rune/blob/main/docs/guides/${sourceFile}`}
+        target="_blank"
+        rel="noopener"
+        class="toc-source-link"
+      >
+        docs/guides/<br />{sourceFile} ↗
+      </a>
+      <div class="toc-source-actions">
+        <a href={`https://github.com/mcp-rune/mcp-rune/edit/main/docs/guides/${sourceFile}`} target="_blank" rel="noopener">✎ Edit this page</a>
+        <a href="https://github.com/mcp-rune/mcp-rune/issues/new" target="_blank" rel="noopener">⚑ Report an issue</a>
+        <a href="https://github.com/mcp-rune/mcp-rune/discussions" target="_blank" rel="noopener">↗ Discuss on GitHub</a>
+      </div>
+    </div>
+  )}
+</aside>
+
+<style>
+  .toc {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+  }
+  .toc-heading {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.5px;
+    color: var(--ink-4);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    list-style: none;
+    margin: 0 0 28px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .toc-list a {
+    display: block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12.5px;
+    color: var(--ink-3);
+    border-left: 2px solid transparent;
+  }
+  .toc-list a:hover {
+    color: var(--ink);
+    background: rgba(124, 92, 255, 0.06);
+    border-left-color: var(--acc);
+    padding-left: 8px;
+  }
+
+  .toc-source {
+    padding: 14px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .toc-source-heading {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.4px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .toc-source-link {
+    display: block;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--acc-2);
+    word-break: break-all;
+    line-height: 1.5;
+  }
+  .toc-source-actions {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line-2);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+  }
+  .toc-source-actions a { color: var(--ink-3); }
+  .toc-source-actions a:hover { color: var(--ink); }
+</style>

@@ -1,0 +1,135 @@
+---
+// Architecture band — port of PrArch in page-landing-pristine.jsx.
+// Five-layer stack, bottom-up data flow.
+const layers: Array<[string, string, string]> = [
+  ['L5', 'Behavioral',       'generateStatefulGuidanceInstructions() · turn-taking · validation · mode selection'],
+  ['L4', 'Assembly',         'PromptContentGenerator.build() · composes all layers into final promptContent'],
+  ['L3', 'Section Docs',     'per-section field tables, enum tables, content notes'],
+  ['L2', 'Grouping',         'sections + fieldGroups · workflow structure, field organization'],
+  ['L1', 'Schema Derivation','derivePromptSchema() · fieldDefinitions from model attributes'],
+];
+---
+<section class="arch">
+  <div class="pr-wrap arch-inner">
+    <div class="arch-intro">
+      <div class="arch-eyebrow">
+        <span class="arch-eyebrow-bar"></span>
+        <span>ARCHITECTURE</span>
+        <span class="arch-eyebrow-bar"></span>
+      </div>
+      <h2 class="pr-display arch-title">Five layers, bottom up.</h2>
+      <p class="arch-lede">
+        Data flows from your model config up through grouping, documentation,
+        assembly, and behavior. Each layer is replaceable — and nothing duplicates.
+      </p>
+    </div>
+
+    <div class="layer-stack">
+      {layers.map(([n, t, s], i) => (
+        <div class:list={['layer', { highlighted: i === layers.length - 1 }]}>
+          <span class="layer-tag">{n}</span>
+          <div class="layer-body">
+            <span class="layer-title">{t}</span>
+            <span class="layer-sub">{s}</span>
+          </div>
+        </div>
+      ))}
+      <div class="arch-foot">
+        ↑ data flows bottom-up · model config → field definitions → grouped sections → assembled docs → behavior
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .arch {
+    background: linear-gradient(180deg, transparent 0%, var(--bg-2) 30%, var(--bg-2) 70%, transparent 100%);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .arch-inner { padding: 96px 32px; }
+  .arch-intro {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 56px;
+  }
+  .arch-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--acc-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    margin-bottom: 16px;
+    letter-spacing: 0.3px;
+  }
+  .arch-eyebrow-bar { width: 16px; height: 1px; background: var(--acc); }
+  .arch-title {
+    font-size: 52px;
+    margin: 0;
+  }
+  .arch-lede {
+    margin-top: 18px;
+    font-size: 17px;
+    color: var(--ink-3);
+  }
+
+  .layer-stack {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .layer {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 18px;
+    align-items: center;
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .layer + .layer { margin-top: -1px; }
+  .layer.highlighted {
+    box-shadow: 0 30px 60px -30px rgba(124, 92, 255, 0.25);
+  }
+  .layer-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-3);
+    background: var(--bg-2);
+    border: 1px solid var(--line-2);
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .layer.highlighted .layer-tag {
+    color: var(--acc-2);
+    background: rgba(124, 92, 255, 0.1);
+    border-color: rgba(124, 92, 255, 0.3);
+  }
+  .layer-body {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .layer-title {
+    font-family: 'Geist', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+  .layer-sub {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-3);
+  }
+  .arch-foot {
+    text-align: center;
+    margin-top: 18px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.4px;
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+import GuideRow from './GuideRow.astro';
+import type { Section } from '../../data/guides';
+
+interface Props {
+  section: Section;
+}
+const { section } = Astro.props;
+---
+<div class="section-block" id={`section-${section.num.toLowerCase()}`}>
+  <div class="section-head">
+    <div class="section-num">{section.num}. SECTION</div>
+    <h2 class="pr-display section-title">{section.title}</h2>
+    <span class="section-bar" />
+    <span class="section-count">
+      {section.guides.length} GUIDE{section.guides.length === 1 ? '' : 'S'}
+    </span>
+  </div>
+  {section.blurb && <p class="section-blurb">{section.blurb}</p>}
+
+  <div class="section-rows">
+    {section.guides.map((guide, i) => (
+      <GuideRow guide={guide} index={i + 1} />
+    ))}
+  </div>
+</div>
+
+<style>
+  .section-block { margin-bottom: 56px; }
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .section-num {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--acc-2);
+    letter-spacing: 0.5px;
+  }
+  .section-title {
+    font-size: 30px;
+    margin: 0;
+    color: var(--ink);
+  }
+  .section-bar {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .section-count {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-4);
+  }
+  .section-blurb {
+    font-size: 14px;
+    color: var(--ink-3);
+    max-width: 720px;
+    margin: 0 0 18px;
+  }
+  .section-rows {
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-top: none;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+</style>
