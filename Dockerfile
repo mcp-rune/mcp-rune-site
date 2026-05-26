@@ -1,0 +1,26 @@
+# Multi-stage build:
+#   1. node:20-alpine builds the static Astro site. The src/content/guides
+#      symlink → ../../vendor/mcp-rune/docs/guides resolves inside the
+#      Docker context because kamal clones the repo with --recurse-submodules,
+#      populating vendor/mcp-rune/ from github.com:mcp-rune/mcp-rune.
+#   2. nginx:alpine serves the resulting dist/.
+#
+# Nothing pre-built on the host is shipped: dist/ stays out of git and is
+# regenerated from source on every image build.
+
+FROM node:20-alpine AS build
+WORKDIR /app
+
+# Install deps in a dedicated layer so it caches across content-only changes.
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+
+RUN npm run build && test -f dist/index.html
+
+FROM nginx:alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist /usr/share/nginx/html
+
+EXPOSE 80
