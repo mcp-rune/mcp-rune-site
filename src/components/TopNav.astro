@@ -43,6 +43,35 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
         Get started <span class="arr">→</span>
       </a>
     </div>
+
+    <div class="topnav-mobile">
+      <button type="button" class="icon-btn search-btn" aria-label="Search">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.4" />
+          <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+        </svg>
+      </button>
+      <button type="button" class="icon-btn menu-btn" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-drawer">
+        <span class="bar" /><span class="bar" />
+      </button>
+    </div>
+  </div>
+
+  <div id="nav-drawer" class="mobile-drawer" hidden>
+    {links.map(({ label, key, href }) => (
+      <a href={href} class:list={['drawer-link', { on: key === active }]}>
+        {label}
+        <span class="drawer-arr">↗</span>
+      </a>
+    ))}
+    <div class="drawer-cta">
+      <a class="pr-btn ghost" href="https://github.com/mcp-rune/mcp-rune">
+        <span class="star">★</span><span>GitHub · 1,243</span>
+      </a>
+      <a class="pr-btn" href="/docs/quickstart">
+        Get started <span class="arr">→</span>
+      </a>
+    </div>
   </div>
 </header>
 
@@ -136,4 +165,119 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
   }
   .pr-btn.compact { height: 32px; padding: 0 12px; font-size: 13px; }
   .star { color: var(--ink-3); }
+
+  /* mobile chrome — hidden by default */
+  .topnav-mobile { display: none; }
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+  .icon-btn.menu-btn {
+    background: var(--surface);
+    color: var(--ink);
+    flex-direction: column;
+    gap: 4px;
+  }
+  .icon-btn.menu-btn .bar {
+    width: 14px;
+    height: 1.5px;
+    background: currentColor;
+    border-radius: 1px;
+  }
+  .mobile-drawer { display: none; }
+  .mobile-drawer.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background: rgba(7, 7, 10, 0.96);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+    padding: 8px 16px 16px;
+  }
+  .drawer-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 8px;
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    border-bottom: 1px solid var(--line);
+  }
+  .drawer-link.on { color: var(--acc-2); }
+  .drawer-arr {
+    margin-left: auto;
+    color: var(--ink-4);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+  }
+  .drawer-cta {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .drawer-cta .pr-btn {
+    flex: 1;
+    height: 38px;
+    font-size: 13px;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .topnav-inner {
+      height: 52px;
+      padding: 0 16px;
+      gap: 10px;
+    }
+    .links,
+    .search,
+    .actions { display: none; }
+    .topnav-mobile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .mobile-drawer.open { top: 52px; }
+  }
 </style>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const drawer = document.getElementById('nav-drawer');
+
+  function setDrawer(open: boolean) {
+    if (!drawer || !toggle) return;
+    drawer.classList.toggle('open', open);
+    if (open) {
+      drawer.removeAttribute('hidden');
+    } else {
+      drawer.setAttribute('hidden', '');
+    }
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  toggle?.addEventListener('click', () => {
+    setDrawer(!drawer?.classList.contains('open'));
+  });
+
+  drawer?.querySelectorAll<HTMLAnchorElement>('a').forEach((a) => {
+    a.addEventListener('click', () => setDrawer(false));
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) setDrawer(false);
+  });
+</script>

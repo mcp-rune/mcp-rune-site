@@ -66,4 +66,17 @@
     border: none;
   }
   .contribute-btn { height: 38px; font-size: 13px; flex-shrink: 0; }
+
+  @media (max-width: 768px) {
+    .contribute {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 14px;
+      padding: 20px;
+    }
+    .contribute-btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
 </style>

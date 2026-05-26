@@ -1574,4 +1574,67 @@ const rfcs = ['RFC 6749', 'RFC 7591', 'RFC 7636 (PKCE)', 'RFC 7662', 'RFC 8414',
     color: var(--ink-2);
     border-radius: 3px;
   }
+
+  @media (max-width: 768px) {
+    .pillars-intro { padding: 64px 16px 16px; }
+    .intro-grid { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .section-title { font-size: 36px; max-width: none; }
+    .intro-copy { max-width: none; }
+
+    .pillars-rows { padding: 16px 16px 64px; }
+    .row {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 40px 0;
+    }
+    .row.illu-first .row-illu,
+    .row.text-first .row-illu { order: 0; padding: 0; }
+    .row.illu-first .row-text,
+    .row.text-first .row-text {
+      order: 1;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .pillar-title { font-size: 28px; max-width: none; }
+    .pillar-lede { font-size: 14.5px; max-width: none; }
+    .pillar-bullets { max-width: none; }
+
+    .stage,
+    .stage-apps,
+    .stage-domain { min-height: auto; }
+    .stage-body { padding: 16px; }
+
+    /* dense inner grids → single column */
+    .illu-crud { grid-template-columns: 1fr; gap: 16px; }
+    .illu-hub-wrap { min-height: 200px; }
+    .illu-models { grid-template-columns: repeat(2, 1fr); }
+
+    .illu-prompt { grid-template-columns: 1fr; gap: 14px; }
+
+    .ef-fields { grid-template-columns: 1fr; gap: 12px; }
+    .field.span2 { grid-column: span 1; }
+    .apps-chat { padding: 16px; }
+    .msg-user { max-width: 85%; }
+
+    .illu-analysis { grid-template-columns: 1fr; gap: 14px; }
+
+    .workflow {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .wf-arrow {
+      transform: rotate(90deg);
+      margin: 4px auto;
+    }
+    .domain-grid { grid-template-columns: 1fr; }
+
+    .oauth-steps { grid-template-columns: 1fr; }
+    .introspect { grid-template-columns: 1fr; }
+
+    /* analysis cluster row gets tighter */
+    .cluster { grid-template-columns: 90px 1fr 48px; gap: 8px; }
+
+    .workflow-head { flex-wrap: wrap; row-gap: 4px; }
+    .wf-tools { width: 100%; }
+  }
 </style>
