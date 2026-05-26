@@ -112,4 +112,34 @@ const Tag = href ? 'a' : 'div';
     color: var(--ink-4);
     text-align: right;
   }
+
+  @media (max-width: 768px) {
+    .guide-row {
+      grid-template-columns: 40px 1fr auto;
+      grid-template-areas:
+        "icon label arr"
+        "icon blurb arr"
+        "icon meta  arr";
+      column-gap: 12px;
+      row-gap: 6px;
+      padding: 14px 16px;
+    }
+    .row-icon {
+      grid-area: icon;
+      align-self: start;
+      width: 32px;
+      height: 32px;
+    }
+    .row-num,
+    .row-tags { display: none; }
+    .row-label { grid-area: label; font-size: 15px; }
+    .row-blurb { grid-area: blurb; font-size: 13px; }
+    .row-meta {
+      grid-area: meta;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+    }
+    .row-arr { grid-area: arr; align-self: center; }
+  }
 </style>

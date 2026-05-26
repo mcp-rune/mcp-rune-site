@@ -21,14 +21,17 @@ const columns: Array<{ heading: string; items: string[] }> = [
         </p>
       </div>
       {columns.map(({ heading, items }) => (
-        <div>
-          <div class="footer-heading">{heading}</div>
+        <details class="footer-col">
+          <summary class="footer-heading">
+            {heading}
+            <span class="chev">▾</span>
+          </summary>
           <ul class="footer-list">
             {items.map((item) => (
               <li><a href="#">{item}</a></li>
             ))}
           </ul>
-        </div>
+        </details>
       ))}
     </div>
     <div class="footer-bottom">
@@ -102,5 +105,48 @@ const columns: Array<{ heading: string; items: string[] }> = [
     font-family: 'Geist Mono', monospace;
     font-size: 11.5px;
     color: var(--ink-4);
+  }
+
+  /* Desktop: <details> renders as plain expanded columns */
+  .footer-col > summary {
+    list-style: none;
+    cursor: default;
+    pointer-events: none;
+  }
+  .footer-col > summary::-webkit-details-marker { display: none; }
+  .footer-col .chev { display: none; }
+  .footer-col > .footer-list { display: flex !important; }
+
+  @media (max-width: 768px) {
+    .footer-inner { padding: 32px 16px 28px; }
+    .footer-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding-bottom: 16px;
+    }
+    .footer-col > summary {
+      pointer-events: auto;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      margin-bottom: 0;
+      border-top: 1px solid var(--line);
+    }
+    .footer-col .chev {
+      display: inline;
+      color: var(--ink-5);
+      transition: transform 120ms;
+    }
+    .footer-col[open] .chev { transform: rotate(180deg); }
+    .footer-col:not([open]) > .footer-list { display: none !important; }
+    .footer-col[open] > .footer-list { padding: 0 4px 14px; }
+    .footer-bottom {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
   }
 </style>

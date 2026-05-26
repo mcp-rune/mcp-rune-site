@@ -132,4 +132,24 @@ const layers: Array<[string, string, string]> = [
     color: var(--ink-4);
     letter-spacing: 0.4px;
   }
+
+  @media (max-width: 768px) {
+    .arch-inner { padding: 56px 16px; }
+    .arch-title { font-size: 34px; }
+    .arch-lede { font-size: 15px; margin-top: 16px; }
+    .arch-intro { margin-bottom: 32px; }
+    .layer {
+      grid-template-columns: 48px 1fr;
+      gap: 12px;
+      padding: 14px 16px;
+    }
+    .layer-body {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+    .layer-title { font-size: 16px; }
+    .layer-sub { font-size: 11.5px; }
+    .arch-foot { font-size: 10.5px; }
+  }
 </style>

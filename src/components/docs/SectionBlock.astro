@@ -67,4 +67,16 @@ const { section } = Astro.props;
     border-radius: 8px;
     overflow: hidden;
   }
+
+  @media (max-width: 768px) {
+    .section-block { margin-bottom: 40px; }
+    .section-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .section-title { font-size: 24px; }
+    .section-bar { display: none; }
+  }
 </style>
