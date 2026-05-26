@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-05-26
+
+### Added
+
+- Kamal deployment to the `dsaenz-prod` droplet under https://mcp-rune.dev, sharing the kamal-proxy + Let's Encrypt setup used by the rest of the dsaenz ecosystem (`engineer.dsaenz.dev`, `identity.dsaenz.dev`, `dsaenz.dev`).
+- `Dockerfile` (nginx:alpine + pre-built `dist/`), `nginx.conf` (`try_files` for Astro's pretty URLs, `/up` healthcheck for kamal-proxy, immutable caching for `/_astro/`), and `.dockerignore` whitelisting only `dist/` and `nginx.conf`.
+- `config/deploy.yml`, `.kamal/secrets` (1Password reference for the shared Docker Hub token), and a `.kamal/hooks/pre-build` script that runs `npm ci && npm run build` on the host so the `src/content/guides` symlink to `../mcp-rune/docs/guides` is resolved before Docker sees the build context.
+
 ## [0.1.1] - 2026-05-26
 
 ### Changed
@@ -18,4 +26,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Domain Intelligence: wrapped the workflow in a labelled card, added the `check_business_rules` panel (one failing rule highlighted) and the `get_domain_context` knowledge card with "#billing/#identity/#workspaces" tags.
   - OAuth 2.1 + PKCE: added the per-step note, the `introspect` badge with `RFC 7662 · 8707` tag, and the full RFC ribbon (CIMD draft, OIDC Core 1.0 included).
 
+[0.2.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.1.0...v0.1.1

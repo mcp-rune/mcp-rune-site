@@ -1,0 +1,49 @@
+# Deployment configuration for dsaenz-prod server
+#
+# This Astro static site is served by a minimal nginx:alpine container at
+# https://mcp-rune.dev/. It shares the dsaenz-prod droplet with the
+# engineer / identity / redirect services but lives on its own apex domain
+# rather than a *.dsaenz.dev subdomain (kamal-proxy still provisions a
+# per-host Let's Encrypt cert via HTTP-01 the same way).
+#
+# The dist/ tree is produced on the host by the pre-build hook
+# (.kamal/hooks/pre-build → npm ci && npm run build) so the Dockerfile is
+# just an nginx layer + a COPY — no Node toolchain in the runtime image,
+# and the src/content/guides symlink to ../mcp-rune/docs/guides is
+# resolved before Docker ever sees the build context.
+#
+# Usage:
+#   kamal setup     # First deploy (provisions container + cert)
+#   kamal deploy    # Subsequent deploys
+#   kamal app logs  # Tail nginx access/error logs
+
+service: mcp-rune-site
+
+image: dsaenztagarro/mcp-rune-site
+
+servers:
+  web:
+    - dsaenz-prod
+
+proxy:
+  app_port: 80
+  host: mcp-rune.dev
+  # kamal-proxy provisions a per-host Let's Encrypt cert via HTTP-01.
+  ssl: true
+  healthcheck:
+    path: /up
+
+registry:
+  server: docker.io
+  username: dsaenztagarro
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+# Pure static site — no app secrets, no env beyond what nginx needs.
+
+builder:
+  arch: amd64
+
+# Astro emits hashed assets straight into dist/_astro; we don't use kamal's
+# Rails-style asset bridging.
+asset_path: false

@@ -1,0 +1,5 @@
+# Whitelist approach: the Dockerfile only copies dist/ and nginx.conf, so
+# everything else is dead weight in the build context.
+*
+!dist
+!nginx.conf
