@@ -1,8 +1,10 @@
 ---
 // Six Pillars — port of pristine-pillars.jsx. Each pillar pairs explanatory copy
 // (eyebrow, headline, lede, bulleted feature list) with an illustrative Stage card.
-// The illustrations here are simplified representations of the rich JSX originals;
-// the structural design (alternating sides, Stage chrome, type roles) is preserved.
+// Illustrations follow the rich design from pristine-pillars.jsx: a converging-lines
+// CRUD diagram, a section-progress panel for Prompts, a full embedded-form chat UI
+// for Apps, an ingest-progress + clusters panel for Analysis, a workflow + rules +
+// knowledge grid for Domain, and a 3-step OAuth flow with introspect badge + RFCs.
 
 interface Pillar {
   n: string;
@@ -12,6 +14,7 @@ interface Pillar {
   bullets: Array<{ k: string; v: string }>;
   illustration: 'crud' | 'prompt' | 'apps' | 'analysis' | 'domain' | 'oauth';
   side: 'left' | 'right';
+  stageRight?: string;
 }
 
 const pillars: Pillar[] = [
@@ -19,7 +22,7 @@ const pillars: Pillar[] = [
     n: '01',
     eyebrow: 'POLYMORPHIC CRUD',
     title: 'Eight tools serve every model in your domain.',
-    lede: 'Most MCP frameworks scale tool count with model count. mcp-rune keeps the surface flat: eight polymorphic tools accept the model name as a parameter and dispatch to the right resolver. Add the hundredth model — the tool list still reads list_models, find_records, create_model.',
+    lede: 'Most MCP frameworks scale tool count with model count — 10 models × 5 verbs = 50 handlers, a tool list that overflows the picker, and an LLM that struggles to choose. mcp-rune keeps the surface flat: eight polymorphic tools accept the model name as a parameter and dispatch to the right resolver. Add the hundredth model — the tool list still reads list_models, find_records, create_model.',
     bullets: [
       { k: 'Compound IDs for nested resources', v: 'titles/42/assets/7 — no separate nested tools' },
       { k: 'Bulk operations built-in',           v: 'bulk_action_models handles batch create / update / delete' },
@@ -27,25 +30,27 @@ const pillars: Pillar[] = [
     ],
     illustration: 'crud',
     side: 'left',
+    stageRight: '10 models · still 8 tools',
   },
   {
     n: '02',
     eyebrow: 'PROMPT STRATEGIES',
     title: 'Make a 25-field form fillable by an agent.',
-    lede: 'Three strategies — stateless, hybrid, and stateful — adapt validation UX to form complexity. The hybrid path validates fields on demand; the stateful path walks the agent through one section at a time, reporting progress and catching errors before the final write.',
+    lede: 'How does an LLM correctly fill a long form? Most servers don\'t try. mcp-rune ships three strategies — stateless, hybrid, and stateful — that adapt validation UX to form complexity. The hybrid path validates fields and generates summaries on demand; the stateful path walks the agent through one section at a time, reporting progress and catching errors before the final write.',
     bullets: [
-      { k: 'derivePromptSchema(Model)',     v: 'fieldDefinitions come straight from your model spec' },
-      { k: 'fieldGroups + sections',        v: 'tell the agent which fields belong together and why' },
+      { k: 'derivePromptSchema(Model)',       v: 'fieldDefinitions come straight from your model spec' },
+      { k: 'fieldGroups + sections',          v: 'tell the agent which fields belong together and why' },
       { k: 'PromptContentGenerator pipeline', v: 'flow diagram → guidance → sections → summary → reference tables' },
     ],
     illustration: 'prompt',
     side: 'right',
+    stageRight: 'strategy: hybrid',
   },
   {
     n: '03',
     eyebrow: 'INTERACTIVE MCP APPS',
     title: 'Schema-driven UI rendered inside the host.',
-    lede: 'Tools handle text. Apps render real interactive UI — forms, lists, detail views, search, autocomplete pickers, multi-selects — inside Claude Desktop and other MCP-Apps hosts. Six generic factories cover the surface; adding a new model form is one registry entry and zero new HTML.',
+    lede: 'Tools handle text. Apps render real interactive UI — forms, lists, detail views, search, autocomplete pickers, multi-selects — inside Claude Desktop, Cursor, VS Code, anywhere that speaks the MCP Apps extension. Six generic factories cover the surface; adding a new model form is one registry entry and zero new HTML. The same attributesConfig powers the tools, prompts, and apps — so they never drift.',
     bullets: [
       { k: 'Six app types',                    v: 'Model Form · List View · Record Detail · Search View · Autocomplete · Multi-Select' },
       { k: 'Two-column / sectioned layouts',   v: 'derived from fieldGroups; no per-model markup' },
@@ -58,7 +63,7 @@ const pillars: Pillar[] = [
     n: '04',
     eyebrow: 'ANALYSIS MEMORIES',
     title: 'Map-reduce thousands of records — without the context window.',
-    lede: '"What are people complaining about this quarter?" doesn\'t fit in 100k tokens. mcp-rune\'s analysis layer ingests entire datasets into local pgvector, groups them into themes, and returns aggregates instead of raw rows. The agent acts on findings, not on records.',
+    lede: 'Asking an agent "what are people complaining about this quarter?" doesn\'t fit in 100k tokens. mcp-rune\'s analysis layer ingests entire datasets into local pgvector, groups them into themes, and returns aggregates — counts, distributions, clusters — instead of raw rows. The agent acts on findings, not on records. Five tools cover the whole loop: ingest, query, act, store, clear.',
     bullets: [
       { k: 'analysis_ingest',                  v: 'batch records by 256, embed with all-MiniLM-L6-v2, 1h TTL by default' },
       { k: 'analysis_query + analysis_act',    v: 'cluster, filter, stratify, count — without flooding context' },
@@ -66,12 +71,13 @@ const pillars: Pillar[] = [
     ],
     illustration: 'analysis',
     side: 'right',
+    stageRight: 'pgvector · 384-dim · all-MiniLM-L6-v2',
   },
   {
     n: '05',
     eyebrow: 'DOMAIN INTELLIGENCE',
     title: 'Workflows, business rules, and knowledge agents can read.',
-    lede: 'The Domain module encodes business logic explicitly: WorkflowDefinition for multi-step operations, business rules the agent validates before write, and a knowledge store for terminology and policy. suggest_workflow lets the agent ask the framework what to do next.',
+    lede: 'A clean MCP server still leaves the agent to guess your business logic. The Domain module lets you encode it explicitly: WorkflowDefinition for multi-step operations, business rules the agent validates before write, and a knowledge store for terminology and policy. suggest_workflow lets the agent ask the framework what to do next.',
     bullets: [
       { k: 'Workflows',              v: 'declarative step graphs; get_workflow_step walks the agent through' },
       { k: 'check_business_rules',   v: 'preflight validation against your domain invariants' },
@@ -79,12 +85,13 @@ const pillars: Pillar[] = [
     ],
     illustration: 'domain',
     side: 'left',
+    stageRight: 'suggest_workflow · check_business_rules',
   },
   {
     n: '06',
     eyebrow: 'OAUTH 2.1 + PKCE',
     title: 'Production OAuth — discovery, DCR, PKCE, audience-restricted tokens.',
-    lede: 'Built on openid-client with mandatory PKCE on every flow. Discovery via RFC 9728 + 8414. Dynamic Client Registration via RFC 7591, or use a Client ID Metadata Document with no pre-shared secret. RFC 8707 resource indicators bind tokens to your server\'s audience.',
+    lede: 'Built on openid-client with mandatory PKCE on every flow. Discovery via RFC 9728 + 8414. Dynamic Client Registration via RFC 7591, or use a Client ID Metadata Document with no pre-shared secret. RFC 8707 resource indicators bind tokens to your server\'s audience — preventing token-confusion attacks across services.',
     bullets: [
       { k: 'Three client strategies',     v: 'pre-registered · DCR · CIMD — your call' },
       { k: 'Audience-restricted tokens',  v: 'aud is checked on every request; mismatched tokens are rejected' },
@@ -92,6 +99,7 @@ const pillars: Pillar[] = [
     ],
     illustration: 'oauth',
     side: 'right',
+    stageRight: 'openid-client · audience-restricted',
   },
 ];
 
@@ -99,10 +107,57 @@ const tools = [
   'list_models', 'find_records', 'create_model', 'update_model',
   'delete_model', 'search_records', 'get_filters_guide', 'bulk_action_models',
 ];
-const models = [
+const models: Array<[string, string]> = [
   ['Book', '📖'], ['User', '◐'], ['Project', '◇'], ['Order', '▤'],
   ['Asset', '▣'], ['Activity', '◉'], ['Invoice', '▦'], ['Team', '◈'],
+  ['Comment', '◔'], ['Tag', '◇'],
 ];
+
+const strategies = [
+  { name: 'stateless', range: '< 10 fields',   ops: ['getDocumentation'],                                         active: false },
+  { name: 'hybrid',    range: '10–20 fields',  ops: ['getDocumentation', 'validateFields', 'generateSummary'],    active: true  },
+  { name: 'stateful',  range: '20+ fields',    ops: ['+ validateSection', '+ getProgress'],                       active: false },
+];
+
+const sections = [
+  { name: 'identity',       status: 'ok',   fields: 'title, author' },
+  { name: 'classification', status: 'ok',   fields: 'theme, tags' },
+  { name: 'reading_status', status: 'ok',   fields: 'status, started_at' },
+  { name: 'metrics',        status: 'ok',   fields: 'rating, pages_read' },
+  { name: 'narrative',      status: 'warn', fields: 'summary too short (4 words)' },
+  { name: 'lending',        status: 'todo', fields: 'borrower_id, due_date' },
+  { name: 'review',         status: 'todo', fields: 'review_text, would_recommend' },
+];
+
+const clusters = [
+  { name: 'performance',  n: 1243, pct: 92 },
+  { name: 'billing',      n:  982, pct: 73 },
+  { name: 'integrations', n:  741, pct: 55 },
+  { name: 'onboarding',   n:  516, pct: 38 },
+  { name: 'mobile-ux',    n:  402, pct: 30 },
+  { name: 'docs',         n:  287, pct: 21 },
+];
+
+const workflow = [
+  { i: 1, name: 'create_user',  tool: 'create_model · user', status: 'done'    },
+  { i: 2, name: 'assign_role',  tool: 'update_model · user', status: 'active'  },
+  { i: 3, name: 'send_welcome', tool: 'send_notification',   status: 'pending' },
+];
+
+const rules = [
+  { ok: true,  text: 'email is unique across organization' },
+  { ok: true,  text: 'role.level ≤ inviter.role.level' },
+  { ok: false, text: 'inviter still has open seats (used 12/10)' },
+  { ok: true,  text: 'department exists in directory' },
+];
+
+const oauthSteps = [
+  { step: '01', title: 'Discovery', method: 'GET',  path: '/.well-known/oauth-protected-resource',          note: 'RFC 9728 · returns resource + auth server URLs' },
+  { step: '02', title: 'Authorize', method: 'GET',  path: '/oauth/authorize?code_challenge=…&resource=…',   note: 'RFC 7636 PKCE · RFC 8707 resource indicator' },
+  { step: '03', title: 'Token',     method: 'POST', path: '/oauth/token',                                   note: 'Returns aud-restricted token · refresh in background' },
+];
+
+const rfcs = ['RFC 6749', 'RFC 7591', 'RFC 7636 (PKCE)', 'RFC 7662', 'RFC 8414', 'RFC 8707', 'RFC 9728', 'CIMD draft', 'OIDC Core 1.0'];
 ---
 <section class="pillars">
   <div class="pr-wrap pillars-intro">
@@ -124,11 +179,11 @@ const models = [
     {pillars.map((p) => (
       <article class:list={['row', p.side === 'left' ? 'illu-first' : 'text-first']}>
         <div class="row-illu">
-          <div class="stage">
+          <div class:list={['stage', `stage-${p.illustration}`]}>
             <div class="stage-chrome">
               <span class="stage-tag">{p.eyebrow.toLowerCase()}</span>
               <span class="flex-spacer" />
-              <span class="stage-meta">pillar {p.n}</span>
+              {p.stageRight && <span class="stage-meta">{p.stageRight}</span>}
             </div>
             <div class="stage-body">
               {p.illustration === 'crud' && (
@@ -144,7 +199,22 @@ const models = [
                       ))}
                     </div>
                   </div>
-                  <div class="illu-hub">
+                  <div class="illu-hub-wrap">
+                    <svg class="illu-lines" viewBox="0 0 220 360" preserveAspectRatio="none" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="pillar-line-fade" x1="0" x2="1">
+                          <stop offset="0"   stop-color="rgba(124,92,255,0)" />
+                          <stop offset="0.5" stop-color="rgba(124,92,255,0.55)" />
+                          <stop offset="1"   stop-color="rgba(124,92,255,0)" />
+                        </linearGradient>
+                      </defs>
+                      <path d="M 0 40  C 80 40,  140 180, 220 180" stroke="url(#pillar-line-fade)" stroke-width="1" fill="none" stroke-dasharray="2 4" />
+                      <path d="M 0 100 C 80 100, 140 180, 220 180" stroke="url(#pillar-line-fade)" stroke-width="1" fill="none" stroke-dasharray="2 4" />
+                      <path d="M 0 160 C 80 160, 140 180, 220 180" stroke="url(#pillar-line-fade)" stroke-width="1" fill="none" stroke-dasharray="2 4" />
+                      <path d="M 0 200 C 80 200, 140 180, 220 180" stroke="url(#pillar-line-fade)" stroke-width="1" fill="none" stroke-dasharray="2 4" />
+                      <path d="M 0 260 C 80 260, 140 180, 220 180" stroke="url(#pillar-line-fade)" stroke-width="1" fill="none" stroke-dasharray="2 4" />
+                      <path d="M 0 320 C 80 320, 140 180, 220 180" stroke="url(#pillar-line-fade)" stroke-width="1" fill="none" stroke-dasharray="2 4" />
+                    </svg>
                     <div class="hub-orb">
                       <span class="hub-num">8</span>
                       <span class="hub-label">polymorphic</span>
@@ -167,52 +237,114 @@ const models = [
 
               {p.illustration === 'prompt' && (
                 <div class="illu-prompt">
-                  <div class="illu-label">THREE STRATEGIES · ONE API</div>
-                  {[
-                    { name: 'stateless', range: '< 10 fields',  active: false },
-                    { name: 'hybrid',    range: '10–20 fields', active: true  },
-                    { name: 'stateful',  range: '20+ fields',   active: false },
-                  ].map((t) => (
-                    <div class:list={['strategy', { active: t.active }]}>
-                      <span class="strategy-name">{t.name}</span>
-                      <span class="strategy-range">{t.range}</span>
-                      {t.active && <span class="strategy-active">● ACTIVE</span>}
+                  <div class="prompt-left">
+                    <div class="illu-label">THREE STRATEGIES · ONE API</div>
+                    {strategies.map((t) => (
+                      <div class:list={['strategy', { active: t.active }]}>
+                        <div class="strategy-head">
+                          <span class="strategy-name">{t.name}</span>
+                          <span class="strategy-range">{t.range}</span>
+                          {t.active && <span class="strategy-active">● ACTIVE</span>}
+                        </div>
+                        <div class="strategy-ops">
+                          {t.ops.map((op) => <span class="strategy-op">{op}</span>)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div class="prompt-right">
+                    <div class="progress-head">
+                      <span class="progress-dot"></span>
+                      <span class="progress-name">validateSection · in_progress</span>
+                      <span class="flex-spacer" />
+                      <span class="progress-count">5/7</span>
                     </div>
-                  ))}
+                    <div class="progress-list">
+                      {sections.map((s) => (
+                        <div class="progress-row">
+                          <span class:list={['progress-mark', s.status]}>
+                            {s.status === 'ok' ? '✓' : s.status === 'warn' ? '!' : '○'}
+                          </span>
+                          <div>
+                            <div class:list={['progress-section', s.status]}>{s.name}</div>
+                            <div class:list={['progress-fields', s.status]}>{s.fields}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div class="progress-foot">
+                      <span class="progress-arr">↳</span>
+                      <span>generated from <span class="hi">fieldGroups</span> + <span class="hi">derivePromptSchema(Book)</span></span>
+                    </div>
+                  </div>
                 </div>
               )}
 
               {p.illustration === 'apps' && (
                 <div class="illu-apps">
                   <div class="apps-window">
-                    <div class="apps-window-head">
-                      <span class="apps-tab">+ Create book</span>
-                      <span class="flex-spacer" />
-                      <span class="apps-meta">schema-driven · two-column</span>
+                    <div class="apps-chrome">
+                      <div class="apps-dots"><span /><span /><span /></div>
+                      <span class="apps-title">Bookshelf · MCP host</span>
+                      <div class="apps-uri">
+                        <span class="apps-uri-dot"></span>
+                        <span>ui://book/create</span>
+                      </div>
                     </div>
-                    <div class="apps-fields">
-                      <div class="field span2">
-                        <label>TITLE</label>
-                        <div class="field-input focused">Designing Data-Intensive Applications</div>
+                    <div class="apps-chat">
+                      <div class="msg-user">
+                        Add <em>"Designing Data-Intensive Applications"</em> to my reading list — Kleppmann, I'm about halfway through.
                       </div>
-                      <div class="field">
-                        <label>AUTHOR</label>
-                        <div class="field-input">Martin Kleppmann</div>
-                      </div>
-                      <div class="field">
-                        <label>STATUS</label>
-                        <div class="field-input">
-                          <span class="ok-dot"></span><span>reading</span>
-                          <span class="flex-spacer" /><span class="caret">▾</span>
+                      <div class="msg-bot">
+                        <span class="msg-avatar">k</span>
+                        <div class="msg-body">
+                          <div class="msg-text">
+                            Got it. Drafted a record — review the fields below and save when you're happy.
+                            <span class="msg-tool">· create_model / book</span>
+                          </div>
+                          <div class="embedded-form">
+                            <div class="ef-head">
+                              <span class="ef-plus">+</span>
+                              <span class="ef-title">Create book</span>
+                              <span class="flex-spacer" />
+                              <span class="ef-meta">schema-driven · two-column</span>
+                            </div>
+                            <div class="ef-fields">
+                              <div class="field span2">
+                                <label>TITLE</label>
+                                <div class="field-input focused">Designing Data-Intensive Applications</div>
+                              </div>
+                              <div class="field">
+                                <label>AUTHOR</label>
+                                <div class="field-input">Martin Kleppmann</div>
+                              </div>
+                              <div class="field">
+                                <label>STATUS</label>
+                                <div class="field-input">
+                                  <span class="ok-dot"></span><span>reading</span>
+                                  <span class="flex-spacer" /><span class="caret">▾</span>
+                                </div>
+                              </div>
+                              <div class="field">
+                                <label>RATING · 1–5</label>
+                                <div class="field-input stars">★★★★<span class="off">★</span></div>
+                              </div>
+                              <div class="field">
+                                <label>PAGES READ</label>
+                                <div class="field-input">312 <span class="muted">/ 624</span></div>
+                              </div>
+                            </div>
+                            <div class="ef-foot">
+                              <span class="ef-status">5 of 5 required fields complete</span>
+                              <span class="flex-spacer" />
+                              <button type="button" class="ef-cancel">Cancel</button>
+                              <button type="button" class="ef-save">Save book</button>
+                            </div>
+                          </div>
+                          <div class="msg-note">
+                            rendered by <span class="hi-acc">ui://book/create</span> · same schema as form / list / detail / search
+                          </div>
                         </div>
-                      </div>
-                      <div class="field">
-                        <label>RATING · 1–5</label>
-                        <div class="field-input stars">★★★★<span class="off">★</span></div>
-                      </div>
-                      <div class="field">
-                        <label>PAGES READ</label>
-                        <div class="field-input">312 <span class="muted">/ 624</span></div>
                       </div>
                     </div>
                   </div>
@@ -221,65 +353,124 @@ const models = [
 
               {p.illustration === 'analysis' && (
                 <div class="illu-analysis">
-                  <div class="illu-label">FIVE-TOOL PIPELINE</div>
-                  <div class="pipeline">
-                    {['ingest', 'query', 'act', 'store', 'clear'].map((t, i, arr) => (
-                      <>
-                        <span class="pipe-tool">{t}</span>
-                        {i < arr.length - 1 && <span class="pipe-bar"></span>}
-                      </>
-                    ))}
-                  </div>
-                  <div class="clusters">
-                    {[
-                      { name: 'performance',  n: 1243, pct: 92 },
-                      { name: 'billing',      n: 982,  pct: 73 },
-                      { name: 'integrations', n: 741,  pct: 55 },
-                      { name: 'onboarding',   n: 516,  pct: 38 },
-                    ].map((c) => (
-                      <div class="cluster">
-                        <span class="cluster-name">{c.name}</span>
-                        <div class="cluster-bar"><div class="cluster-fill" style={`width: ${c.pct}%`}></div></div>
-                        <span class="cluster-n">{c.n.toLocaleString()}</span>
+                  <div class="analysis-left">
+                    <div class="illu-label">FIVE-TOOL PIPELINE</div>
+                    <div class="pipeline">
+                      {['ingest', 'query', 'act', 'store', 'clear'].map((t, i, arr) => (
+                        <>
+                          <span class="pipe-tool">{t}</span>
+                          {i < arr.length - 1 && <span class="pipe-bar"></span>}
+                        </>
+                      ))}
+                    </div>
+                    <div class="ingest-card">
+                      <div class="ingest-head">
+                        <span class="ingest-name">analysis_ingest</span>
+                        <span class="flex-spacer" />
+                        <span class="ingest-status">● done · 6.4s</span>
                       </div>
-                    ))}
+                      <div class="ingest-num">12,847 <span class="muted">records</span></div>
+                      <div class="ingest-sub">
+                        from <span class="hi">FeedbackRecord</span> · batched 256 · embedded title+summary
+                      </div>
+                      <div class="ingest-bar"><div class="ingest-bar-fill"></div></div>
+                    </div>
+                    <div class="analysis-note">
+                      <span class="hi-acc">analysis_act</span> aggregates, filters, and stratifies findings —
+                      <span class="hi"> no records cross the context boundary</span>.
+                    </div>
+                  </div>
+                  <div class="analysis-right">
+                    <div class="clusters-head">
+                      <span class="cluster-name-h">analysis_query</span>
+                      <span class="flex-spacer" />
+                      <span class="cluster-k">k=24 · clusters</span>
+                    </div>
+                    <div class="cluster-prompt">"group customer feedback by theme, last 90 days"</div>
+                    <div class="clusters">
+                      {clusters.map((c, i) => (
+                        <div class="cluster">
+                          <span class="cluster-name">{c.name}</span>
+                          <div class="cluster-bar">
+                            <div class={`cluster-fill cluster-fill-${i}`} style={`width: ${c.pct}%`}></div>
+                          </div>
+                          <span class="cluster-n">{c.n.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div class="clusters-foot">
+                      <span><span class="dot-ok"></span> persisted · 1h TTL</span>
+                      <span><span class="dot-acc"></span> 6 of 24 shown</span>
+                    </div>
                   </div>
                 </div>
               )}
 
               {p.illustration === 'domain' && (
                 <div class="illu-domain">
-                  <div class="illu-label">WORKFLOW · onboard_new_user</div>
-                  <div class="workflow">
-                    {[
-                      { name: 'create_user',  tool: 'create_model · user',  status: 'done'    },
-                      { name: 'assign_role',  tool: 'update_model · user',  status: 'active'  },
-                      { name: 'send_welcome', tool: 'send_notification',    status: 'pending' },
-                    ].map((step, i, arr) => (
-                      <>
-                        <div class:list={['wf-step', step.status]}>
-                          <div class="wf-step-head">
-                            <span class="wf-step-mark">{step.status === 'done' ? '✓' : i + 1}</span>
-                            <span class="wf-step-name">{step.name}</span>
+                  <div class="workflow-card">
+                    <div class="workflow-head">
+                      <span class="wf-chip">workflow</span>
+                      <span class="wf-name">onboard_new_user</span>
+                      <span class="flex-spacer" />
+                      <span class="wf-tools">get_workflow_step · suggest_workflow</span>
+                    </div>
+                    <div class="workflow">
+                      {workflow.map((step, i, arr) => (
+                        <>
+                          <div class:list={['wf-step', step.status]}>
+                            <div class="wf-step-head">
+                              <span class="wf-step-mark">{step.status === 'done' ? '✓' : step.i}</span>
+                              <span class="wf-step-name">{step.name}</span>
+                            </div>
+                            <div class="wf-step-tool">{step.tool}</div>
                           </div>
-                          <div class="wf-step-tool">{step.tool}</div>
+                          {i < arr.length - 1 && (
+                            <svg class="wf-arrow" viewBox="0 0 28 14" aria-hidden="true">
+                              <path d="M0 7 L24 7 M18 2 L24 7 L18 12" stroke="currentColor" stroke-width="1.2" fill="none" />
+                            </svg>
+                          )}
+                        </>
+                      ))}
+                    </div>
+                  </div>
+                  <div class="domain-grid">
+                    <div class="domain-card">
+                      <div class="domain-card-head">
+                        <span class="domain-chip">rules</span>
+                        <span class="domain-card-name">check_business_rules</span>
+                      </div>
+                      {rules.map((r) => (
+                        <div class="rule-row">
+                          <span class:list={['rule-mark', { ok: r.ok, bad: !r.ok }]}>{r.ok ? '✓' : '✕'}</span>
+                          <span class:list={['rule-text', { bad: !r.ok }]}>{r.text}</span>
                         </div>
-                        {i < arr.length - 1 && <span class="wf-arrow">→</span>}
-                      </>
-                    ))}
+                      ))}
+                    </div>
+                    <div class="domain-card">
+                      <div class="domain-card-head">
+                        <span class="domain-chip">knowledge</span>
+                        <span class="domain-card-name">get_domain_context</span>
+                      </div>
+                      <div class="knowledge-term">"seat"</div>
+                      <div class="knowledge-def">
+                        A licensed user slot on a workspace plan. Seats are billed monthly per workspace; reassigning a seat closes the previous user's sessions within 24h.
+                      </div>
+                      <div class="knowledge-tags">
+                        {['billing', 'identity', 'workspaces'].map((t) => (
+                          <span class="knowledge-tag">#{t}</span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
 
               {p.illustration === 'oauth' && (
                 <div class="illu-oauth">
-                  <div class="illu-label">FLOW · DISCOVERY → AUTHORIZE → TOKEN</div>
+                  <div class="illu-label">FLOW · DISCOVERY → AUTHORIZE → TOKEN → INTROSPECT</div>
                   <div class="oauth-steps">
-                    {[
-                      { step: '01', title: 'Discovery', method: 'GET',  path: '/.well-known/oauth-protected-resource' },
-                      { step: '02', title: 'Authorize', method: 'GET',  path: '/oauth/authorize?code_challenge=…' },
-                      { step: '03', title: 'Token',     method: 'POST', path: '/oauth/token' },
-                    ].map((s) => (
+                    {oauthSteps.map((s) => (
                       <div class="oauth-step">
                         <div class="oauth-head">
                           <span class="oauth-num">{s.step}</span>
@@ -289,14 +480,21 @@ const models = [
                           <span class:list={['method', s.method.toLowerCase()]}>{s.method}</span>
                           <span class="oauth-path">{s.path}</span>
                         </div>
+                        <div class="oauth-note">{s.note}</div>
                       </div>
                     ))}
                   </div>
+                  <div class="introspect">
+                    <div class="introspect-body">
+                      <span class="hi-acc">introspect</span> → <span class="introspect-json">{`{ active: true, aud: "https://mcp.example.com/mcp", scope: "read write" }`}</span>
+                      <br />
+                      <span class="introspect-ok">✓</span> aud matches resourceUri · token cached 60s · LRU 100
+                    </div>
+                    <div class="introspect-rfcs">RFC 7662 · 8707</div>
+                  </div>
                   <div class="rfc-strip">
                     <span class="rfc-label">IMPLEMENTED:</span>
-                    {['RFC 6749', 'RFC 7591', 'RFC 7636 (PKCE)', 'RFC 8414', 'RFC 8707', 'RFC 9728'].map((r) => (
-                      <span class="rfc">{r}</span>
-                    ))}
+                    {rfcs.map((r) => <span class="rfc">{r}</span>)}
                   </div>
                 </div>
               )}
@@ -342,6 +540,8 @@ const models = [
     line-height: 0.98;
   }
   .muted { color: var(--ink-3); }
+  .hi { color: var(--ink-2); }
+  .hi-acc { color: var(--acc-2); }
   .intro-copy {
     max-width: 360px;
     font-size: 14.5px;
@@ -449,6 +649,8 @@ const models = [
                 0 0 0 1px rgba(124, 92, 255, 0.06);
     min-height: 460px;
   }
+  .stage-apps { min-height: 540px; }
+  .stage-domain { min-height: 480px; }
   .stage-chrome {
     display: flex;
     align-items: center;
@@ -471,7 +673,7 @@ const models = [
     color: var(--acc-2);
   }
   .flex-spacer { flex: 1; }
-  .stage-body { padding: 28px; }
+  .stage-body { padding: 24px 28px; }
   .illu-label {
     font-family: 'Geist Mono', monospace;
     font-size: 10.5px;
@@ -483,11 +685,12 @@ const models = [
   /* 01 CRUD illustration */
   .illu-crud {
     display: grid;
-    grid-template-columns: 1fr 180px 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr 200px 1fr;
+    gap: 18px;
     align-items: center;
   }
-  .illu-side { display: flex; flex-direction: column; gap: 8px; }
+  .illu-side { display: flex; flex-direction: column; gap: 10px; }
+  .illu-side .illu-label { text-align: center; margin-bottom: 4px; }
   .illu-models { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
   .model-cell {
     display: flex;
@@ -502,12 +705,23 @@ const models = [
     color: var(--ink-2);
   }
   .model-icon { color: var(--acc-2); width: 12px; text-align: center; }
-  .illu-hub {
+  .illu-hub-wrap {
+    position: relative;
+    height: 100%;
+    min-height: 320px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
+  .illu-lines {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
   .hub-orb {
+    position: relative;
     width: 130px;
     height: 130px;
     border-radius: 50%;
@@ -556,19 +770,28 @@ const models = [
   }
 
   /* 02 Prompt illustration */
-  .illu-prompt { display: flex; flex-direction: column; gap: 10px; }
+  .illu-prompt {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    height: 100%;
+  }
+  .prompt-left { display: flex; flex-direction: column; gap: 10px; }
   .strategy {
     padding: 12px 14px;
     background: var(--bg-2);
     border: 1px solid var(--line);
     border-radius: 8px;
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
   }
   .strategy.active {
     background: rgba(124, 92, 255, 0.07);
     border-color: rgba(124, 92, 255, 0.32);
+  }
+  .strategy-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 8px;
   }
   .strategy-name {
     font-family: 'Geist Mono', monospace;
@@ -588,37 +811,222 @@ const models = [
     color: var(--acc-2);
     letter-spacing: 0.4px;
   }
+  .strategy-ops { display: flex; flex-wrap: wrap; gap: 5px; }
+  .strategy-op {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    padding: 3px 7px;
+    background: var(--bg-3);
+    border: 1px solid var(--line-2);
+    color: var(--ink-2);
+    border-radius: 3px;
+  }
+  .prompt-right {
+    padding: 14px 16px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  .progress-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .progress-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #7ee2c1;
+    box-shadow: 0 0 8px #7ee2c1;
+  }
+  .progress-name {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-2);
+  }
+  .progress-count {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .progress-list { display: flex; flex-direction: column; }
+  .progress-row {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 10px;
+    align-items: center;
+    padding: 7px 0;
+    border-top: 1px solid var(--line);
+  }
+  .progress-mark {
+    width: 18px; height: 18px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.03);
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .progress-mark.ok   { color: #7ee2c1; border: 1px solid #7ee2c1; }
+  .progress-mark.warn { color: #f0c674; border: 1px solid #f0c674; }
+  .progress-mark.todo { color: var(--ink-4); border: 1px solid var(--line-2); }
+  .progress-section {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .progress-section.todo { color: var(--ink-4); }
+  .progress-fields {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+  }
+  .progress-fields.warn { color: #f0c674; }
+  .progress-foot {
+    margin-top: auto;
+    padding-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    border-top: 1px dashed var(--line-2);
+  }
+  .progress-arr { color: var(--acc-2); }
 
-  /* 03 Apps illustration */
-  .illu-apps { display: flex; }
-  .apps-window {
+  /* 03 Apps illustration — full chat with embedded form */
+  .stage-apps .stage-body { padding: 0; }
+  .illu-apps { display: flex; flex-direction: column; height: 100%; }
+  .apps-window { display: flex; flex-direction: column; height: 100%; }
+  .apps-chrome {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-3);
+  }
+  .apps-dots { display: flex; gap: 6px; }
+  .apps-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background: var(--line-3);
+  }
+  .apps-title {
     flex: 1;
+    text-align: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .apps-uri {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+  }
+  .apps-uri-dot {
+    width: 6px; height: 6px; border-radius: 3px;
+    background: var(--acc-2);
+  }
+  .apps-chat {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 26px;
+    gap: 14px;
+  }
+  .msg-user {
+    align-self: flex-end;
+    max-width: 70%;
+    padding: 10px 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--line-2);
+    border-radius: 12px 12px 4px 12px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .msg-user em { color: var(--acc-2); font-style: normal; }
+  .msg-bot {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .msg-avatar {
+    width: 26px; height: 26px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    background: linear-gradient(160deg, #a78bfa 0%, #7c5cff 60%, #4f3da6 100%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    color: #fff;
+    font-size: 13px;
+    box-shadow: 0 4px 14px -4px rgba(124, 92, 255, 0.6);
+  }
+  .msg-body { flex: 1; min-width: 0; }
+  .msg-text {
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .msg-tool {
+    color: var(--ink-4);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    margin-left: 6px;
+  }
+  .embedded-form {
     background: var(--bg);
     border: 1px solid var(--line-2);
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 14px 40px -20px rgba(0, 0, 0, 0.6);
   }
-  .apps-window-head {
-    padding: 10px 14px;
+  .ef-head {
+    padding: 10px 16px;
     border-bottom: 1px solid var(--line);
     display: flex;
     align-items: center;
     gap: 10px;
     background: var(--bg-2);
   }
-  .apps-tab {
+  .ef-plus {
+    width: 18px; height: 18px;
+    border-radius: 4px;
+    border: 1px solid rgba(124, 92, 255, 0.35);
+    color: var(--acc-2);
+    font-size: 11px;
+    font-family: 'Geist Mono', monospace;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ef-title {
     font-family: 'Geist', sans-serif;
     font-size: 13px;
     font-weight: 500;
     color: var(--ink);
   }
-  .apps-meta {
+  .ef-meta {
     font-family: 'Geist Mono', monospace;
     font-size: 10.5px;
     color: var(--ink-4);
   }
-  .apps-fields {
+  .ef-fields {
     padding: 16px 18px;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -651,9 +1059,56 @@ const models = [
   .field-input.stars .off { color: var(--ink-5); }
   .ok-dot { width: 7px; height: 7px; border-radius: 50%; background: #7ee2c1; }
   .caret { color: var(--ink-4); }
+  .ef-foot {
+    padding: 10px 18px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-2);
+  }
+  .ef-status {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+  }
+  .ef-cancel,
+  .ef-save {
+    font-family: 'Geist', sans-serif;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .ef-cancel {
+    background: transparent;
+    color: var(--ink-3);
+    border: 1px solid var(--line-2);
+  }
+  .ef-save {
+    font-weight: 500;
+    color: #fff;
+    background: var(--acc);
+    border: 1px solid var(--acc);
+    padding: 6px 14px;
+    box-shadow: 0 0 0 1px var(--acc), 0 6px 18px -6px rgba(124, 92, 255, 0.6);
+  }
+  .msg-note {
+    margin-top: 10px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+  }
 
   /* 04 Analysis illustration */
-  .illu-analysis { display: flex; flex-direction: column; gap: 16px; }
+  .illu-analysis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    height: 100%;
+  }
+  .analysis-left { display: flex; flex-direction: column; gap: 14px; }
   .pipeline {
     display: flex;
     align-items: center;
@@ -674,14 +1129,102 @@ const models = [
     background: rgba(124, 92, 255, 0.25);
     min-width: 6px;
   }
-  .clusters {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  .ingest-card {
     padding: 14px 16px;
     background: var(--bg-2);
     border: 1px solid var(--line);
     border-radius: 10px;
+  }
+  .ingest-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .ingest-name {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-2);
+  }
+  .ingest-status {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: #7ee2c1;
+  }
+  .ingest-num {
+    font-family: 'Geist', sans-serif;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .ingest-num .muted { font-size: 16px; }
+  .ingest-sub {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .ingest-bar {
+    margin-top: 12px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--bg-3);
+    border: 1px solid var(--line-2);
+    overflow: hidden;
+    position: relative;
+  }
+  .ingest-bar-fill {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--acc), var(--acc-2));
+    width: 100%;
+  }
+  .analysis-note {
+    margin-top: auto;
+    padding: 10px 14px;
+    background: rgba(124, 92, 255, 0.05);
+    border: 1px dashed rgba(124, 92, 255, 0.28);
+    border-radius: 8px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-2);
+  }
+  .analysis-right {
+    padding: 14px 16px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  .clusters-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .cluster-name-h {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-2);
+  }
+  .cluster-k {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+  }
+  .cluster-prompt {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    margin-bottom: 12px;
+  }
+  .clusters {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
   .cluster {
     display: grid;
@@ -705,6 +1248,11 @@ const models = [
     height: 100%;
     background: linear-gradient(90deg, var(--acc), var(--acc-2));
   }
+  .cluster-fill-1 { background: rgba(124, 92, 255, 0.44); }
+  .cluster-fill-2 { background: rgba(124, 92, 255, 0.38); }
+  .cluster-fill-3 { background: rgba(124, 92, 255, 0.32); }
+  .cluster-fill-4 { background: rgba(124, 92, 255, 0.26); }
+  .cluster-fill-5 { background: rgba(124, 92, 255, 0.20); }
   .cluster-n {
     font-family: 'Geist Mono', monospace;
     font-size: 11.5px;
@@ -712,12 +1260,68 @@ const models = [
     text-align: right;
     font-variant-numeric: tabular-nums;
   }
+  .clusters-foot {
+    margin-top: auto;
+    padding-top: 12px;
+    display: flex;
+    gap: 14px;
+    border-top: 1px solid var(--line);
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+  }
+  .dot-ok,
+  .dot-acc {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+  }
+  .dot-ok { background: #7ee2c1; }
+  .dot-acc { background: var(--acc-2); }
 
   /* 05 Domain illustration */
-  .illu-domain { display: flex; flex-direction: column; gap: 16px; }
+  .illu-domain {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 14px;
+    height: 100%;
+  }
+  .workflow-card {
+    padding: 16px 18px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .workflow-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .wf-chip,
+  .domain-chip {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+    padding: 2px 7px;
+    background: rgba(124, 92, 255, 0.08);
+    border: 1px solid rgba(124, 92, 255, 0.25);
+    border-radius: 3px;
+  }
+  .wf-name {
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .wf-tools {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+  }
   .workflow {
     display: grid;
-    grid-template-columns: 1fr 22px 1fr 22px 1fr;
+    grid-template-columns: 1fr 28px 1fr 28px 1fr;
     align-items: center;
     gap: 0;
   }
@@ -764,14 +1368,99 @@ const models = [
     color: var(--ink-3);
   }
   .wf-arrow {
+    width: 28px;
+    height: 14px;
     color: var(--acc-2);
-    text-align: center;
+    margin: 0 auto;
+    display: block;
+  }
+  .domain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .domain-card {
+    padding: 14px 16px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  .domain-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .domain-card-name {
     font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .rule-row {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 10px;
+    align-items: center;
+    padding: 7px 0;
+    border-top: 1px solid var(--line);
+  }
+  .rule-mark {
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    font-size: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Geist Mono', monospace;
+  }
+  .rule-mark.ok  { border: 1px solid #7ee2c1; color: #7ee2c1; }
+  .rule-mark.bad { border: 1px solid #f08a8a; color: #f08a8a; }
+  .rule-text {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    font-family: 'Geist Mono', monospace;
+  }
+  .rule-text.bad { color: #f08a8a; }
+  .knowledge-term {
+    font-family: 'Geist', sans-serif;
     font-size: 14px;
+    color: var(--ink);
+    margin-bottom: 6px;
+    letter-spacing: -0.005em;
+  }
+  .knowledge-def {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--ink-3);
+    margin-bottom: 12px;
+  }
+  .knowledge-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line-2);
+  }
+  .knowledge-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    padding: 2px 7px;
+    background: var(--bg-3);
+    border: 1px solid var(--line-2);
+    color: var(--ink-3);
+    border-radius: 3px;
   }
 
   /* 06 OAuth illustration */
-  .illu-oauth { display: flex; flex-direction: column; gap: 14px; }
+  .illu-oauth {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: 100%;
+  }
   .oauth-steps {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -808,6 +1497,7 @@ const models = [
     display: flex;
     align-items: baseline;
     gap: 6px;
+    margin-bottom: 6px;
   }
   .method {
     font-family: 'Geist Mono', monospace;
@@ -831,7 +1521,37 @@ const models = [
     color: var(--ink-2);
     word-break: break-all;
   }
+  .oauth-note {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+  }
+  .introspect {
+    padding: 12px 14px;
+    background: rgba(124, 92, 255, 0.06);
+    border: 1px solid rgba(124, 92, 255, 0.28);
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+  }
+  .introspect-body {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+  .introspect-json { color: var(--ink-2); }
+  .introspect-ok { color: #7ee2c1; }
+  .introspect-rfcs {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--acc-2);
+    letter-spacing: 0.4px;
+  }
   .rfc-strip {
+    margin-top: auto;
     display: flex;
     flex-wrap: wrap;
     gap: 6px;

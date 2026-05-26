@@ -8,13 +8,13 @@
 :root {
   /* surfaces */
   --bg:        #07070a;
-  --bg-2:      #0d0d12;
-  --bg-3:      #131319;
-  --surface:   #11111a;
-  --surface-2: #161620;
-  --line:      #1f1f29;
-  --line-2:    #2a2a36;
-  --line-3:    #3a3a48;
+  --bg-2:      #101019;
+  --bg-3:      #181822;
+  --surface:   #14141e;
+  --surface-2: #1c1c28;
+  --line:      #2a2a38;
+  --line-2:    #383848;
+  --line-3:    #4a4a5e;
 
   /* ink */
   --ink:   #f4f4f7;
