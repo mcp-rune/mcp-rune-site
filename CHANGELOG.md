@@ -10,8 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Kamal deployment to the `dsaenz-prod` droplet under https://mcp-rune.dev, sharing the kamal-proxy + Let's Encrypt setup used by the rest of the dsaenz ecosystem (`engineer.dsaenz.dev`, `identity.dsaenz.dev`, `dsaenz.dev`).
-- `Dockerfile` (nginx:alpine + pre-built `dist/`), `nginx.conf` (`try_files` for Astro's pretty URLs, `/up` healthcheck for kamal-proxy, immutable caching for `/_astro/`), and `.dockerignore` whitelisting only `dist/` and `nginx.conf`.
-- `config/deploy.yml`, `.kamal/secrets` (1Password reference for the shared Docker Hub token), and a `.kamal/hooks/pre-build` script that runs `npm ci && npm run build` on the host so the `src/content/guides` symlink to `../mcp-rune/docs/guides` is resolved before Docker sees the build context.
+- Multi-stage `Dockerfile` (node:20-alpine build stage → nginx:alpine runtime); `nginx.conf` with `try_files` for Astro's pretty URLs, `/up` healthcheck for kamal-proxy, and immutable caching for `/_astro/`.
+- `vendor/mcp-rune` git submodule (github.com:mcp-rune/mcp-rune) — replaces the host-only absolute symlink that the docs collection used to read from `../mcp-rune/docs/guides`. `src/content/guides` is now a relative symlink into the submodule, so it resolves identically in dev and inside the Docker build context.
+- `config/deploy.yml` and `.kamal/secrets` (1Password reference for the shared Docker Hub token). No pre-build hook needed: the multi-stage image builds `dist/` itself, and kamal's `git clone --recurse-submodules` populates the guides automatically.
 
 ## [0.1.1] - 2026-05-26
 

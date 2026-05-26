@@ -1,0 +1,3 @@
+[submodule "vendor/mcp-rune"]
+	path = vendor/mcp-rune
+	url = git@github.com:mcp-rune/mcp-rune.git

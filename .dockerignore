@@ -1,5 +1,17 @@
-# Whitelist approach: the Dockerfile only copies dist/ and nginx.conf, so
-# everything else is dead weight in the build context.
-*
-!dist
-!nginx.conf
+# Don't pull build outputs, local caches, or git metadata into the build
+# context. Everything else (source, package manifests, the vendored
+# mcp-rune submodule with its guides) is needed by the build stage.
+node_modules
+dist
+.astro
+.git
+.github
+.claude
+.kamal
+.DS_Store
+.env*
+README.md
+CHANGELOG.md
+
+# Submodule housekeeping: the .git pointer-file is useless inside the image.
+vendor/**/.git

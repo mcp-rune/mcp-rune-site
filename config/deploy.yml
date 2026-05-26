@@ -6,11 +6,11 @@
 # rather than a *.dsaenz.dev subdomain (kamal-proxy still provisions a
 # per-host Let's Encrypt cert via HTTP-01 the same way).
 #
-# The dist/ tree is produced on the host by the pre-build hook
-# (.kamal/hooks/pre-build → npm ci && npm run build) so the Dockerfile is
-# just an nginx layer + a COPY — no Node toolchain in the runtime image,
-# and the src/content/guides symlink to ../mcp-rune/docs/guides is
-# resolved before Docker ever sees the build context.
+# The image is a multi-stage build: a node:20-alpine stage runs
+# `npm ci && npm run build`, then nginx:alpine serves the resulting
+# dist/. The src/content/guides symlink resolves through the
+# vendor/mcp-rune git submodule (github.com:mcp-rune/mcp-rune), which
+# kamal populates automatically via `git clone --recurse-submodules`.
 #
 # Usage (dsaenz-prod is already bootstrapped by ~/Code/engineer's kamal
 # setup — docker + kamal-proxy are running and the registry is logged in,
