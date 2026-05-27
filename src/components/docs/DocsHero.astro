@@ -138,8 +138,12 @@ const wip = total - live;
     margin-top: 32px;
   }
   .stat, .stat-link {
-    padding: 24px 32px 0 0;
+    padding: 24px 32px 0 32px;
     color: inherit;
+  }
+  .stat:first-child,
+  .stat:first-child .stat-link {
+    padding-left: 0;
   }
   .stat:not(:last-child) {
     border-right: 1px solid var(--line-2);
@@ -185,11 +189,15 @@ const wip = total - live;
       margin-top: 24px;
     }
     .stat,
-    .stat-link { padding: 18px 16px 0 0; }
+    .stat-link { padding: 18px 16px 0 16px; }
+    .stat:nth-child(2n+1),
+    .stat:nth-child(2n+1) .stat-link { padding-left: 0; }
     .stat-big { font-size: 32px; }
   }
   @media (max-width: 480px) {
     .hero-stats { grid-template-columns: 1fr; }
+    .stat,
+    .stat-link { padding-left: 0; }
     .stat:not(:last-child) {
       border-right: none;
       border-bottom: 1px solid var(--line-2);
