@@ -4,6 +4,8 @@ import DocsLayout from '../../layouts/DocsLayout.astro';
 import DocsSidebar from '../../components/DocsSidebar.astro';
 import DocsBadge from '../../components/docs/DocsBadge.astro';
 import Toc from '../../components/docs/Toc.astro';
+import TocAccordion from '../../components/docs/TocAccordion.astro';
+import DocsSource from '../../components/docs/DocsSource.astro';
 import { FLAT_GUIDES, findGuide } from '../../data/guides';
 
 export async function getStaticPaths() {
@@ -68,6 +70,8 @@ const { Content, headings } = await render(entry);
           </div>
         </div>
 
+        <TocAccordion headings={headings} />
+
         <div class="docs-prose">
           <Content />
         </div>
@@ -87,6 +91,8 @@ const { Content, headings } = await render(entry);
             </a>
           ) : <span class="pager-link disabled" aria-hidden="true"></span>}
         </div>
+
+        <DocsSource sourceFile={guide.file} />
       </article>
 
       <Toc headings={headings} sourceFile={guide.file} />
@@ -186,5 +192,40 @@ const { Content, headings } = await render(entry);
     font-size: 15px;
     color: var(--ink);
     margin-top: 4px;
+  }
+
+  @media (max-width: 1024px) {
+    .guide-inner {
+      padding: 24px 16px 56px;
+      gap: 0;
+    }
+    .guide-content { max-width: none; }
+
+    .breadcrumb {
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 10.5px;
+      margin-bottom: 18px;
+    }
+    .section-eyebrow { font-size: 10.5px; margin-bottom: 12px; }
+
+    .meta-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 0 0 24px;
+    }
+    .meta-cell { padding: 8px 11px; }
+    .meta-label { font-size: 9.5px; }
+    .meta-value { font-size: 12.5px; }
+
+    .pager {
+      margin-top: 32px;
+      padding-top: 18px;
+      gap: 8px;
+    }
+    .pager-link { padding: 10px 12px; }
+    .pager-tag { font-size: 10px; }
+    .pager-label { font-size: 13px; margin-top: 3px; }
   }
 </style>

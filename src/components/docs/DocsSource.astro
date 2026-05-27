@@ -1,0 +1,66 @@
+---
+interface Props {
+  sourceFile?: string;
+}
+const { sourceFile } = Astro.props;
+---
+{sourceFile && (
+  <div class="ds">
+    <div class="ds-heading">Source</div>
+    <a
+      class="ds-link"
+      href={`https://github.com/mcp-rune/mcp-rune/blob/main/docs/guides/${sourceFile}`}
+      target="_blank"
+      rel="noopener"
+    >docs/guides/{sourceFile} ↗</a>
+    <div class="ds-actions">
+      <a href={`https://github.com/mcp-rune/mcp-rune/edit/main/docs/guides/${sourceFile}`} target="_blank" rel="noopener">✎ Edit this page</a>
+      <a href="https://github.com/mcp-rune/mcp-rune/issues/new" target="_blank" rel="noopener">⚑ Report issue</a>
+      <a class="ds-full" href="https://github.com/mcp-rune/mcp-rune/discussions" target="_blank" rel="noopener">↗ Discuss on GitHub</a>
+    </div>
+  </div>
+)}
+
+<style>
+  .ds {
+    display: none;
+    margin-top: 22px;
+    padding: 14px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .ds-heading {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-4);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .ds-link {
+    display: block;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--acc-2);
+    word-break: break-all;
+    line-height: 1.5;
+  }
+  .ds-actions {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line-2);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+  }
+  .ds-actions a { color: var(--ink-3); }
+  .ds-actions a:hover { color: var(--ink); }
+  .ds-full { grid-column: span 2; }
+
+  @media (max-width: 1024px) {
+    .ds { display: block; }
+  }
+</style>

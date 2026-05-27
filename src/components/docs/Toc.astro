@@ -113,4 +113,10 @@ const items = headings.filter((h) => h.depth === 2);
   }
   .toc-source-actions a { color: var(--ink-3); }
   .toc-source-actions a:hover { color: var(--ink); }
+
+  /* On mobile, the rail is replaced by TocAccordion (above article) and
+     DocsSource (below article). See [slug].astro for the wiring. */
+  @media (max-width: 1024px) {
+    .toc { display: none; }
+  }
 </style>

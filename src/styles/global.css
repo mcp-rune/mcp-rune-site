@@ -330,6 +330,21 @@ a { color: inherit; text-decoration: none; }
 img, svg { max-width: 100%; }
 @media (max-width: 768px) {
   .pr-wrap, .docs-wrap { padding: 0 16px; }
+
+  .docs-prose { font-size: 14.5px; line-height: 1.65; }
+  .docs-prose h1 { font-size: 34px; letter-spacing: -0.035em; }
+  .docs-prose h2 {
+    font-size: 22px;
+    margin: 40px 0 12px;
+    padding-top: 22px;
+    letter-spacing: -0.025em;
+  }
+  .docs-prose h3 { font-size: 17px; margin: 24px 0 8px; }
+  .docs-prose h4 { font-size: 14.5px; }
+  .docs-prose pre { padding: 14px; font-size: 12px; }
+  .docs-prose .lede { font-size: 16px; }
+  .docs-prose table { font-size: 12.5px; }
+  .docs-prose th, .docs-prose td { padding: 8px 10px; }
 }
 
 /* Brand mark — the geometric runic-r chip (see public/brand/mark.svg). */
