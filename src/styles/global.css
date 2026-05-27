@@ -332,18 +332,10 @@ img, svg { max-width: 100%; }
   .pr-wrap, .docs-wrap { padding: 0 16px; }
 }
 
-/* Gradient brand mark — reused by Logo */
+/* Brand mark — the geometric runic-r chip (see public/brand/mark.svg). */
 .brand-mark {
-  border-radius: 5px;
-  background: linear-gradient(160deg, #a78bfa 0%, #7c5cff 60%, #4f3da6 100%);
-  color: #fff;
-  font-family: 'Geist', sans-serif;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset,
-              0 4px 14px -4px rgba(124, 92, 255, 0.6);
+  display: inline-block;
   flex-shrink: 0;
+  border-radius: 5px;
+  filter: drop-shadow(0 4px 14px rgba(124, 92, 255, 0.35));
 }

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="mcp-rune">
+  <defs>
+    <linearGradient id="gh-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a78bfa"></stop>
+      <stop offset="0.55" stop-color="#7c5cff"></stop>
+      <stop offset="1" stop-color="#4f3da6"></stop>
+    </linearGradient>
+    <radialGradient id="gh-field" cx="0.5" cy="0.35" r="0.8">
+      <stop offset="0" stop-color="#1a1626"></stop>
+      <stop offset="1" stop-color="#07070a"></stop>
+    </radialGradient>
+  </defs>
+  
+  <rect x="0" y="0" width="400" height="400" fill="url(#gh-field)"></rect>
+
+  
+  <g transform="translate(110,90)">
+    <rect x="0" y="0" width="180" height="180" rx="38" fill="url(#gh-bg)"></rect>
+    <rect x="0.5" y="0.5" width="179" height="179" rx="37.5" fill="none" stroke="#ffffff" stroke-opacity="0.10"></rect>
+    
+    
+    <rect x="54" y="50" width="26" height="85" fill="#ffffff"></rect>
+    <rect x="80" y="50" width="42" height="20" fill="#ffffff"></rect>
+    <polygon points="122,50 134,50 122,82" fill="#ffffff"></polygon>
+  </g>
+
+  
+  <text x="200" y="318" fill="#f4f4f7" text-anchor="middle" font-family="Geist, Inter, system-ui, sans-serif" font-size="42" font-weight="500" letter-spacing="-0.04em">mcp-rune</text>
+  
+  <text x="200" y="346" fill="#9090a0" text-anchor="middle" font-family="Geist Mono, ui-monospace, monospace" font-size="13" letter-spacing="0.10em">MCP · FRAMEWORK</text>
+</svg>

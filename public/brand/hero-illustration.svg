@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="800" height="560" role="img" aria-label="schema derivation">
+  <defs>
+    <linearGradient id="h-chip" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a78bfa"></stop>
+      <stop offset="0.55" stop-color="#7c5cff"></stop>
+      <stop offset="1" stop-color="#4f3da6"></stop>
+    </linearGradient>
+    <radialGradient id="h-glow" cx="0.5" cy="0.5" r="0.4">
+      <stop offset="0" stop-color="#7c5cff" stop-opacity="0.55"></stop>
+      <stop offset="1" stop-color="#7c5cff" stop-opacity="0"></stop>
+    </radialGradient>
+    <pattern id="h-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity="0.03"></path>
+    </pattern>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#7c5cff" fill-opacity="0.8"></path>
+    </marker>
+  </defs>
+
+  
+  <rect x="0" y="0" width="800" height="560" fill="#07070a"></rect>
+  <rect x="0" y="0" width="800" height="560" fill="url(#h-grid)"></rect>
+  <ellipse cx="400" cy="280" rx="280" ry="220" fill="url(#h-glow)"></ellipse>
+
+  
+  <g transform="translate(330,225)">
+    <rect x="0" y="0" width="140" height="110" rx="10" fill="#0c0c14" stroke="#7c5cff" stroke-opacity="0.6"></rect>
+    <text x="70" y="22" fill="#a78bfa" text-anchor="middle" font-family="Geist Mono, ui-monospace, monospace" font-size="10" letter-spacing="0.16em">MODEL</text>
+    <line x1="14" y1="32" x2="126" y2="32" stroke="#26262f"></line>
+    <g font-family="Geist Mono, ui-monospace, monospace" font-size="11" fill="#cdcdd6">
+      <text x="14" y="50">title</text><text x="124" y="50" text-anchor="end" fill="#7c5cff">str</text>
+      <text x="14" y="68">author</text><text x="124" y="68" text-anchor="end" fill="#7c5cff">str</text>
+      <text x="14" y="86">summary</text><text x="124" y="86" text-anchor="end" fill="#7c5cff">text</text>
+      <text x="14" y="104">status</text><text x="124" y="104" text-anchor="end" fill="#7c5cff">enum</text>
+    </g>
+  </g>
+
+  
+  <g stroke="#7c5cff" stroke-opacity="0.45" stroke-width="1.2" fill="none" marker-end="url(#arrow)">
+    
+    <path d="M 340 240 Q 240 200 170 130"></path>
+    
+    <path d="M 400 225 L 400 130"></path>
+    
+    <path d="M 460 240 Q 560 200 630 130"></path>
+    
+    <path d="M 340 320 Q 240 360 170 430"></path>
+    
+    <path d="M 400 335 L 400 430"></path>
+    
+    <path d="M 460 320 Q 560 360 630 430"></path>
+  </g>
+
+  
+  <g font-family="Geist Mono, ui-monospace, monospace" font-size="10" fill="#9090a0">
+    
+    <g transform="translate(80,88)">
+      <rect x="0" y="0" width="170" height="62" rx="8" fill="#0c0c14" stroke="#26262f"></rect>
+      <text x="14" y="20" fill="#a78bfa" letter-spacing="0.10em">PROMPT</text>
+      <text x="14" y="38" fill="#cdcdd6" font-size="11">L1·L2·L3·L4·L5</text>
+      <text x="14" y="54">5-layer assembly</text>
+    </g>
+    
+    <g transform="translate(315,68)">
+      <rect x="0" y="0" width="170" height="62" rx="8" fill="#0c0c14" stroke="#26262f"></rect>
+      <text x="14" y="20" fill="#a78bfa" letter-spacing="0.10em">TOOLS</text>
+      <text x="14" y="38" fill="#cdcdd6" font-size="11">list · find · create</text>
+      <text x="14" y="54">update · delete</text>
+    </g>
+    
+    <g transform="translate(550,88)">
+      <rect x="0" y="0" width="170" height="62" rx="8" fill="#0c0c14" stroke="#26262f"></rect>
+      <text x="14" y="20" fill="#a78bfa" letter-spacing="0.10em">APPS</text>
+      <text x="14" y="38" fill="#cdcdd6" font-size="11">sandboxed HTML</text>
+      <text x="14" y="54">typed RPC · forms</text>
+    </g>
+    
+    <g transform="translate(80,420)">
+      <rect x="0" y="0" width="170" height="62" rx="8" fill="#0c0c14" stroke="#26262f"></rect>
+      <text x="14" y="20" fill="#a78bfa" letter-spacing="0.10em">SEARCH</text>
+      <text x="14" y="38" fill="#cdcdd6" font-size="11">filters + vector</text>
+      <text x="14" y="54">paginated server-side</text>
+    </g>
+    
+    <g transform="translate(315,430)">
+      <rect x="0" y="0" width="170" height="62" rx="8" fill="#0c0c14" stroke="#26262f"></rect>
+      <text x="14" y="20" fill="#a78bfa" letter-spacing="0.10em">VALIDATORS</text>
+      <text x="14" y="38" fill="#cdcdd6" font-size="11">required · min · enum</text>
+      <text x="14" y="54">+ custom rules</text>
+    </g>
+    
+    <g transform="translate(550,420)">
+      <rect x="0" y="0" width="170" height="62" rx="8" fill="#0c0c14" stroke="#26262f"></rect>
+      <text x="14" y="20" fill="#a78bfa" letter-spacing="0.10em">ANALYSIS</text>
+      <text x="14" y="38" fill="#cdcdd6" font-size="11">pgvector · 384-dim</text>
+      <text x="14" y="54">proximity recall</text>
+    </g>
+  </g>
+
+  
+  <g transform="translate(400,532)" text-anchor="middle">
+    <text fill="#5f5f6c" font-family="Geist Mono, ui-monospace, monospace" font-size="11" letter-spacing="0.16em">DERIVE · DON’T HAND-WIRE</text>
+  </g>
+</svg>
