@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-05-27
+
+### Added
+
+- Brand asset kit under `public/brand/` from the Claude Design handoff bundle (design hash `P4-DzsmqTyyF0f3_BX7a8g`, source `mcp-kit/project/brand/`) — 10 SVGs at ≈ 20 KB total: `mark.svg`, `favicon.svg`, `logo-horizontal.svg`, `logo-horizontal-clean.svg`, `logo-stacked.svg`, `github-avatar.svg`, `discord-avatar.svg`, `og-card.svg`, `readme-banner.svg`, `hero-illustration.svg`. Canonical URLs (`/brand/*.svg`) are now stable for external consumers (GitHub README, Discord/Slack workspace icons, social unfurls).
+
+### Changed
+
+- Nav and footer brand chip now renders the geometric `brand/mark.svg` (a runic-r chip with a triangular notch in place of the typical serif curl) instead of a text "r" inside a gradient `<span>`. The chip carries its own gradient, rounded-rect, inner border, and notch — the previous CSS-only chip was the "original chip" the new mark refines.
+- `public/favicon.svg` replaced with the design's chunkier-stroked variant tuned for 16/32 px tab-bar legibility (same canonical path, `BaseLayout.astro` unchanged).
+- `Logo.astro` simplified to `<img src="/brand/mark.svg">`; the `size` prop API is preserved so existing call sites in `TopNav.astro` (size 24) and `Footer.astro` (size 22) pick the new mark up automatically.
+- `.brand-mark` rule in `global.css` reduced from a full gradient/text composition to sizing + a silhouette-shaped `drop-shadow` glow — the gradient, rounded rect, inner border, and runic notch are now carried by the SVG itself.
+
+[0.3.1]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.3.0...v0.3.1
+
 ## [0.3.0] - 2026-05-27
 
 ### Added

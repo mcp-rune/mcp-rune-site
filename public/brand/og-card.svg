@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="mcp-rune">
+  <defs>
+    <linearGradient id="og-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0a14"></stop>
+      <stop offset="0.5" stop-color="#07070a"></stop>
+      <stop offset="1" stop-color="#0c0a18"></stop>
+    </linearGradient>
+    <radialGradient id="og-glow" cx="0.18" cy="0.18" r="0.6">
+      <stop offset="0" stop-color="#7c5cff" stop-opacity="0.35"></stop>
+      <stop offset="1" stop-color="#7c5cff" stop-opacity="0"></stop>
+    </radialGradient>
+    <linearGradient id="og-chip" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a78bfa"></stop>
+      <stop offset="0.55" stop-color="#7c5cff"></stop>
+      <stop offset="1" stop-color="#4f3da6"></stop>
+    </linearGradient>
+    <pattern id="og-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity="0.025"></path>
+    </pattern>
+  </defs>
+  
+  <rect x="0" y="0" width="1200" height="630" fill="url(#og-bg)"></rect>
+  <rect x="0" y="0" width="1200" height="630" fill="url(#og-grid)"></rect>
+  <rect x="0" y="0" width="1200" height="630" fill="url(#og-glow)"></rect>
+
+  
+  <g transform="translate(72,72)">
+    <rect x="0" y="6" width="22" height="2" fill="#a78bfa"></rect>
+    <text x="34" y="14" fill="#a78bfa" font-family="Geist Mono, ui-monospace, monospace" font-size="14" letter-spacing="0.16em">MCP · FRAMEWORK</text>
+  </g>
+
+  
+  <g transform="translate(72,116)">
+    <rect x="0" y="0" width="80" height="80" rx="17" fill="url(#og-chip)"></rect>
+    <rect x="0.5" y="0.5" width="79" height="79" rx="16.5" fill="none" stroke="#ffffff" stroke-opacity="0.10"></rect>
+    <rect x="24" y="22" width="11" height="38" fill="#ffffff"></rect>
+    <rect x="35" y="22" width="19" height="9" fill="#ffffff"></rect>
+    <polygon points="54,22 60,22 54,36" fill="#ffffff"></polygon>
+  </g>
+  <text x="168" y="173" fill="#f4f4f7" font-family="Geist, Inter, system-ui, sans-serif" font-size="40" font-weight="500" letter-spacing="-0.03em">mcp-rune</text>
+
+  
+  <g transform="translate(72,266)">
+    <text fill="#f4f4f7" font-family="Geist, Inter, system-ui, sans-serif" font-size="88" font-weight="500" letter-spacing="-0.045em">
+      <tspan x="0" dy="0">One schema.</tspan>
+      <tspan x="0" dy="96">Five layers.</tspan>
+      <tspan x="0" dy="96" fill="#9a9aa6">An MCP server.</tspan>
+    </text>
+  </g>
+
+  
+  <g transform="translate(72,558)">
+    <rect x="0" y="0" width="360" height="44" rx="8" fill="#15151c" stroke="#26262f"></rect>
+    <text x="18" y="29" fill="#a78bfa" font-family="Geist Mono, ui-monospace, monospace" font-size="16">$</text>
+    <text x="36" y="29" fill="#cdcdd6" font-family="Geist Mono, ui-monospace, monospace" font-size="16">npm i @mcp-rune/core</text>
+  </g>
+
+  
+  <g transform="translate(1128,558)" text-anchor="end">
+    <text x="0" y="14" fill="#5f5f6c" font-family="Geist Mono, ui-monospace, monospace" font-size="13" letter-spacing="0.10em">v0.1.0-ALPHA</text>
+    <text x="0" y="34" fill="#5f5f6c" font-family="Geist Mono, ui-monospace, monospace" font-size="13" letter-spacing="0.10em">MCP-RUNE.DEV</text>
+  </g>
+</svg>
