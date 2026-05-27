@@ -18,6 +18,15 @@ const derived: Array<[string, string, string]> = [
   <div class="hero-grid pr-grid-faint"></div>
 
   <div class="pr-wrap hero-top">
+    <div class="hero-lockup">
+      <img
+        src="/brand/logo-horizontal-clean.svg"
+        alt="mcp-rune"
+        width="277"
+        height="88"
+      />
+    </div>
+
     <a href="/docs/mcp-apps" class="announce">
       <span class="badge-new">NEW</span>
       <span>v0.1.0-alpha · MCP Apps for CRUD, schema-derived</span>
@@ -159,6 +168,17 @@ const derived: Array<[string, string, string]> = [
     z-index: 1;
     padding: 88px 32px 56px;
     text-align: center;
+  }
+  .hero-lockup {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  .hero-lockup img {
+    height: 88px;
+    width: auto;
+    flex-shrink: 0;
+    display: inline-block;
   }
   .announce {
     display: inline-flex;
@@ -517,6 +537,8 @@ const derived: Array<[string, string, string]> = [
 
   @media (max-width: 768px) {
     .hero-top { padding: 36px 16px 28px; }
+    .hero-lockup { margin-bottom: 24px; }
+    .hero-lockup img { height: 56px; }
     .announce { margin-bottom: 20px; font-size: 12px; padding: 4px 4px 4px 12px; }
     .headline { font-size: 44px; line-height: 1.02; }
     .lede { font-size: 16px; margin-top: 20px; }
