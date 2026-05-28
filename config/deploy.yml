@@ -43,10 +43,16 @@ registry:
   password:
     - KAMAL_REGISTRY_PASSWORD
 
-# Pure static site — no app secrets, no env beyond what nginx needs.
+# The build needs a fine-grained GitHub PAT to fetch milestones + issues
+# for the /roadmap page (mcp-rune/mcp-rune is private, so anonymous calls
+# return 404). The secret is mounted into the Astro build via BuildKit's
+# --mount=type=secret in the Dockerfile, so it never lands in an image
+# layer or in `docker history`. See .kamal/secrets for the 1Password ref.
 
 builder:
   arch: amd64
+  secrets:
+    - GITHUB_TOKEN_MCP_RUNE
 
 # Astro emits hashed assets straight into dist/_astro; we don't use kamal's
 # Rails-style asset bridging.
