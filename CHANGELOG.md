@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2026-05-28
+
+### Added
+
+- **`GITHUB_TOKEN_MCP_RUNE` namespaced env var** for the Roadmap fetcher. `src/pages/roadmap.astro:16` now reads `import.meta.env.GITHUB_TOKEN_MCP_RUNE ?? import.meta.env.GITHUB_TOKEN`, so the build picks up the namespaced var first and falls back to the unprefixed one. Operators carrying a generic shell `GITHUB_TOKEN` (e.g. the `read:packages`-scoped token used for `npm install` from GitHub Packages) can keep that untouched and set `GITHUB_TOKEN_MCP_RUNE` separately for the Roadmap.
+- **Kamal builder secret wiring** so production builds receive the token. `.kamal/secrets` reads `GITHUB_TOKEN_MCP_RUNE` from 1Password at `op://${OP_VAULT}/${OP_ITEM}/GITHUB_TOKEN_MCP_RUNE`; `config/deploy.yml` declares `builder.secrets: [GITHUB_TOKEN_MCP_RUNE]`; `Dockerfile` mounts it via `--mount=type=secret,id=GITHUB_TOKEN_MCP_RUNE` so the value never lands in an image layer or in `docker history`. Local `docker build` without the secret mount tolerates the absence (`|| true`) — Astro falls back to the empty-state Roadmap and the rest of the site builds normally.
+- **AGENTS.md updates** documenting the new env var name, the fallback semantics, and the production wiring path (1Password → `.kamal/secrets` → `builder.secrets` → BuildKit mount).
+
+### Fixed
+
+- **Roadmap will actually render on `kamal deploy`** once `GITHUB_TOKEN_MCP_RUNE` is populated in 1Password. v0.4.0's verification surfaced that `mcp-rune/mcp-rune` is private and the previous deploy config wired no token — the Roadmap was rendering the empty-state design in production. This release fixes the wiring; the 1Password entry creation is a manual follow-up gated on this PR.
+
+[0.4.1]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.4.0...v0.4.1
+
 ## [0.4.0] - 2026-05-28
 
 ### Added

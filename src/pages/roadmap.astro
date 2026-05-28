@@ -13,7 +13,13 @@ import RoadmapSuggestedStarters from '../components/roadmap/RoadmapSuggestedStar
 import RoadmapInfluenceClose from '../components/roadmap/RoadmapInfluenceClose.astro';
 import { fetchRoadmap } from '../lib/github-milestones';
 
-const token = import.meta.env.GITHUB_TOKEN;
+// Prefer the namespaced var so this site's Roadmap token doesn't collide
+// with a generic shell `GITHUB_TOKEN` an operator may have set for other
+// purposes (npm install against GitHub Packages, gh CLI, etc.). Falls
+// back to `GITHUB_TOKEN` for any CI/local setup that already wired the
+// unprefixed name. Both are empty-state-safe when missing.
+const token =
+  import.meta.env.GITHUB_TOKEN_MCP_RUNE ?? import.meta.env.GITHUB_TOKEN;
 const data = await fetchRoadmap({
   owner: 'mcp-rune',
   repo: 'mcp-rune',

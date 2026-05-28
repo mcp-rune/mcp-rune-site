@@ -17,7 +17,16 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build && test -f dist/index.html
+# The /roadmap page reads GITHUB_TOKEN_MCP_RUNE at build time to fetch
+# milestones + issues from the private mcp-rune/mcp-rune repo. Kamal
+# forwards the secret via `builder.secrets` in config/deploy.yml; locally
+# you can `docker build --secret id=GITHUB_TOKEN_MCP_RUNE,src=<path>`. If
+# the secret is absent, Astro falls back to the empty-state Roadmap and
+# the rest of the site builds normally — that's why we tolerate a missing
+# mount with `|| true`.
+RUN --mount=type=secret,id=GITHUB_TOKEN_MCP_RUNE \
+    GITHUB_TOKEN_MCP_RUNE="$(cat /run/secrets/GITHUB_TOKEN_MCP_RUNE 2>/dev/null || true)" \
+    npm run build && test -f dist/index.html
 
 FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
