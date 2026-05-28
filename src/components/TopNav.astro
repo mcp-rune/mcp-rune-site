@@ -2,7 +2,7 @@
 import Logo from './Logo.astro';
 
 interface Props {
-  active?: 'docs' | 'ref' | 'cli' | 'adopt' | 'log' | null;
+  active?: 'docs' | 'ref' | 'cli' | 'adopt' | 'roadmap' | null;
   /** Wider container for the docs-section pages (1440px), narrower for landing (1240px). */
   wide?: boolean;
 }
@@ -13,7 +13,7 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
   { label: 'Reference', key: 'ref',   href: '#' },
   { label: 'CLI',       key: 'cli',   href: '#' },
   { label: 'Adopters',  key: 'adopt', href: '#' },
-  { label: 'Changelog', key: 'log',   href: '#' },
+  { label: 'Roadmap',   key: 'roadmap', href: '/roadmap' },
 ];
 ---
 <header class="topnav">

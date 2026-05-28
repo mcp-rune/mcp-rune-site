@@ -1,0 +1,107 @@
+---
+interface Props {
+  mode: 'empty' | 'populated';
+}
+const { mode } = Astro.props;
+
+const eyebrow = mode === 'empty' ? 'ROADMAP · LIVE FROM GITHUB' : 'ROADMAP';
+const milestonesUrl = 'https://github.com/mcp-rune/mcp-rune/milestones';
+---
+<section class="rm-hero">
+  <div class="rm-hero-glow" aria-hidden="true" />
+  <div class="rm-hero-inner">
+    <div class="rm-hero-eyebrow">
+      <span class="rm-hero-eyebrow-rule" />
+      <span>{eyebrow}</span>
+    </div>
+
+    {mode === 'populated' ? (
+      <>
+        <h1 class="pr-display rm-hero-title">
+          Where mcp-rune is going.<br />
+          <span class="rm-hero-title-muted">And what it isn’t yet.</span>
+        </h1>
+        <p class="rm-hero-lede">
+          This page is the project’s direction. Detailed planning lives in{' '}
+          <a href={milestonesUrl} class="rm-hero-link">GitHub milestones</a>{' '}
+          and is tentative — items may be reshuffled or dropped without notice.
+          Version numbers (<span class="pr-mono">0.2</span>, <span class="pr-mono">0.3</span>, …) track
+          production releases. The next upcoming version carries an estimated target date.
+        </p>
+      </>
+    ) : (
+      <>
+        <h1 class="pr-display rm-hero-title">
+          No milestones yet.<br />
+          <span class="rm-hero-title-muted">That’s about to change.</span>
+        </h1>
+        <p class="rm-hero-lede">
+          This page mirrors{' '}
+          <a href={milestonesUrl} class="rm-hero-link">GitHub Milestones</a> on the project repo.
+          Until milestones are created the page renders this empty state — a worked example of
+          what the layout will become, plus four suggested starter milestones a maintainer can
+          publish in one click.
+        </p>
+      </>
+    )}
+  </div>
+</section>
+
+<style>
+  .rm-hero {
+    position: relative;
+    overflow: hidden;
+  }
+  .rm-hero-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(124, 92, 255, 0.12), transparent 60%);
+    pointer-events: none;
+  }
+  .rm-hero-inner {
+    position: relative;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 72px 32px 24px;
+  }
+  .rm-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--acc-2);
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
+  .rm-hero-eyebrow-rule {
+    width: 18px;
+    height: 1px;
+    background: var(--acc);
+  }
+  .rm-hero-title {
+    font-size: 64px;
+    margin: 0;
+    max-width: 880px;
+    letter-spacing: -0.04em;
+  }
+  .rm-hero-title-muted { color: var(--ink-3); }
+  .rm-hero-lede {
+    margin-top: 24px;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--ink-3);
+    max-width: 720px;
+    letter-spacing: -0.005em;
+  }
+  .rm-hero-link {
+    color: var(--acc-2);
+    border-bottom: 1px solid rgba(167, 139, 250, 0.3);
+  }
+
+  @media (max-width: 768px) {
+    .rm-hero-inner { padding: 32px 16px 18px; }
+    .rm-hero-title { font-size: 36px; line-height: 1.02; }
+    .rm-hero-lede { font-size: 13.5px; margin-top: 14px; }
+  }
+</style>

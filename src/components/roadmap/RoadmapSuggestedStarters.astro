@@ -1,0 +1,204 @@
+---
+interface Starter {
+  title: string;
+  blurb: string;
+  desc: string;
+  due: string | null;
+  labels: string[];
+}
+
+const STARTERS: Starter[] = [
+  {
+    title: '0.2',
+    blurb: 'The Year of API Stability.',
+    desc: 'Lock the public API surface before 1.0.',
+    due: 'Q3 2026',
+    labels: ['area:core', 'area:prompt', 'area:apps', 'area:cli'],
+  },
+  {
+    title: '0.3',
+    blurb: 'The Year of Live Data.',
+    desc: 'Subscriptions, streaming, real-time apps.',
+    due: 'Q1 2027',
+    labels: ['area:core', 'area:apps', 'area:tools'],
+  },
+  {
+    title: '1.0',
+    blurb: 'LTS.',
+    desc: 'Frozen API. Three-year support guarantee.',
+    due: '≈ mid 2027',
+    labels: ['area:core', 'area:docs', 'area:qa'],
+  },
+  {
+    title: 'Future',
+    blurb: 'Speculative ideas.',
+    desc: 'No committed release; some will graduate into a numbered milestone, others will be cut.',
+    due: null,
+    labels: ['area:*'],
+  },
+];
+
+function ghUrl(s: Starter): string {
+  const base = 'https://github.com/mcp-rune/mcp-rune/milestones/new';
+  const q = new URLSearchParams({
+    title: s.title,
+    description: `${s.blurb}\n\n${s.desc}`,
+  });
+  return `${base}?${q.toString()}`;
+}
+---
+<section class="rm-starters">
+  <div class="rm-starters-inner">
+    <div class="rm-starters-grid">
+      <div>
+        <div class="rm-starters-eyebrow">For maintainers</div>
+        <div class="pr-display rm-starters-display">Seed the roadmap.</div>
+        <p class="rm-starters-helper">
+          Create these four milestones on GitHub and this page starts populating
+          within a minute. Add issues with <code>area:*</code> and <code>status:*</code> labels to fill the rows.
+        </p>
+      </div>
+
+      <ul class="rm-starters-list">
+        {STARTERS.map((s) => (
+          <li class="rm-starters-row">
+            <span class="pr-display rm-starters-version">{s.title}</span>
+            <div>
+              <div class="rm-starters-blurb">“{s.blurb}”</div>
+              <div class="rm-starters-desc">{s.desc}</div>
+              <div class="rm-starters-labels">
+                {s.labels.map((l) => (
+                  <span class="rm-starters-chip">{l}</span>
+                ))}
+              </div>
+            </div>
+            <span class="rm-starters-target">
+              {s.due ? `target · ${s.due}` : 'no target'}
+            </span>
+            <a href={ghUrl(s)} class="pr-btn ghost rm-starters-btn">
+              <span class="rm-starters-arr">↗</span> Create on GitHub
+            </a>
+          </li>
+        ))}
+        <li class="rm-starters-row-end" />
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rm-starters { border-top: 1px solid var(--line-2); margin-top: 32px; }
+  .rm-starters-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 56px 32px 8px;
+  }
+  .rm-starters-grid {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 56px;
+  }
+  .rm-starters-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .rm-starters-display {
+    font-size: 38px;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .rm-starters-helper {
+    font-size: 13px;
+    color: var(--ink-3);
+    line-height: 1.55;
+    max-width: 240px;
+  }
+  .rm-starters-helper code {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .rm-starters-list { list-style: none; margin: 0; padding: 0; }
+  .rm-starters-row {
+    display: grid;
+    grid-template-columns: 120px 1fr auto 170px;
+    gap: 18px;
+    align-items: center;
+    padding: 18px 0;
+    border-top: 1px solid var(--line);
+  }
+  .rm-starters-row-end { border-top: 1px solid var(--line); height: 0; }
+  .rm-starters-version {
+    font-size: 28px;
+    color: var(--ink-2);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .rm-starters-blurb {
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 450;
+    letter-spacing: -0.005em;
+    font-style: italic;
+  }
+  .rm-starters-desc {
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-top: 4px;
+    line-height: 1.55;
+  }
+  .rm-starters-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .rm-starters-chip {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.3px;
+    padding: 1px 6px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+  }
+  .rm-starters-target {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    letter-spacing: 0.3px;
+    padding: 2px 8px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    white-space: nowrap;
+    background: var(--surface);
+  }
+  .rm-starters-btn {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12px;
+    justify-self: end;
+  }
+  .rm-starters-arr { color: var(--ink-3); }
+
+  @media (max-width: 768px) {
+    .rm-starters-inner { padding: 32px 16px 8px; }
+    .rm-starters-grid { grid-template-columns: 1fr; gap: 18px; }
+    .rm-starters-display { font-size: 28px; }
+    .rm-starters-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 16px 0;
+    }
+    .rm-starters-version { font-size: 22px; }
+    .rm-starters-target, .rm-starters-btn { justify-self: start; }
+  }
+</style>

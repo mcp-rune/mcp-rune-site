@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-05-28
+
+### Added
+
+- **`/roadmap` page**, GitHub-driven at build time. `src/pages/roadmap.astro` calls `fetchRoadmap()` (in `src/lib/github-milestones.ts`), which hits `/repos/mcp-rune/mcp-rune/milestones?state=all` and `/repos/mcp-rune/mcp-rune/issues?milestone={n}` for each milestone, then bakes the result into static HTML. Three sections render in order: open milestones (eyebrow **UPCOMING**), closed milestones (**NOW SHIPPING**), and the single special `future` milestone (**RESEARCHING**). Within open/closed, sorting is semver-ish on milestone titles with `localeCompare` fallback for non-numeric (theme) titles.
+- **10 Roadmap components** under `src/components/roadmap/`: `RoadmapHero`, `RoadmapMilestone`, `RoadmapFuture`, `RoadmapStatusPill`, `RoadmapLegend`, `RoadmapSkeleton`, `RoadmapAnnotatedExample`, `RoadmapSuggestedStarters`, `RoadmapSyncCard`, `RoadmapInfluenceClose`. Each is `.astro` with scoped styles, translating the Claude Design handoff bundle's Roadmap page into Astro.
+- **GitHub fetcher + mapper** at `src/lib/github-milestones.ts`. Filters surface only issues carrying **both** a `status:*` and an `area:*` label — this is the curation control. Accepts `status:progress` / `status:research` as aliases for `status:in-progress` / `status:researching`. Parses milestone descriptions where a first line ending in `…` / `...` becomes the `name` field (ellipsis stripped) and remaining lines become the `blurb`. The token never reaches the browser; missing token, fetch failure, or zero milestones all render the empty-state design — intentional, not a failure mode.
+- **20 Vitest cases** at `src/lib/github-milestones.test.ts` covering label extraction, status alias normalization, semver-ish sort with `localeCompare` fallback, `future` title special-casing, description parsing with/without ellipsis, accent rule (lowest-open or highest-closed), and the 401/404/network-error empty-state fallback.
+- **Vitest test runner**: `vitest@^2.1.8` as devDependency, `vitest.config.ts` (default `node` environment — the mapper is DOM-free), `"test": "vitest run"` script.
+- **`AGENTS.md` Roadmap section** expanded from a single paragraph to a full reference: the `status:*` + `area:*` requirement that gates surfacing, the canonical status set with the two aliases, the area seed set used on mcp-rune (`apps`, `core`, `tools`, `prompts`, `extensions`, `transport`, `auth`, `docs`), the "milestones are themes, not versions" convention, the description ellipsis name/blurb split, the `shipped-in:<version>` per-issue release tag, and the local-preview workflow.
+
+### Changed
+
+- **Nav and footer wiring.** `TopNav.astro` swaps the placeholder `Changelog` link for `Roadmap` → `/roadmap`; the `active` prop's `'log'` key becomes `'roadmap'`. `landing/Close.astro` footer switches from `<a href="#">` placeholders to real hrefs: `Docs` → `/docs`, `GitHub` → `https://github.com/mcp-rune/mcp-rune`, `Roadmap` → `/roadmap` (CLI / API / Adopters stay placeholder until those pages exist).
+- **`AGENTS.md`** is now committed (previously only present locally as `27e13a3`). Includes the framework build/architecture notes plus the expanded Roadmap reference described above.
+
+[0.4.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.3.1...v0.4.0
+
 ## [0.3.1] - 2026-05-27
 
 ### Added

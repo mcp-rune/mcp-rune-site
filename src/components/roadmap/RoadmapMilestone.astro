@@ -1,0 +1,241 @@
+---
+import type { RoadmapMilestone } from '../../lib/github-milestones';
+import RoadmapStatusPill from './RoadmapStatusPill.astro';
+
+interface Props {
+  milestone: RoadmapMilestone;
+  /** Optional section eyebrow: "Now shipping" / "Next" rendered above the block. */
+  sectionEyebrow?: { glyph: string; label: string };
+}
+const { milestone, sectionEyebrow } = Astro.props;
+const accent = milestone.accent === true;
+const targetText = milestone.target;
+---
+<section class="rm-ms-section">
+  <div class="rm-ms-inner">
+    {sectionEyebrow && (
+      <div class="rm-ms-section-eyebrow">
+        <span class="rm-ms-section-glyph">{sectionEyebrow.glyph}</span> {sectionEyebrow.label}
+      </div>
+    )}
+
+    <section class="rm-ms" data-accent={accent ? 'true' : 'false'}>
+      <div class="rm-ms-rail">
+        <div class="rm-ms-status">{milestone.status}</div>
+        <div class="pr-display rm-ms-version">{milestone.version}</div>
+        {milestone.name && <div class="rm-ms-name">“{milestone.name}”</div>}
+        {targetText && (
+          <div class="rm-ms-target">
+            <span>target</span>
+            <span class="rm-ms-target-val">{targetText}</span>
+          </div>
+        )}
+        {milestone.blurb && <p class="rm-ms-blurb">{milestone.blurb}</p>}
+      </div>
+
+      <ul class="rm-ms-items">
+        {milestone.items.length === 0 ? (
+          <li class="rm-ms-empty">
+            No roadmap items yet — add issues with <code>area:*</code> and <code>status:*</code> labels.
+          </li>
+        ) : (
+          milestone.items.map((item) => (
+            <li class="rm-ms-row">
+              <span class="rm-ms-area">{item.area || '—'}</span>
+              <div>
+                <div class="rm-ms-title">{item.title}</div>
+                {item.hint && <div class="rm-ms-hint">{item.hint}</div>}
+              </div>
+              <RoadmapStatusPill kind={item.status} />
+              {item.issue ? (
+                <a class="rm-ms-issue" href={item.url ?? '#'}>#{item.issue}</a>
+              ) : (
+                <span class="rm-ms-issue rm-ms-issue-empty">—</span>
+              )}
+            </li>
+          ))
+        )}
+        <li class="rm-ms-row-end" />
+      </ul>
+    </section>
+  </div>
+</section>
+
+<style>
+  .rm-ms-section { padding: 0; }
+  .rm-ms-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 32px 32px 8px;
+  }
+  .rm-ms-section-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: var(--ink-4);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .rm-ms-section-glyph { color: var(--acc-2); }
+
+  .rm-ms {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 56px;
+    padding: 40px 0 8px;
+    border-top: 1px solid var(--line-2);
+  }
+  .rm-ms-rail {
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+  }
+  .rm-ms-status {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .rm-ms[data-accent='true'] .rm-ms-status { color: var(--acc-2); }
+  .rm-ms-version {
+    font-size: 44px;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .rm-ms-name {
+    font-family: 'Geist', sans-serif;
+    font-size: 14px;
+    color: var(--ink-2);
+    letter-spacing: -0.005em;
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+  .rm-ms-target {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    color: var(--ink-3);
+  }
+  .rm-ms-target-val { color: var(--ink-2); }
+  .rm-ms[data-accent='true'] .rm-ms-target {
+    background: rgba(124, 92, 255, 0.08);
+    border-color: rgba(124, 92, 255, 0.3);
+    color: var(--acc-2);
+  }
+  .rm-ms[data-accent='true'] .rm-ms-target-val { color: var(--ink); }
+  .rm-ms-blurb {
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--ink-3);
+    line-height: 1.55;
+    max-width: 200px;
+  }
+
+  .rm-ms-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .rm-ms-row {
+    display: grid;
+    grid-template-columns: 120px 1fr auto 90px;
+    gap: 18px;
+    align-items: baseline;
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+  }
+  .rm-ms-row-end {
+    border-top: 1px solid var(--line);
+    height: 0;
+  }
+  .rm-ms-area {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding-top: 2px;
+  }
+  .rm-ms-title {
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    font-weight: 450;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .rm-ms-hint {
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-top: 4px;
+    line-height: 1.55;
+  }
+  .rm-ms-issue {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--acc-2);
+    text-align: right;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(167, 139, 250, 0.3);
+    justify-self: end;
+  }
+  .rm-ms-issue-empty {
+    color: var(--ink-5);
+    border-bottom: none;
+    pointer-events: none;
+  }
+
+  .rm-ms-empty {
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+    color: var(--ink-3);
+    font-size: 13.5px;
+  }
+  .rm-ms-empty code {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-2);
+    background: var(--bg-3);
+    border: 1px solid var(--line);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .rm-ms-inner { padding: 20px 16px 8px; }
+    .rm-ms {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 20px 0 8px;
+    }
+    .rm-ms-rail {
+      position: static;
+      padding: 14px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .rm-ms[data-accent='true'] .rm-ms-rail {
+      background: rgba(124, 92, 255, 0.06);
+      border-color: rgba(124, 92, 255, 0.3);
+    }
+    .rm-ms-version { font-size: 32px; }
+    .rm-ms-blurb { max-width: none; }
+    .rm-ms-row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 14px 0;
+    }
+    .rm-ms-row > :global(.rm-pill) { justify-self: start; }
+    .rm-ms-issue { text-align: left; justify-self: start; }
+  }
+</style>
