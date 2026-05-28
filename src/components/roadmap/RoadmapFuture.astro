@@ -1,0 +1,147 @@
+---
+import type { RoadmapMilestone } from '../../lib/github-milestones';
+import RoadmapStatusPill from './RoadmapStatusPill.astro';
+
+interface Props {
+  milestone: RoadmapMilestone;
+}
+const { milestone } = Astro.props;
+const items = milestone.items;
+---
+<section class="rm-future-section">
+  <div class="rm-future-inner">
+    <section class="rm-future">
+      <div class="rm-future-rail">
+        <div class="rm-future-status">RESEARCHING</div>
+        <div class="pr-display rm-future-version">{milestone.version}</div>
+        {milestone.blurb ? (
+          <p class="rm-future-blurb">{milestone.blurb}</p>
+        ) : (
+          <p class="rm-future-blurb">
+            Ideas with no committed release. Some will become numbered items;
+            others will be cut. Adopter votes shape priority.
+          </p>
+        )}
+      </div>
+
+      <ul class="rm-future-items">
+        {items.length === 0 ? (
+          <li class="rm-future-empty">No items yet.</li>
+        ) : (
+          items.map((item) => (
+            <li class="rm-future-row">
+              <span class="rm-future-area">{item.area || '—'}</span>
+              <div>
+                <div class="rm-future-title">{item.title}</div>
+                {item.hint && <div class="rm-future-hint">{item.hint}</div>}
+              </div>
+              <RoadmapStatusPill kind="research" />
+            </li>
+          ))
+        )}
+        <li class="rm-future-row-end" />
+      </ul>
+    </section>
+  </div>
+</section>
+
+<style>
+  .rm-future-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 32px 32px 8px;
+  }
+  .rm-future {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 56px;
+    padding: 40px 0 8px;
+    border-top: 1px solid var(--line-2);
+  }
+  .rm-future-rail {
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+  }
+  .rm-future-status {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: #f0c674;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .rm-future-version {
+    font-size: 38px;
+    color: var(--ink-2);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .rm-future-blurb {
+    font-size: 13px;
+    color: var(--ink-3);
+    line-height: 1.55;
+    max-width: 200px;
+  }
+  .rm-future-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .rm-future-row {
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 18px;
+    align-items: baseline;
+  }
+  .rm-future-row-end { border-top: 1px solid var(--line); height: 0; }
+  .rm-future-area {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .rm-future-title {
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 450;
+    letter-spacing: -0.005em;
+  }
+  .rm-future-hint {
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-top: 4px;
+    line-height: 1.55;
+  }
+  .rm-future-empty {
+    padding: 20px 0;
+    border-top: 1px solid var(--line);
+    color: var(--ink-3);
+    font-size: 13.5px;
+  }
+
+  @media (max-width: 768px) {
+    .rm-future-inner { padding: 20px 16px 8px; }
+    .rm-future {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 20px 0 8px;
+    }
+    .rm-future-rail {
+      position: static;
+      padding: 14px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .rm-future-version { font-size: 28px; }
+    .rm-future-blurb { max-width: none; }
+    .rm-future-row { grid-template-columns: 60px 1fr auto; gap: 10px; padding: 12px 0; }
+    .rm-future-title { font-size: 13.5px; }
+    .rm-future-hint { font-size: 12.5px; }
+  }
+</style>

@@ -1,0 +1,112 @@
+---
+const CARDS: Array<{ title: string; body: string; link: string }> = [
+  {
+    title: 'Open an RFC',
+    body: 'For shaping items in this list. Discussed in the open, decided by the maintainers + founding adopters.',
+    link: '↗ github.com/mcp-rune/rfcs',
+  },
+  {
+    title: 'Vote on milestones',
+    body: 'Founding adopters get a binding +1/−1 per release. Three seats currently open.',
+    link: '↗ Read the adopter charter',
+  },
+  {
+    title: 'File an issue',
+    body: 'Bugs, papercuts, and small papercuts. Use the milestone field to suggest a release.',
+    link: '↗ github.com/mcp-rune/mcp-rune/issues',
+  },
+];
+---
+<section class="rm-close">
+  <div class="rm-close-inner">
+    <div class="rm-close-grid">
+      <div>
+        <div class="rm-close-eyebrow">YOU</div>
+        <div class="pr-display rm-close-display">Shape it.</div>
+      </div>
+      <div class="rm-close-cards">
+        {CARDS.map((card) => (
+          <a href="#" class="rm-close-card">
+            <div class="rm-close-card-title">{card.title}</div>
+            <div class="rm-close-card-body">{card.body}</div>
+            <div class="rm-close-card-link">{card.link}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rm-close {
+    border-top: 1px solid var(--line-2);
+    margin-top: 40px;
+  }
+  .rm-close-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 64px 32px 96px;
+  }
+  .rm-close-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 56px;
+  }
+  .rm-close-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .rm-close-display {
+    font-size: 38px;
+    color: var(--ink);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .rm-close-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+  .rm-close-card {
+    display: block;
+    text-decoration: none;
+    padding: 20px 22px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    transition: border-color 0.15s ease;
+  }
+  .rm-close-card:hover { border-color: var(--line-3); }
+  .rm-close-card-title {
+    font-family: 'Geist', sans-serif;
+    font-size: 18px;
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .rm-close-card-body {
+    font-size: 13px;
+    color: var(--ink-3);
+    line-height: 1.55;
+    margin-bottom: 16px;
+  }
+  .rm-close-card-link {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--acc-2);
+    letter-spacing: 0.3px;
+  }
+
+  @media (max-width: 768px) {
+    .rm-close-inner { padding: 36px 16px 56px; }
+    .rm-close-grid { grid-template-columns: 1fr; gap: 18px; }
+    .rm-close-cards { grid-template-columns: 1fr; }
+    .rm-close-display { font-size: 28px; }
+  }
+</style>

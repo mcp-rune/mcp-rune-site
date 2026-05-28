@@ -1,0 +1,53 @@
+---
+type StatusKind = 'shipped' | 'progress' | 'planned' | 'research' | 'blocked' | 'empty';
+
+interface Props {
+  kind: StatusKind;
+}
+const { kind } = Astro.props;
+
+const COLORS: Record<StatusKind, { fg: string; bg: string; bd: string }> = {
+  shipped:  { fg: '#7ee2c1',     bg: 'rgba(126,226,193,0.08)', bd: 'rgba(126,226,193,0.28)' },
+  progress: { fg: '#a78bfa',     bg: 'rgba(124,92,255,0.10)',  bd: 'rgba(124,92,255,0.35)'  },
+  planned:  { fg: '#c7c7d1',     bg: 'rgba(255,255,255,0.04)', bd: 'var(--line-2)'          },
+  research: { fg: '#f0c674',     bg: 'rgba(240,198,116,0.06)', bd: 'rgba(240,198,116,0.25)' },
+  blocked:  { fg: '#f87171',     bg: 'rgba(248,113,113,0.06)', bd: 'rgba(248,113,113,0.25)' },
+  empty:    { fg: 'var(--ink-4)', bg: 'transparent',           bd: 'var(--line-2)'          },
+};
+const LABELS: Record<StatusKind, string> = {
+  shipped: 'shipped',
+  progress: 'in progress',
+  planned: 'planned',
+  research: 'researching',
+  blocked: 'blocked',
+  empty: 'awaiting milestone',
+};
+const c = COLORS[kind];
+const style = `color: ${c.fg}; background: ${c.bg}; border-color: ${c.bd}; border-style: ${kind === 'empty' ? 'dashed' : 'solid'};`;
+---
+<span class="rm-pill" style={style}>
+  <span class="rm-pill-dot" />
+  {LABELS[kind]}
+</span>
+
+<style>
+  .rm-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border-width: 1px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    line-height: 1.2;
+  }
+  .rm-pill-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 3px;
+    background: currentColor;
+  }
+</style>

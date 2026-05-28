@@ -28,8 +28,15 @@ import Logo from '../Logo.astro';
         <span class="close-version">v0.1.0-alpha · MIT · 2026</span>
       </div>
       <div class="close-foot-links">
-        {['Docs', 'CLI', 'API', 'Adopters', 'GitHub', 'Changelog'].map((label) => (
-          <a href="#">{label}</a>
+        {[
+          { label: 'Docs', href: '/docs' },
+          { label: 'CLI', href: '#' },
+          { label: 'API', href: '#' },
+          { label: 'Adopters', href: '#' },
+          { label: 'GitHub', href: 'https://github.com/mcp-rune/mcp-rune' },
+          { label: 'Roadmap', href: '/roadmap' },
+        ].map(({ label, href }) => (
+          <a href={href}>{label}</a>
         ))}
       </div>
     </div>

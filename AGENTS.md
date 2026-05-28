@@ -56,3 +56,64 @@ The guide markdown files have **no frontmatter**. All descriptive metadata (slug
 ### Image pipeline is intentionally disabled
 
 `astro.config.mjs` sets `image.service` to the `noop` service to avoid pulling in `sharp`. If image optimization is ever needed, remove that override.
+
+### Roadmap page is GitHub-driven at build time
+
+`src/pages/roadmap.astro` calls `fetchRoadmap()` (in `src/lib/github-milestones.ts`) during `astro build`. It reads `GITHUB_TOKEN` from the env, hits the GitHub REST API for milestones + issues in `mcp-rune/mcp-rune`, and bakes the result into the static HTML. The token never reaches the browser. A fine-grained PAT scoped to the single `mcp-rune/mcp-rune` repo with **Issues: Read-only** + **Metadata: Read-only** is sufficient. Missing token, fetch failure, or zero milestones all render the empty-state design — intentional, not a failure mode. Run `npm test` (Vitest) to cover the mapping logic.
+
+#### What surfaces on the Roadmap
+
+An issue appears on the Roadmap **only if it carries both a `status:*` label and an `area:*` label, and is assigned to a milestone.** Issues missing any of those are filtered out — this is the curation control. The Roadmap intentionally shows a small set of headline work items, not every PR or ticket.
+
+The page renders three sections, in order: open milestones (eyebrow: **UPCOMING**), closed milestones (eyebrow: **NOW SHIPPING**), then the single special `future` milestone (eyebrow: **RESEARCHING**). Within open/closed, milestones sort by `compareVersions` (semver-ish; non-numeric titles fall back to `localeCompare`).
+
+#### Status labels (required, one per issue)
+
+| Label | Pill | Aliases |
+|---|---|---|
+| `status:shipped` | green "shipped" | — |
+| `status:in-progress` | purple "in progress" | `status:progress` |
+| `status:planned` | gray "planned" | — |
+| `status:researching` | yellow "researching" | `status:research` |
+| `status:blocked` | red "blocked" | — |
+
+The mapping lives in `STATUS_ALIASES` at `src/lib/github-milestones.ts:66-74`. Canonical names are recommended; the aliases exist so the site doesn't break if a repo uses the alternate spelling.
+
+#### Area labels (required, one per issue)
+
+`area:<name>` — the suffix becomes the area pill text (lowercased internally; rendered in the UI per the pill component's style). The site has no allowlist; any `area:*` works. The mcp-rune repo's current seed set:
+
+- `area:apps` — MCP apps surface (list-view, model-form, record-detail, formatters, registry)
+- `area:core` — core seams (DataLayer, BaseModel, BaseTool, ApiClient)
+- `area:tools` — tool framework (BaseTool, CRUD tools, registries)
+- `area:prompts` — prompt system (strategies, generators, derivation)
+- `area:extensions` — ApiExtension framework (custom-actions, search, future extensions)
+- `area:transport` — HTTP server, stdio, session management
+- `area:auth` — OAuth2 service, token flows
+- `area:docs` — user-facing guides, examples, README
+
+Adding a new area is a label-creation operation on the mcp-rune repo; no site code change required.
+
+#### Milestones are themes, not release versions
+
+GitHub milestones group issues by initiative ("MCP apps overhaul", "Convention-free seams"), not by version number. Title freely. Closed → **NOW SHIPPING**. Open → **UPCOMING**. The exact title `future` (case-insensitive, special-cased at `src/lib/github-milestones.ts:135-136`) → **RESEARCHING** and is always rendered last.
+
+Milestone description format (parsed at `parseDescription`, `github-milestones.ts:118-133`):
+
+- If the **first line** ends with `…` or `...`, that line (ellipsis stripped) becomes the milestone's `name` field — shown as the headline on the card.
+- Remaining lines become the `blurb` body.
+- A description without an ellipsis renders the entire body as the blurb (no separate name).
+
+Milestone `due_on` (optional) renders as `Q{quarter} {year}` in the target field (`github-milestones.ts:102-108`).
+
+#### Release tags: `shipped-in:<version>`
+
+Theme milestones may span multiple releases. The `shipped-in:0.50.0`, `shipped-in:0.51.0`, … labels record which release an issue actually landed in — independent of which milestone (theme) it belongs to. Apply this label only when the issue closes with merged code; create the label on demand when a new release ships.
+
+#### Local preview
+
+```bash
+GITHUB_TOKEN=<your-pat> npm run dev
+```
+
+Without the token the Roadmap renders the empty-state design — no warnings or errors. `npm test` exercises the milestone/issue → Roadmap mapping logic in isolation; no network call needed for the test suite.

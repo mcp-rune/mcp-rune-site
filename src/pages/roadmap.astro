@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TopNav from '../components/TopNav.astro';
+import Footer from '../components/Footer.astro';
+import RoadmapHero from '../components/roadmap/RoadmapHero.astro';
+import RoadmapLegend from '../components/roadmap/RoadmapLegend.astro';
+import RoadmapMilestone from '../components/roadmap/RoadmapMilestone.astro';
+import RoadmapFuture from '../components/roadmap/RoadmapFuture.astro';
+import RoadmapSyncCard from '../components/roadmap/RoadmapSyncCard.astro';
+import RoadmapAnnotatedExample from '../components/roadmap/RoadmapAnnotatedExample.astro';
+import RoadmapSkeleton from '../components/roadmap/RoadmapSkeleton.astro';
+import RoadmapSuggestedStarters from '../components/roadmap/RoadmapSuggestedStarters.astro';
+import RoadmapInfluenceClose from '../components/roadmap/RoadmapInfluenceClose.astro';
+import { fetchRoadmap } from '../lib/github-milestones';
+
+const token = import.meta.env.GITHUB_TOKEN;
+const data = await fetchRoadmap({
+  owner: 'mcp-rune',
+  repo: 'mcp-rune',
+  token,
+});
+const isEmpty = !data || data.milestones.length === 0;
+
+// In populated mode, decide which milestone block gets which section eyebrow.
+function eyebrowFor(index: number, version: string, isFuture: boolean | undefined) {
+  if (isFuture) return undefined;
+  if (index === 0) {
+    // First non-future block: "Now shipping" if the first is closed, else "Next".
+    return data!.milestones[0].status === 'NOW SHIPPING'
+      ? { glyph: '●', label: 'Now shipping' }
+      : { glyph: '→', label: 'Next' };
+  }
+  // If the first block was "Now shipping" and this is the second one, label it "Next".
+  if (index === 1 && data!.milestones[0].status === 'NOW SHIPPING') {
+    return { glyph: '→', label: 'Next' };
+  }
+  return undefined;
+}
+---
+<BaseLayout
+  title="Roadmap · mcp-rune"
+  description="Where mcp-rune is going. And what it isn’t yet."
+>
+  <TopNav active="roadmap" wide />
+  <main>
+    <RoadmapHero mode={isEmpty ? 'empty' : 'populated'} />
+
+    {isEmpty ? (
+      <>
+        <RoadmapSyncCard data={data} />
+        <RoadmapAnnotatedExample />
+        <RoadmapSkeleton caption="UPCOMING"    version="0.2"    hintCount={6} showHeader />
+        <RoadmapSkeleton caption="ROUGH"       version="0.3"    hintCount={5} />
+        <RoadmapSkeleton caption="HORIZON"     version="1.0"    hintCount={4} />
+        <RoadmapSkeleton caption="RESEARCHING" version="Future" hintCount={5} />
+        <RoadmapSuggestedStarters />
+      </>
+    ) : (
+      <>
+        <RoadmapLegend />
+        {data!.milestones.map((m, i) =>
+          m.isFuture ? (
+            <RoadmapFuture milestone={m} />
+          ) : (
+            <RoadmapMilestone milestone={m} sectionEyebrow={eyebrowFor(i, m.version, m.isFuture)} />
+          ),
+        )}
+      </>
+    )}
+
+    <RoadmapInfluenceClose />
+  </main>
+  <Footer />
+</BaseLayout>

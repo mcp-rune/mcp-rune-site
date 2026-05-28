@@ -1,0 +1,84 @@
+---
+import RoadmapStatusPill from './RoadmapStatusPill.astro';
+const milestonesUrl = 'https://github.com/mcp-rune/mcp-rune/milestones';
+---
+<section class="rm-legend-wrap">
+  <div class="rm-legend-inner">
+    <div class="rm-legend">
+      <div class="rm-legend-pills">
+        <span class="rm-legend-label">Legend</span>
+        <RoadmapStatusPill kind="shipped" />
+        <RoadmapStatusPill kind="progress" />
+        <RoadmapStatusPill kind="planned" />
+        <RoadmapStatusPill kind="research" />
+        <RoadmapStatusPill kind="blocked" />
+      </div>
+      <div class="rm-legend-actions">
+        <a href={milestonesUrl} class="pr-btn ghost rm-legend-btn">
+          <span class="rm-legend-arr">↗</span> Milestones
+        </a>
+        {/* TODO: link to RFCs repo once the project goes public */}
+        <a href="#" class="pr-btn ghost rm-legend-btn">
+          <span class="rm-legend-arr">↗</span> RFCs
+        </a>
+        {/* TODO: point to /adopters once that page lands */}
+        <a href="#" class="pr-btn rm-legend-btn">
+          Become an adopter <span class="arr">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rm-legend-wrap {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .rm-legend-inner { padding-top: 0; }
+  .rm-legend {
+    margin-top: 0;
+    padding: 18px 22px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .rm-legend-pills {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .rm-legend-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-right: 6px;
+  }
+  .rm-legend-actions { display: flex; gap: 8px; }
+  .rm-legend-btn { height: 32px; padding: 0 12px; font-size: 12px; }
+  .rm-legend-arr { color: var(--ink-3); }
+
+  @media (max-width: 768px) {
+    .rm-legend-wrap { padding: 0 16px; }
+    .rm-legend {
+      grid-template-columns: 1fr;
+      padding: 12px 14px;
+      gap: 12px;
+    }
+    .rm-legend-pills {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      white-space: nowrap;
+      gap: 8px;
+    }
+    .rm-legend-actions { flex-wrap: wrap; }
+  }
+</style>
