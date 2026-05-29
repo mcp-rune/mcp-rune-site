@@ -1,0 +1,17 @@
+---
+/** PlateGrid — 4-column responsive catalog grid. */
+---
+<div class="plate-grid">
+  <slot />
+</div>
+
+<style>
+  .plate-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 1200px) {
+    .plate-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

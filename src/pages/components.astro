@@ -1,0 +1,103 @@
+---
+import { codeToHtml } from 'shiki';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CodeSnippet from '../components/docs/CodeSnippet.astro';
+import DocsBadge from '../components/docs/DocsBadge.astro';
+
+if (import.meta.env.PROD) {
+  return new Response(null, { status: 404 });
+}
+
+const SHIKI_OPTS = { theme: 'github-dark-default' };
+
+const bookTs = `import { BaseModel, string, integer } from 'mcp-rune';
+
+export class Book extends BaseModel {
+  static attributes = {
+    title: string().required(),
+    duration_min: integer().range(30, 180),
+  };
+}`;
+
+const bookJs = `import { BaseModel, string, integer } from 'mcp-rune';
+
+export class Book extends BaseModel {
+  static attributes = {
+    title: string().required(),
+    duration_min: integer().range(30, 180),
+  };
+}`;
+
+const bookTsHtml = await codeToHtml(bookTs, { lang: 'ts', ...SHIKI_OPTS });
+const bookJsHtml = await codeToHtml(bookJs, { lang: 'js', ...SHIKI_OPTS });
+---
+<BaseLayout title="mcp-rune component index">
+  <div class="cat-root">
+    <header class="cat-mast">
+      <div class="cat-mast-row">
+        <div class="cat-mast-id">
+          <img src="/brand/mark.svg" alt="" width="28" height="28" />
+          <div>
+            <div class="cat-kicker">mcp-rune design system</div>
+            <h1 class="cat-title">Component Index</h1>
+          </div>
+        </div>
+      </div>
+      <p class="cat-lede">
+        One reference for the parts that repeat across every page.
+        The signature plate is the code snippet:
+        every example ships a <span class="ts-ink">TypeScript</span> and a
+        <span class="js-ink">JavaScript</span> variant.
+      </p>
+    </header>
+
+    <div class="cat-body">
+      <section class="feature">
+        <div class="feature-head">
+          <span>P-01</span>
+          <span>CodeSnippet</span>
+        </div>
+        <div class="feature-grid">
+          <CodeSnippet file="src/models/book" tsHtml={bookTsHtml} jsHtml={bookJsHtml} />
+        </div>
+      </section>
+
+      <div class="plate-grid">
+        <div class="plate">
+          <div class="plate-head"><span>P-04</span><span>Status badge</span></div>
+          <div class="plate-stage">
+            <DocsBadge kind="live" />
+            <DocsBadge kind="wip" />
+            <DocsBadge kind="soon" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import '../scripts/code-snippet';
+  </script>
+</BaseLayout>
+
+<style>
+  .cat-root { background: var(--bg); min-height: 100vh; padding-bottom: 64px; }
+  .cat-mast { border-bottom: 1px solid var(--line); padding: 40px 48px 30px; }
+  .cat-mast-row { display: flex; align-items: flex-start; gap: 32px; }
+  .cat-mast-id { display: flex; gap: 16px; align-items: center; }
+  .cat-kicker { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--acc-2); margin-bottom: 4px; }
+  .cat-title { font-family: 'Geist', sans-serif; font-size: 40px; margin: 0; color: var(--ink); }
+  .cat-lede { max-width: 720px; margin: 22px 0 0; font-size: 15px; color: var(--ink-3); }
+  .ts-ink { color: var(--c-ts); }
+  .js-ink { color: var(--c-js); }
+
+  .cat-body { padding: 36px 48px 0; }
+  .feature { border: 1px solid var(--line-2); border-radius: 14px; overflow: hidden; margin-bottom: 40px; }
+  .feature-head { display: flex; gap: 14px; padding: 16px 22px; border-bottom: 1px solid var(--line); background: var(--bg-3); }
+  .feature-grid { padding: 28px; }
+
+  .plate-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .plate { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-2); display: flex; flex-direction: column; }
+  .plate-head { display: flex; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .plate-stage { padding: 26px 24px; min-height: 132px; display: flex; gap: 8px; align-items: center; justify-content: center; }
+</style>
