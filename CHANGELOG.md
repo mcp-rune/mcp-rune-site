@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-05-29
+
+### Added
+
+- **`CodeSnippet` primitive** at `src/components/docs/CodeSnippet.astro` — the signature plate of the design's `Components.html` specimen sheet (P-01). Segmented TS ⇄ JS switch in the header, filename extension follows the language choice, language tints (TS `#8aa6ff`, JS `#f0c674`) on the chip, copy button. Vanilla `<script>` for tab state mirrors the existing "Extension points only" toggle pattern in `src/pages/docs/index.astro` — no React island. Language preference persists across guides via `localStorage` under key `mcp-rune:lang` so a reader who picks JS once stays on JS throughout the docs.
+- **`remark-code-pairs` plugin** at `src/lib/remark-code-pairs.mjs`. Detects two adjacent fenced blocks tagged `ts` and `js` with matching `file=` meta (extension stripped) and replaces them with a single `CodeSnippet` HTML wrapper, with each variant pre-rendered through Shiki (`github-dark-default`). Strictly additive — unpaired blocks render as standard Shiki output. Registered in `astro.config.mjs:markdown.remarkPlugins`.
+- **Runtime tab handler** at `src/scripts/code-snippet.ts`. One handler wires every `[data-code-snippet]` on the page: tab clicks broadcast across siblings (pick TS on one snippet, all snippets switch), `aria-pressed` toggles, copy button writes the active pane to the clipboard, language choice persists.
+- **Dev-only `/components` specimen page** at `src/pages/components.astro` — a single-page design-system reference (production builds emit a 404 via `if (import.meta.env.PROD) return new Response(null, { status: 404 })`). Hosts the CodeSnippet feature plate and a grid of supporting primitives (button, status badge, syntax tokens, terminal). Useful as a fast "what already exists" reference for contributors; not shipped to end users.
+- **Language chip tokens** `--c-ts` and `--c-js` in `src/styles/global.css`, plus the global `.cs*` style block (kept global because the remark plugin emits raw HTML that bypasses Astro's scoped-CSS hashing — both the `.astro` component and the plugin's output share one source of truth).
+- **`vendor/mcp-rune` submodule bumped** from `0dee69c` to `e79b507` to pull in the pilot pairing edits in 10 framework guides ([mcp-rune#147](https://github.com/mcp-rune/mcp-rune/pull/147)) — ~13 paired snippets across Section VIII (Adapters & Extensions) and Section I (api-config).
+
+### Changed
+
+- **`src/pages/docs/[slug].astro`** — imports `src/scripts/code-snippet` so the tab handler ships with every guide.
+- **`astro.config.mjs`** — `markdown.remarkPlugins: [remarkCodePairs]` registered before Shiki so the plugin pre-highlights its own panes and the rest of the pipeline leaves them alone.
+
+[0.6.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.5.0...v0.6.0
+
 ## [0.5.0] - 2026-05-29
 
 ### Added

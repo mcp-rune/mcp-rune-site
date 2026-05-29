@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
+import remarkCodePairs from './src/lib/remark-code-pairs.mjs';
 
 export default defineConfig({
   integrations: [react()],
@@ -9,6 +10,10 @@ export default defineConfig({
     service: { entrypoint: 'astro/assets/services/noop' },
   },
   markdown: {
+    // Pair adjacent ts/js code fences with matching `file=` meta into a
+    // CodeSnippet wrapper. Must run before Shiki for unpaired blocks to
+    // still get the standard treatment.
+    remarkPlugins: [remarkCodePairs],
     shikiConfig: {
       theme: 'github-dark-default',
       wrap: false,

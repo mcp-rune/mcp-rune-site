@@ -1,0 +1,66 @@
+---
+/**
+ * CodeSnippet — paired TS/JS code block with a segmented language switch.
+ *
+ * Used directly on the /components specimen page. In docs guides the same
+ * chrome is emitted by src/lib/remark-code-pairs.mjs from adjacent ts/js
+ * fenced blocks with matching `file=` meta. Styles live in global.css so
+ * both rendering paths share one source of truth.
+ *
+ * Runtime tab handling lives in src/scripts/code-snippet.ts (loaded once
+ * by the docs detail page).
+ */
+
+interface Props {
+  /** Base file path WITHOUT extension, e.g. "src/models/book". */
+  file: string;
+  /** Shiki-highlighted HTML for the TypeScript variant. */
+  tsHtml: string;
+  /** Shiki-highlighted HTML for the JavaScript variant. */
+  jsHtml: string;
+  /** Which language is initially active when no preference is stored. */
+  defaultLang?: 'ts' | 'js';
+}
+
+const { file, tsHtml, jsHtml, defaultLang = 'ts' } = Astro.props;
+---
+<div class="cs" data-code-snippet data-default-lang={defaultLang} data-active={defaultLang}>
+  <div class="cs-head">
+    <span class="cs-dot" />
+    <span class="cs-file">
+      {file}<span class="cs-ext" data-cs-ext>.{defaultLang}</span>
+    </span>
+    <span class="cs-spacer" />
+
+    <div class="cs-seg" role="tablist" aria-label="Language">
+      <span class="cs-seg-thumb" data-cs-thumb />
+      <button
+        type="button"
+        role="tab"
+        class="cs-seg-btn"
+        data-cs-tab="ts"
+        aria-selected={defaultLang === 'ts' ? 'true' : 'false'}
+      >
+        <span class="cs-seg-chip cs-chip-ts">TS</span>
+        <span class="cs-seg-lbl">TypeScript</span>
+      </button>
+      <button
+        type="button"
+        role="tab"
+        class="cs-seg-btn"
+        data-cs-tab="js"
+        aria-selected={defaultLang === 'js' ? 'true' : 'false'}
+      >
+        <span class="cs-seg-chip cs-chip-js">JS</span>
+        <span class="cs-seg-lbl">JavaScript</span>
+      </button>
+    </div>
+
+    <button type="button" class="cs-copy" data-cs-copy aria-label="Copy">copy</button>
+  </div>
+
+  <div class="cs-body" data-cs-body>
+    <div class="cs-pane" data-cs-pane="ts" set:html={tsHtml} />
+    <div class="cs-pane" data-cs-pane="js" set:html={jsHtml} />
+  </div>
+</div>
