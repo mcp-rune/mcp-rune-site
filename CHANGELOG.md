@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.2] - 2026-05-29
+
+### Changed
+
+- **`vendor/mcp-rune` bumped from `5a04ddf` to `cdf9ade`** to pick up the framework's hand-authored JSDoc `@typedef` siblings for type-only TS blocks ([mcp-rune#151](https://github.com/mcp-rune/mcp-rune/pull/151)). The 20 JS panes that previously rendered the `/** Types are a TypeScript-only artifact … */` placeholder now show idiomatic JSDoc — the same format `tsc --checkJs` validates. Also picks up the new `--report-placeholders` flag on the upstream `dualize` tool. No site-side code change; the existing `remark-code-pairs` plugin + `CodeSnippet` primitive handle everything.
+
+[0.6.2]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.6.1...v0.6.2
+
 ## [0.6.1] - 2026-05-29
 
 ### Changed
