@@ -5,11 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.6.1] - 2026-05-29
 
 ### Changed
 
 - **`vendor/mcp-rune` bumped from `e79b507` to `5a04ddf`** to pick up the framework's `npm run docs:dualize` tool + complete TS/JS dual-variant coverage ([mcp-rune#149](https://github.com/mcp-rune/mcp-rune/pull/149)). Every concrete code example in every guide now ships both a TypeScript and a JavaScript variant. The hub now renders **~258 `CodeSnippet` wrappers** across the 31 detail pages (was 13 after v0.6.0's hero pilot). No site-side code change; the existing `remark-code-pairs` plugin + `CodeSnippet` primitive handle the convention.
+
+[0.6.1]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.6.0...v0.6.1
 
 ## [0.6.0] - 2026-05-29
 
