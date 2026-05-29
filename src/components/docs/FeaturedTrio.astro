@@ -1,6 +1,8 @@
 ---
 import DocIcon from './DocIcon.astro';
+import ExtFlag from './ExtFlag.astro';
 import { findGuide } from '../../data/guides';
+import { loadExtensions } from '../../data/extensions';
 
 const featured: Array<{ slug: string; tag: string; excerpt: string }> = [
   { slug: 'quickstart',      tag: 'START', excerpt: '10 minutes to a running MCP server. Scaffold, declare one model, ship.' },
@@ -8,7 +10,12 @@ const featured: Array<{ slug: string; tag: string; excerpt: string }> = [
   { slug: 'mcp-apps',        tag: 'APPS',  excerpt: 'Build rich UIs that render inside Claude Desktop. Bi-directional protocol.' },
 ];
 
-const cards = featured.map((f) => ({ ...f, meta: findGuide(f.slug) }));
+const extensions = await loadExtensions();
+const cards = featured.map((f) => ({
+  ...f,
+  meta: findGuide(f.slug),
+  ext: extensions.get(f.slug),
+}));
 ---
 <section class="featured">
   <div class="docs-wrap featured-inner">
@@ -25,7 +32,10 @@ const cards = featured.map((f) => ({ ...f, meta: findGuide(f.slug) }));
           <div class="card-icon">
             <DocIcon name={card.meta.guide.icon} size={22} />
           </div>
-          <div class="card-tag">{card.tag}</div>
+          <div class="card-tag-row">
+            <span class="card-tag">{card.tag}</span>
+            {card.ext && <ExtFlag variant="chip" what={card.ext.what} />}
+          </div>
           <div class="card-title">{card.meta.guide.label}</div>
           <div class="card-excerpt">{card.excerpt}</div>
           <div class="card-foot">
@@ -105,12 +115,17 @@ const cards = featured.map((f) => ({ ...f, meta: findGuide(f.slug) }));
     color: var(--acc-2);
     margin-bottom: 20px;
   }
+  .card-tag-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
   .card-tag {
     font-family: 'Geist Mono', monospace;
     font-size: 10.5px;
     color: var(--acc-2);
     letter-spacing: 0.5px;
-    margin-bottom: 8px;
   }
   .card-title {
     font-family: 'Geist', sans-serif;

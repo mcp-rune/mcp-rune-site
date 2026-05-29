@@ -1,0 +1,24 @@
+---
+interface Props {
+  size?: number;
+  /** Override stroke colour. Defaults to `currentColor`. */
+  color?: string;
+}
+const { size = 12, color } = Astro.props;
+---
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke={color ?? 'currentColor'}
+  stroke-width="1.7"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  style="flex-shrink: 0;"
+  aria-hidden="true"
+>
+  <path d="M9 2v5M15 2v5" />
+  <path d="M6 7h12v4a6 6 0 0 1-12 0V7z" />
+  <path d="M12 17v5" />
+</svg>

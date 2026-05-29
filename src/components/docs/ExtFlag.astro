@@ -1,0 +1,84 @@
+---
+import PlugIcon from './PlugIcon.astro';
+import type { ExtensionKind } from '../../data/extensions';
+
+type Variant = 'chip' | 'icon' | 'detail';
+
+interface Props {
+  variant?: Variant;
+  kind?: ExtensionKind;
+  what?: string;
+}
+
+const { variant = 'chip', kind, what } = Astro.props;
+const tip = 'Extension point' + (what ? ' — ' + what : '');
+---
+{variant === 'icon' && (
+  <span class="ext-icon" title={tip} aria-label={tip}>
+    <PlugIcon size={12} />
+  </span>
+)}
+
+{variant === 'chip' && (
+  <span class="ext-chip" title={tip}>
+    <PlugIcon size={11} />
+    <span>Extensible</span>
+  </span>
+)}
+
+{variant === 'detail' && (
+  <span class="ext-detail" title={tip}>
+    <PlugIcon size={13} />
+    <span class="ext-detail-label">Extension point</span>
+    {kind && <span class="ext-detail-kind">· {kind}</span>}
+    {what && <span class="ext-detail-what">{what}</span>}
+  </span>
+)}
+
+<style>
+  .ext-icon {
+    color: #5bb8f5;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ext-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    background: rgba(91, 184, 245, 0.1);
+    border: 1px solid rgba(91, 184, 245, 0.34);
+    color: #5bb8f5;
+  }
+
+  .ext-detail {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 11px 4px 9px;
+    border-radius: 6px;
+    vertical-align: middle;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.5px;
+    background: rgba(91, 184, 245, 0.1);
+    border: 1px solid rgba(91, 184, 245, 0.34);
+    color: #5bb8f5;
+  }
+  .ext-detail-label { text-transform: uppercase; }
+  .ext-detail-kind {
+    opacity: 0.55;
+    text-transform: uppercase;
+  }
+  .ext-detail-what {
+    color: var(--ink-3);
+    letter-spacing: 0;
+  }
+</style>

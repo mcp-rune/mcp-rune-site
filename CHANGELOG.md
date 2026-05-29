@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-05-29
+
+### Added
+
+- **Extensibility signal on the docs hub.** Guides that document a place where a developer can plug in their own implementation now carry an "Extensible" treatment — blue plug badge on the row icon, a chip + concrete `what` text under the label, and a per-section "N EXTENSIBLE" pill in the section heading. The new "Adapters & Extensions" trail of the framework (extension points across HTTP, API, tool-flow, custom apps, custom adapters for API client / convention / data layer / search) becomes scannable at a glance.
+- **"Extension points only" toggle** on the hub legend bar. Vanilla `<script>` on `src/pages/docs/index.astro` flips an `ext-only` class on the content root; CSS hides non-extensible rows (`.guide-row[data-ext='false']`) and sections that become empty (`.section-block[data-ext-count='0']`); the script updates each section's "N GUIDES" counter live. Button uses `aria-pressed` for state.
+- **Extensibility frontmatter as the source of truth.** Per-guide `extension: { kind, what }` YAML frontmatter on the 19 extensible guides in mcp-rune (`vendor/mcp-rune` submodule bumped from `70ab7e7` to `0dee69c` — mcp-rune#145). Six kinds: `config | hook | strategy | plugin | override | registry`. `src/content.config.ts` validates the shape via Zod; `src/data/extensions.ts` exposes `loadExtensions(): Promise<Map<string, ExtensionPoint>>` and the shared `EXT_COLORS` palette (`#5bb8f5` / `rgba(91,184,245,0.10)` / `rgba(91,184,245,0.34)`).
+- **Two new shared atoms** under `src/components/docs/`: `PlugIcon.astro` (the universal plug glyph, prop-sized) and `ExtFlag.astro` (three variants — `chip` for rows / featured / legend, `icon` for the sidebar, `detail` reserved for the guide-detail page).
+- **Sidebar legend block** in `src/components/DocsSidebar.astro`: a tinted blue box explains the plug mark and shows the total extensible count; each extensible guide link gets an inline plug icon with a "Extension point — `<what>`" tooltip.
+- **12 new guides registered** in `src/data/guides.ts`, expanding the catalog from 19 to **31 guides across 8 sections**. New section **VIII "Adapters & Extensions"** with 10 guides (overview, HTTP / API / tool-flow extensions, authoring extensions, custom MCP app, custom API client / convention / data layer / search adapter). `attribute-kinds` added to section II; `summary-strategies` added to section V.
+- **Computed hero stats** on `src/components/docs/DocsHero.astro` — replaces hard-coded "15 / 12 / 180 / 3,800" with `total = FLAT_GUIDES.length`, `live = …filter('live')`, `sectionCount = SECTIONS.length`, and a `pagesEstimate` + `linesLabel` derived from the actual content collection (`await getCollection('guides')`). The strip stays accurate as the catalog grows.
+
+### Changed
+
+- **`src/components/docs/GuideRow.astro`** — accepts an optional `extension` prop, sets `data-ext` + `data-ext-slug` for the toggle CSS to target, recolors the icon avatar with the blue palette when extensible, adds an absolutely-positioned 17×17 plug badge top-right of the icon, and renders the chip + `what` text below the row label.
+- **`src/components/docs/SectionBlock.astro`** — accepts an `extensions` map, computes `extCount`, exposes `data-ext-count` + `data-total-count` on the root, and renders the "N EXTENSIBLE" pill in the section head when `extCount > 0`.
+- **`src/components/docs/FeaturedTrio.astro`** — featured cards (`Quickstart`, `Prompt Creation`, `MCP Apps`) gain a chip next to the existing tag when the guide is extensible.
+
+[0.5.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.4.1...v0.5.0
+
 ## [0.4.1] - 2026-05-28
 
 ### Added
