@@ -4,6 +4,8 @@
 // install command, meta strip, the source-model → derived-surfaces showcase,
 // and the founding-adopter callout.
 
+import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
+
 const derived: Array<[string, string, string]> = [
   ['prompt',   'BookPrompt',       'sections · validation · askPrompts'],
   ['tools',    '5 CRUD tools',     'list · find · create · update · delete'],
@@ -29,7 +31,7 @@ const derived: Array<[string, string, string]> = [
 
     <a href="/docs/mcp-apps" class="announce">
       <span class="badge-new">NEW</span>
-      <span>v0.1.0-alpha · MCP Apps for CRUD, schema-derived</span>
+      <span>{MCP_RUNE_VERSION_LABEL} · MCP Apps for CRUD, schema-derived</span>
       <span class="announce-cta">Read →</span>
     </a>
 

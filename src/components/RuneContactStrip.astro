@@ -1,0 +1,54 @@
+---
+// Two framed contact intents, lifted from the design's RuneContactRow:
+//   Discord = "Ask the community"    (accent — primary social surface)
+//   Email   = "Maintainer · partnerships"  (muted — 1:1, security, deals)
+// Slotted between the footer column grid and the bottom copyright row.
+
+import { RUNE_DISCORD, RUNE_EMAIL } from '../lib/community';
+---
+<div class="rune-contact-strip">
+  <a class="rune-contact-item accent" href={RUNE_DISCORD} target="_blank" rel="noopener">
+    <span class="eyebrow">Ask the community</span>
+    <span class="label">Join the Discord <span class="arr">↗</span></span>
+  </a>
+  <a class="rune-contact-item" href={`mailto:${RUNE_EMAIL}`}>
+    <span class="eyebrow">Maintainer · partnerships</span>
+    <span class="label">{RUNE_EMAIL} <span class="arr">✉</span></span>
+  </a>
+</div>
+
+<style>
+  .rune-contact-strip {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 24px 0;
+    border-bottom: 1px dashed var(--line-2);
+  }
+  .rune-contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    text-decoration: none;
+  }
+  .rune-contact-item .eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--ink-4);
+  }
+  .rune-contact-item .label {
+    font-size: 13.5px;
+    color: var(--ink-2);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .rune-contact-item.accent .label { color: var(--acc-2); }
+  .rune-contact-item .arr {
+    color: var(--ink-4);
+    font-size: 11px;
+  }
+</style>
