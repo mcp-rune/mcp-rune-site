@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-06-01
+
+### Added
+
+- **New guide: Extension Recipes.** Registers `extension-recipes.md` at the top of Section VIII (Adapters & Extensions) in `src/data/guides.ts` as the section's "start here" entry. The guide is an inverse map ("I want to do X — which seam does that?") with copy-pasteable starting points for the common extension patterns. `read: '9 min'`, icon `book`, tags `extensions`/`cookbook`.
+- **New extension kind `hub`** added to the curation schema. `src/content.config.ts` extends the zod enum and `src/data/extensions.ts` extends the `ExtensionKind` TypeScript union. The new recipes guide carries `extension.kind: hub` in its frontmatter, so it shows up in the "Extension points only" filter on the docs hub.
+- **Community / contact chrome ported from the `community.jsx` reference** ([c2f987e](https://github.com/mcp-rune/mcp-rune-site/commit/c2f987e)):
+  - `src/lib/community.ts` — single source of truth for repo, Discord, email, star threshold (50) and seed (0). Email is `hello@mcp-rune.dev`.
+  - `src/components/RuneStarButton.astro` — SSR seeds "Be star #N" invitation; client enhancement resolves `?stars=` URL override > 1h `localStorage` cache > live GitHub fetch > seed. Two variants (pill, drawer).
+  - `src/components/RuneContactStrip.astro` — Discord + email framed by intent, slotted into `Footer` between columns and bottom row.
+- **`MCP_RUNE_VERSION` / `SITE_VERSION` constants** at `src/data/version.ts`, each read from the respective `package.json` — a submodule bump auto-propagates everywhere the version is rendered (TopNav, Footer, DocsHero, DocsSidebar, `[slug].astro`, landing Hero + Close).
+
+### Changed
+
+- **`vendor/mcp-rune` bumped from `cdf9ade` to `a0a6750` (v0.59.0)** — eight upstream commits, including the [`Audit and align 31 guides with v0.58.1 source` (#169)](https://github.com/mcp-rune/mcp-rune/pull/169) sweep that rewrites passages in 11 existing guides (`analysis-memories`, `api-config`, `api-convention`, `api-extensions`, `attribute-kinds`, `custom-app`, `data-layer`, `domain-knowledge`, `extension-recipes`, `service-layer`, `summary-strategies`) against the v0.58.1 source. Also picks up the `extension-recipes` cookbook ([#164](https://github.com/mcp-rune/mcp-rune/pull/164)) and the co-location convention for multi-surface extensions ([#165](https://github.com/mcp-rune/mcp-rune/pull/165)). `FLAT_GUIDES.length` grows from 31 → 32; the sidebar version label auto-updates to `v0.59.0`.
+- **`GuideIcon` documentation.** Adds a JSDoc block to the `GuideIcon` type in `src/data/guides.ts` and tightens the comment on the `Guide.icon` field. The block names `src/components/docs/DocIcon.astro` as the switch site for the 16 inline SVGs, explains the `stroke="currentColor"` mechanism, and points to `.row-icon` in `GuideRow.astro` (and the `.guide-row.ext` reskin to `#5bb8f5`) as the ancestor CSS that drives the rendered color. Adding a new icon now reads as a two-step recipe in the type's tooltip.
+- **Hardcoded version strings replaced.** Seven `v0.1.0-alpha` / `0.1.0` sites across TopNav, Footer, DocsHero, DocsSidebar, `[slug].astro`, landing Hero + Close switched to the new `MCP_RUNE_VERSION_LABEL` / `SITE_VERSION_LABEL` constants. Drops the inconsistent `-alpha` suffix.
+
+### Removed
+
+- **Non-functional "Search docs" stubs.** Desktop search bar, mobile search icon, and sidebar "Filter guides…" placeholder removed; orphaned CSS cleaned up.
+
+[0.7.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.6.2...v0.7.0
+
 ## [0.6.2] - 2026-05-29
 
 ### Changed

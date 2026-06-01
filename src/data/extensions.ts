@@ -19,7 +19,8 @@ export type ExtensionKind =
   | 'strategy'
   | 'plugin'
   | 'override'
-  | 'registry';
+  | 'registry'
+  | 'hub';
 
 export interface ExtensionPoint {
   kind: ExtensionKind;
@@ -50,6 +51,7 @@ const ENTRY_ID_TO_SLUG: Record<string, string> = {
   'model-form-customization-guide': 'model-form',
   'domain-knowledge-guide': 'domain-knowledge',
   // Adapters & Extensions guide set (section VIII).
+  'extension-recipes': 'extension-recipes',
   extensions: 'extensions-http',
   'api-extensions': 'api-extensions',
   'tool-flow-extension-guide': 'tool-flow-extension',
