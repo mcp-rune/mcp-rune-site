@@ -1,5 +1,7 @@
 ---
 import Logo from './Logo.astro';
+import RuneStarButton from './RuneStarButton.astro';
+import { MCP_RUNE_VERSION } from '../data/version';
 
 interface Props {
   active?: 'docs' | 'ref' | 'cli' | 'adopt' | 'roadmap' | null;
@@ -21,36 +23,21 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
     <a href="/" class="brand">
       <Logo size={24} />
       <span class="brand-name">mcp-rune</span>
-      <span class="version">0.1.0</span>
+      <span class="version">{MCP_RUNE_VERSION}</span>
     </a>
     <nav class="links">
       {links.map(({ label, key, href }) => (
         <a href={href} class:list={['nav-link', { on: key === active }]}>{label}</a>
       ))}
     </nav>
-    <div class="search">
-      <span>⌕</span>
-      <span class="search-label">Search docs</span>
-      <span class="flex-spacer" />
-      <span class="kbd">⌘K</span>
-    </div>
     <div class="actions">
-      <a class="pr-btn ghost compact" href="https://github.com/mcp-rune/mcp-rune">
-        <span class="star">★</span>
-        <span>1,243</span>
-      </a>
+      <RuneStarButton />
       <a class="pr-btn compact" href="/docs/quickstart">
         Get started <span class="arr">→</span>
       </a>
     </div>
 
     <div class="topnav-mobile">
-      <button type="button" class="icon-btn search-btn" aria-label="Search">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.4" />
-          <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
-        </svg>
-      </button>
       <button type="button" class="icon-btn menu-btn" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-drawer">
         <span class="bar" /><span class="bar" />
       </button>
@@ -65,9 +52,7 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
       </a>
     ))}
     <div class="drawer-cta">
-      <a class="pr-btn ghost" href="https://github.com/mcp-rune/mcp-rune">
-        <span class="star">★</span><span>GitHub · 1,243</span>
-      </a>
+      <RuneStarButton variant="drawer" />
       <a class="pr-btn" href="/docs/quickstart">
         Get started <span class="arr">→</span>
       </a>
@@ -131,40 +116,11 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
     background: var(--surface);
     border-color: var(--line);
   }
-  .search {
-    height: 32px;
-    width: 240px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0 10px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    font-family: 'Geist Mono', monospace;
-    font-size: 12px;
-    color: var(--ink-3);
-    white-space: nowrap;
-  }
-  .search-label { color: var(--ink-2); }
-  .flex-spacer { flex: 1; }
-  .kbd {
-    font-family: 'Geist Mono', monospace;
-    font-size: 10.5px;
-    padding: 2px 5px;
-    background: var(--bg);
-    border: 1px solid var(--line-2);
-    border-radius: 3px;
-    color: var(--ink-3);
-    flex-shrink: 0;
-  }
   .actions {
     display: flex;
     gap: 8px;
   }
   .pr-btn.compact { height: 32px; padding: 0 12px; font-size: 13px; }
-  .star { color: var(--ink-3); }
 
   /* mobile chrome — hidden by default */
   .topnav-mobile { display: none; }
@@ -242,7 +198,6 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
       gap: 10px;
     }
     .links,
-    .search,
     .actions { display: none; }
     .topnav-mobile {
       display: flex;

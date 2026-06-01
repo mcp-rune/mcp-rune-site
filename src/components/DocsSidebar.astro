@@ -1,6 +1,7 @@
 ---
 import { SECTIONS, FLAT_GUIDES } from '../data/guides';
 import { loadExtensions } from '../data/extensions';
+import { MCP_RUNE_VERSION_LABEL } from '../data/version';
 import ExtFlag from './docs/ExtFlag.astro';
 import PlugIcon from './docs/PlugIcon.astro';
 
@@ -11,11 +12,7 @@ const { activeSlug } = Astro.props;
 const extensions = await loadExtensions();
 ---
 <aside class="docs-sidebar">
-  <div class="sidebar-version">v0.1.0-alpha · {FLAT_GUIDES.length} guides</div>
-  <div class="sidebar-filter">
-    <span>⌕</span>
-    <span>Filter guides…</span>
-  </div>
+  <div class="sidebar-version">{MCP_RUNE_VERSION_LABEL} · {FLAT_GUIDES.length} guides</div>
 
   <div class="sidebar-ext-key">
     <span class="ext-key-icon"><PlugIcon size={13} /></span>
@@ -73,20 +70,6 @@ const extensions = await loadExtensions();
     text-transform: uppercase;
     margin-bottom: 10px;
   }
-  .sidebar-filter {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
-    margin-bottom: 12px;
-    background: var(--bg-2);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    font-family: 'Geist Mono', monospace;
-    font-size: 11.5px;
-    color: var(--ink-3);
-  }
-
   .sidebar-ext-key {
     display: flex;
     align-items: center;

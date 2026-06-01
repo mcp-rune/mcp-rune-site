@@ -11,7 +11,7 @@ const guides = defineCollection({
   schema: z.object({
     extension: z
       .object({
-        kind: z.enum(['config', 'hook', 'strategy', 'plugin', 'override', 'registry']),
+        kind: z.enum(['config', 'hook', 'strategy', 'plugin', 'override', 'registry', 'hub']),
         what: z.string(),
       })
       .optional(),

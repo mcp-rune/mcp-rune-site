@@ -1,0 +1,116 @@
+---
+// Star pill that's honest about being early. While the repo is below
+// STAR_THRESHOLD it renders "★ Be star #N" (an invitation, accent colour);
+// past the threshold it shows the real count. SSR ships the seed so the
+// button is meaningful before JS runs; the client script resolves in order:
+//   1. ?stars=N URL override   (lets anyone preview any state)
+//   2. fresh localStorage cache (1h TTL)
+//   3. live GitHub REST          (cached on success)
+//   4. seed                      (never fabricates)
+// Ported from the design's project/community.jsx.
+
+import {
+  RUNE_REPO,
+  RUNE_REPO_URL,
+  STAR_THRESHOLD,
+  STAR_SEED,
+} from '../lib/community';
+
+interface Props {
+  /** Render variant. 'pill' is the desktop nav button; 'drawer' is the mobile drawer line. */
+  variant?: 'pill' | 'drawer';
+}
+const { variant = 'pill' } = Astro.props;
+
+const initialState = STAR_SEED >= STAR_THRESHOLD ? 'count' : 'invitation';
+const initialLabel =
+  initialState === 'invitation'
+    ? `Be star #${STAR_SEED + 1}`
+    : STAR_SEED.toLocaleString();
+const initialTitle =
+  initialState === 'invitation'
+    ? STAR_SEED === 0
+      ? 'No stars yet — be the very first to leave one'
+      : `${STAR_SEED} stars so far — add yours`
+    : `${STAR_SEED.toLocaleString()} stars on GitHub`;
+---
+<a
+  class:list={['pr-btn', 'ghost', 'compact', 'rune-star', `rune-star-${variant}`]}
+  href={RUNE_REPO_URL}
+  target="_blank"
+  rel="noopener"
+  data-repo={RUNE_REPO}
+  data-threshold={STAR_THRESHOLD}
+  data-seed={STAR_SEED}
+  data-state={initialState}
+  title={initialTitle}
+>
+  <span class="rune-star-mark">★</span>
+  <span class="rune-star-label">
+    {variant === 'drawer' ? `GitHub · ${initialLabel}` : initialLabel}
+  </span>
+</a>
+
+<script>
+  const CACHE_KEY = 'mcprune.stars.v1';
+  const CACHE_TTL = 60 * 60 * 1000;
+
+  type State = 'invitation' | 'count';
+
+  document.querySelectorAll<HTMLAnchorElement>('.rune-star').forEach((btn) => {
+    const repo = btn.dataset.repo!;
+    const threshold = Number(btn.dataset.threshold ?? 50);
+    const seed = Number(btn.dataset.seed ?? 0);
+    const isDrawer = btn.classList.contains('rune-star-drawer');
+    const labelEl = btn.querySelector<HTMLSpanElement>('.rune-star-label')!;
+
+    const apply = (count: number) => {
+      const state: State = count < threshold ? 'invitation' : 'count';
+      const core = state === 'invitation'
+        ? `Be star #${count + 1}`
+        : count.toLocaleString();
+      labelEl.textContent = isDrawer ? `GitHub · ${core}` : core;
+      btn.dataset.state = state;
+      btn.title = state === 'invitation'
+        ? (count === 0
+          ? 'No stars yet — be the very first to leave one'
+          : `${count} stars so far — add yours`)
+        : `${count.toLocaleString()} stars on GitHub`;
+    };
+
+    // 1. URL override — synchronous, no flash.
+    try {
+      const p = new URLSearchParams(location.search).get('stars');
+      if (p !== null) {
+        const n = parseInt(p, 10);
+        if (Number.isFinite(n)) { apply(Math.max(0, n)); return; }
+      }
+    } catch { /* fall through */ }
+
+    // 2. Fresh localStorage cache.
+    try {
+      const raw = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+      if (raw && Date.now() - raw.ts < CACHE_TTL && Number.isFinite(raw.count)) {
+        apply(raw.count);
+        return;
+      }
+    } catch { /* fall through */ }
+
+    // 3. Live GitHub fetch — public API, 60 req/h per IP unauthenticated.
+    fetch(`https://api.github.com/repos/${repo}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((d: { stargazers_count?: number }) => {
+        const n = d?.stargazers_count;
+        if (Number.isFinite(n)) {
+          apply(n!);
+          try { localStorage.setItem(CACHE_KEY, JSON.stringify({ count: n, ts: Date.now() })); } catch {}
+        }
+      })
+      .catch(() => { apply(seed); }); // 4. Keep seed — never fabricate.
+  });
+</script>
+
+<style>
+  .rune-star .rune-star-mark { color: var(--ink-3); transition: color 120ms; }
+  .rune-star[data-state='invitation'] .rune-star-mark { color: var(--acc-2); }
+</style>

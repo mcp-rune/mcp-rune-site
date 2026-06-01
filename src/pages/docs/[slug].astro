@@ -7,6 +7,7 @@ import Toc from '../../components/docs/Toc.astro';
 import TocAccordion from '../../components/docs/TocAccordion.astro';
 import DocsSource from '../../components/docs/DocsSource.astro';
 import { FLAT_GUIDES, findGuide } from '../../data/guides';
+import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
 
 export async function getStaticPaths() {
   // Only generate routes for guides whose markdown file exists on disk.
@@ -62,7 +63,7 @@ const { Content, headings } = await render(entry);
           )}
           <div class="meta-cell">
             <div class="meta-label">Spec</div>
-            <div class="meta-value">v0.1.0-alpha</div>
+            <div class="meta-value">{MCP_RUNE_VERSION_LABEL}</div>
           </div>
           <div class="meta-cell">
             <div class="meta-label">Source</div>

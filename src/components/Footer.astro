@@ -1,5 +1,7 @@
 ---
 import Logo from './Logo.astro';
+import RuneContactStrip from './RuneContactStrip.astro';
+import { MCP_RUNE_VERSION_LABEL, SITE_VERSION_LABEL } from '../data/version';
 
 const columns: Array<{ heading: string; items: string[] }> = [
   { heading: 'Framework', items: ['Models', 'Prompt DSL', 'Tools', 'MCP Apps', 'Analysis'] },
@@ -34,9 +36,10 @@ const columns: Array<{ heading: string; items: string[] }> = [
         </details>
       ))}
     </div>
+    <RuneContactStrip />
     <div class="footer-bottom">
       <span>© 2026 · mcp-rune · MIT</span>
-      <span>v0.1.0-alpha · 24 May 2026</span>
+      <span>{MCP_RUNE_VERSION_LABEL} framework · site {SITE_VERSION_LABEL}</span>
     </div>
   </div>
 </footer>

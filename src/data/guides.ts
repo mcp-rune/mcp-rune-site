@@ -5,6 +5,25 @@
 
 export type GuideStatus = 'live' | 'wip' | 'soon';
 
+/**
+ * Discriminator key for the docs icon set rendered by
+ * `src/components/docs/DocIcon.astro`. That component switches on `name`
+ * and emits one inline `<svg>` per key — no external icon library.
+ *
+ * Color is **not** set by the icon itself: every SVG declares
+ * `stroke="currentColor"`, so the rendered hue is inherited from the
+ * ancestor element's CSS `color`. Each surface picks its own:
+ *
+ * - Docs hub rows  → `.row-icon { color: var(--acc-2); }`
+ *   in `src/components/docs/GuideRow.astro` (and `.guide-row.ext .row-icon`
+ *   reskins to `#5bb8f5` when the guide carries an extension point).
+ * - Featured trio  → ancestor color set in `FeaturedTrio.astro` styles.
+ * - The sidebar does not render `DocIcon`.
+ *
+ * Adding a new icon: append a key here, then add a matching `{name === '…' && (...)}`
+ * branch in `DocIcon.astro`. No CSS change is required as long as the
+ * surface using it already sets an ancestor `color`.
+ */
 export type GuideIcon =
   | 'bolt'
   | 'schema'
@@ -33,7 +52,7 @@ export interface Guide {
   blurb: string;
   read: string;
   tags?: string[];
-  /** Icon key consumed by the Docs Hub. */
+  /** See `GuideIcon` — key into `DocIcon.astro`; color comes from ancestor CSS via `currentColor`. */
   icon: GuideIcon;
 }
 
@@ -309,6 +328,16 @@ export const SECTIONS: Section[] = [
     title: 'Adapters & Extensions',
     blurb: 'Every layer of mcp-rune has a typed seam. Swap, extend, or compose the framework\'s defaults without forking.',
     guides: [
+      {
+        slug: 'extension-recipes',
+        label: 'Extension Recipes',
+        status: 'live',
+        file: 'extension-recipes.md',
+        blurb: 'Inverse map — "I want to do X, which seam does that?" Copy-pasteable starting points for the common extension patterns.',
+        read: '9 min',
+        tags: ['extensions', 'cookbook'],
+        icon: 'book',
+      },
       {
         slug: 'extensibility',
         label: 'Adapters & Extensions Overview',

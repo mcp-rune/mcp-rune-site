@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { FLAT_GUIDES, SECTIONS } from '../../data/guides';
+import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
 
 const total = FLAT_GUIDES.length;
 const live = FLAT_GUIDES.filter((g) => g.guide.status === 'live').length;
@@ -19,7 +20,7 @@ const linesLabel = totalLines >= 1000 ? `~${(totalLines / 1000).toFixed(1)}K lin
   <div class="docs-wrap docs-hero-inner">
     <div class="hero-eyebrow">
       <span class="eyebrow-badge">DOCS</span>
-      <span class="eyebrow-meta">v0.1.0-alpha · synced with main · 25 May 2026</span>
+      <span class="eyebrow-meta">{MCP_RUNE_VERSION_LABEL} · synced with main</span>
     </div>
 
     <div class="hero-headline">
