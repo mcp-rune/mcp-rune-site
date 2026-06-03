@@ -39,7 +39,7 @@ The guide markdown files have **no frontmatter**. All descriptive metadata (slug
 
 ### Adding or promoting a guide
 
-- New guide: drop the `*.md` into `mcp-rune/docs/guides/` (the *framework* repo, not this one), then add a `SECTIONS` entry in `src/data/guides.ts` with `status: 'live'` and `file: '<filename>.md'`. The submodule needs to be updated locally before the build sees the new file.
+- New guide: drop the `*.md` into `mcp-rune/docs/guides/` (the *framework* repo, not this one), then add a `SECTIONS` entry in `src/data/guides.ts` with `status: 'live'` and `file: '<filename>.md'`. The submodule needs to be updated locally before the build sees the new file — run `npm run sync:mcp-rune` (see [`scripts/README.md`](./scripts/README.md)).
 - Promote a `wip` guide: change its status to `'live'` and add the `file:` field.
 - A guide can exist in `guides.ts` with `status: 'wip'` or `'soon'` and no `file` — it appears in the sidebar/hub but does not generate a route.
 

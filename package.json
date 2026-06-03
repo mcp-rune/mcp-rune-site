@@ -9,7 +9,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "vitest run"
+    "test": "vitest run",
+    "sync:mcp-rune": "scripts/sync-mcp-rune.sh",
+    "sync:mcp-rune:check": "scripts/sync-mcp-rune.sh --check"
   },
   "engines": {
     "node": ">=20"
