@@ -60,7 +60,8 @@ const ENTRY_ID_TO_SLUG: Record<string, string> = {
   'api-client-guide': 'api-client',
   'api-convention-guide': 'api-convention',
   'data-layer-guide': 'data-layer',
-  // Section V — pluggable summary strategies.
+  // Section V — Retrieval & GraphRAG.
+  'retrieval-graphrag-guide': 'retrieval-graphrag',
   'summary-strategies': 'summary-strategies',
   // Quickstart tutorial series — used by loadSeries(), not loadExtensions().
   'quickstart-guide': 'quickstart',
