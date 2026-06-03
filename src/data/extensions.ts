@@ -62,6 +62,9 @@ const ENTRY_ID_TO_SLUG: Record<string, string> = {
   'data-layer-guide': 'data-layer',
   // Section V — pluggable summary strategies.
   'summary-strategies': 'summary-strategies',
+  // Quickstart tutorial series — used by loadSeries(), not loadExtensions().
+  'quickstart-guide': 'quickstart',
+  'analysis-quickstart-guide': 'analysis-quickstart',
 };
 
 export async function loadExtensions(): Promise<Map<string, ExtensionPoint>> {
@@ -72,6 +75,28 @@ export async function loadExtensions(): Promise<Map<string, ExtensionPoint>> {
     if (!ext) continue;
     const slug = ENTRY_ID_TO_SLUG[entry.id] ?? entry.id;
     map.set(slug, ext);
+  }
+  return map;
+}
+
+// Series metadata for multi-part tutorials (e.g. Quickstart parts 1 & 2).
+// The truth lives in YAML frontmatter on each guide markdown file
+// (see src/content.config.ts for the schema). Mirrored from ExtensionPoint's
+// pattern so callers can drive UI off a single sync lookup.
+export interface SeriesInfo {
+  name: string;
+  part: number;
+  total: number;
+}
+
+export async function loadSeries(): Promise<Map<string, SeriesInfo>> {
+  const entries = await getCollection('guides');
+  const map = new Map<string, SeriesInfo>();
+  for (const entry of entries) {
+    const series = entry.data.series;
+    if (!series) continue;
+    const slug = ENTRY_ID_TO_SLUG[entry.id] ?? entry.id;
+    map.set(slug, series);
   }
   return map;
 }

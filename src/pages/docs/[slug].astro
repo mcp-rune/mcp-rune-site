@@ -6,13 +6,13 @@ import DocsBadge from '../../components/docs/DocsBadge.astro';
 import Toc from '../../components/docs/Toc.astro';
 import TocAccordion from '../../components/docs/TocAccordion.astro';
 import DocsSource from '../../components/docs/DocsSource.astro';
-import { FLAT_GUIDES, findGuide } from '../../data/guides';
+import { FLAT_GUIDES, findGuide, isReadable } from '../../data/guides';
 import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
 
 export async function getStaticPaths() {
   // Only generate routes for guides whose markdown file exists on disk.
   return FLAT_GUIDES
-    .filter(({ guide }) => guide.status === 'live' && guide.file)
+    .filter(({ guide }) => isReadable(guide.status) && guide.file)
     .map(({ guide }) => ({ params: { slug: guide.slug } }));
 }
 
@@ -79,14 +79,14 @@ const { Content, headings } = await render(entry);
 
         <div class="pager">
           {prev ? (
-            <a href={prev.guide.status === 'live' ? `/docs/${prev.guide.slug}` : '#'} class:list={['pager-link', { disabled: prev.guide.status !== 'live' }]}>
+            <a href={isReadable(prev.guide.status) ? `/docs/${prev.guide.slug}` : '#'} class:list={['pager-link', { disabled: !isReadable(prev.guide.status) }]}>
               <div class="pager-tag">← PREV</div>
               <div class="pager-label">{prev.guide.label}</div>
             </a>
           ) : <span class="pager-link disabled" aria-hidden="true"></span>}
 
           {next ? (
-            <a href={next.guide.status === 'live' ? `/docs/${next.guide.slug}` : '#'} class:list={['pager-link', 'right', { disabled: next.guide.status !== 'live' }]}>
+            <a href={isReadable(next.guide.status) ? `/docs/${next.guide.slug}` : '#'} class:list={['pager-link', 'right', { disabled: !isReadable(next.guide.status) }]}>
               <div class="pager-tag">NEXT →</div>
               <div class="pager-label">{next.guide.label}</div>
             </a>

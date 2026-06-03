@@ -1,5 +1,5 @@
 ---
-import { SECTIONS, FLAT_GUIDES } from '../data/guides';
+import { SECTIONS, FLAT_GUIDES, isReadable } from '../data/guides';
 import { loadExtensions } from '../data/extensions';
 import { MCP_RUNE_VERSION_LABEL } from '../data/version';
 import ExtFlag from './docs/ExtFlag.astro';
@@ -32,15 +32,16 @@ const extensions = await loadExtensions();
       <ul class="section-list">
         {section.guides.map((guide) => {
           const on = guide.slug === activeSlug;
-          const href = guide.status === 'live' ? `/docs/${guide.slug}` : '#';
+          const readable = isReadable(guide.status);
+          const href = readable ? `/docs/${guide.slug}` : '#';
           const ext = extensions.get(guide.slug);
           return (
             <li>
-              <a href={href} class:list={['guide-link', { on, disabled: guide.status !== 'live' }]}>
+              <a href={href} class:list={['guide-link', { on, disabled: !readable }]}>
                 <span class="guide-label">{guide.label}</span>
                 {ext && <ExtFlag variant="icon" what={ext.what} />}
                 {guide.status !== 'live' && (
-                  <span class="guide-status">{guide.status}</span>
+                  <span class:list={['guide-status', `s-${guide.status}`]}>{guide.status}</span>
                 )}
               </a>
             </li>
@@ -148,6 +149,8 @@ const extensions = await loadExtensions();
     color: #f0c674;
     letter-spacing: 0.4px;
   }
+  .guide-status.s-new { color: #5bb8f5; }
+  .guide-status.s-soon { color: #a78bfa; }
 
   @media (max-width: 1024px) {
     .docs-sidebar { display: none; }

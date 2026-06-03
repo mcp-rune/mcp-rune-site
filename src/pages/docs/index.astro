@@ -8,9 +8,9 @@ import ContributionCallout from '../../components/docs/ContributionCallout.astro
 import ExtFlag from '../../components/docs/ExtFlag.astro';
 import PlugIcon from '../../components/docs/PlugIcon.astro';
 import { SECTIONS, FLAT_GUIDES } from '../../data/guides';
-import { loadExtensions } from '../../data/extensions';
+import { loadExtensions, loadSeries } from '../../data/extensions';
 
-const extensions = await loadExtensions();
+const [extensions, series] = await Promise.all([loadExtensions(), loadSeries()]);
 const totalGuides = FLAT_GUIDES.length;
 const extCount = extensions.size;
 ---
@@ -54,7 +54,7 @@ const extCount = extensions.size;
         </div>
 
         {SECTIONS.map((section) => (
-          <SectionBlock section={section} extensions={extensions} />
+          <SectionBlock section={section} extensions={extensions} series={series} />
         ))}
 
         <ContributionCallout />

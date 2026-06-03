@@ -3,21 +3,22 @@ import DocIcon from './DocIcon.astro';
 import DocsBadge from './DocsBadge.astro';
 import ExtFlag from './ExtFlag.astro';
 import PlugIcon from './PlugIcon.astro';
-import type { Guide } from '../../data/guides';
-import type { ExtensionPoint } from '../../data/extensions';
+import { isReadable, type Guide } from '../../data/guides';
+import type { ExtensionPoint, SeriesInfo } from '../../data/extensions';
 
 interface Props {
   guide: Guide;
   /** 1-based ordinal within the section. */
   index: number;
   extension?: ExtensionPoint;
+  series?: SeriesInfo;
 }
-const { guide, index, extension } = Astro.props;
-const href = guide.status === 'live' ? `/docs/${guide.slug}` : undefined;
+const { guide, index, extension, series } = Astro.props;
+const href = isReadable(guide.status) ? `/docs/${guide.slug}` : undefined;
 const Tag = href ? 'a' : 'div';
 ---
 <Tag
-  class:list={['guide-row', { live: guide.status === 'live', disabled: !href, ext: !!extension }]}
+  class:list={['guide-row', { live: isReadable(guide.status), disabled: !href, ext: !!extension }]}
   href={href}
   data-ext={extension ? 'true' : 'false'}
   data-ext-slug={guide.slug}
@@ -35,6 +36,14 @@ const Tag = href ? 'a' : 'div';
 
   <span class="row-label-col">
     <span class="row-label">{guide.label}</span>
+    {series && (
+      <span
+        class="row-series"
+        title={`${series.name} tutorial · part ${series.part} of ${series.total}`}
+      >
+        Tutorial · {series.part}/{series.total}
+      </span>
+    )}
     {extension && (
       <span class="row-ext">
         <ExtFlag variant="chip" />
@@ -126,6 +135,21 @@ const Tag = href ? 'a' : 'div';
     color: var(--ink);
     letter-spacing: -0.01em;
   }
+  .row-series {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background: rgba(124, 92, 255, 0.1);
+    border: 1px solid rgba(124, 92, 255, 0.3);
+    color: var(--acc-2);
+  }
   .row-ext {
     display: inline-flex;
     align-items: center;
@@ -197,6 +221,7 @@ const Tag = href ? 'a' : 'div';
     .row-label-col { grid-area: label; }
     .row-label { font-size: 15px; }
     .row-ext-what { display: none; }
+    .row-series { font-size: 9px; padding: 1px 6px; }
     .row-blurb { grid-area: blurb; font-size: 13px; }
     .row-meta {
       grid-area: meta;

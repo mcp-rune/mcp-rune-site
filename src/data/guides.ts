@@ -3,7 +3,17 @@
 // page-docs-hub.jsx (REAL_GUIDES), but driven by what actually exists on disk in
 // /Users/dsaenz/Code/mcp-rune/docs/guides (which is symlinked into src/content/guides).
 
-export type GuideStatus = 'live' | 'wip' | 'soon';
+export type GuideStatus = 'live' | 'new' | 'wip' | 'soon';
+
+/**
+ * Guides the reader can actually open. `live` is the steady state; `new` is
+ * the same shape (file is rendered, route exists, sidebar links it) but
+ * decorated with a blue badge for one release cycle so it surfaces on the hub.
+ * Use this anywhere we'd otherwise write `status === 'live'`.
+ */
+export function isReadable(status: GuideStatus): boolean {
+  return status === 'live' || status === 'new';
+}
 
 /**
  * Discriminator key for the docs icon set rendered by
@@ -248,6 +258,16 @@ export const SECTIONS: Section[] = [
     blurb: 'Patterns for large-result LLM workflows: pgvector-backed memories, stratified sampling, and the transient-context protocol that keeps context windows small.',
     guides: [
       {
+        slug: 'analysis-quickstart',
+        label: 'Analysis Quickstart',
+        status: 'new',
+        file: 'analysis-quickstart-guide.md',
+        blurb: 'Spin up pgvector, load 5,000 books into the in-memory data layer, and try each summary strategy side by side.',
+        read: '12 min',
+        tags: ['analysis', 'quickstart'],
+        icon: 'brain',
+      },
+      {
         slug: 'analysis-memories',
         label: 'Analysis Memories',
         status: 'live',
@@ -268,16 +288,6 @@ export const SECTIONS: Section[] = [
         icon: 'sample',
       },
       {
-        slug: 'transient-context',
-        label: 'Transient Context Protocol',
-        status: 'live',
-        file: 'transient-context-protocol.md',
-        blurb: 'Server-to-client protocol for collapsing transient tool results after a follow-up call has consumed them.',
-        read: '5 min',
-        tags: ['protocol', 'context'],
-        icon: 'ghost',
-      },
-      {
         slug: 'summary-strategies',
         label: 'Summary Strategies',
         status: 'live',
@@ -286,6 +296,16 @@ export const SECTIONS: Section[] = [
         read: '5 min',
         tags: ['analysis', 'strategy'],
         icon: 'brain',
+      },
+      {
+        slug: 'transient-context',
+        label: 'Transient Context Protocol',
+        status: 'live',
+        file: 'transient-context-protocol.md',
+        blurb: 'Server-to-client protocol for collapsing transient tool results after a follow-up call has consumed them.',
+        read: '5 min',
+        tags: ['protocol', 'context'],
+        icon: 'ghost',
       },
     ],
   },
@@ -325,79 +345,9 @@ export const SECTIONS: Section[] = [
   },
   {
     num: 'VIII',
-    title: 'Adapters & Extensions',
-    blurb: 'Every layer of mcp-rune has a typed seam. Swap, extend, or compose the framework\'s defaults without forking.',
+    title: 'Adapters',
+    blurb: 'Replace a built-in default without forking — the API client, wire convention, data backend, or search translation. Each is one typed seam.',
     guides: [
-      {
-        slug: 'extension-recipes',
-        label: 'Extension Recipes',
-        status: 'live',
-        file: 'extension-recipes.md',
-        blurb: 'Inverse map — "I want to do X, which seam does that?" Copy-pasteable starting points for the common extension patterns.',
-        read: '9 min',
-        tags: ['extensions', 'cookbook'],
-        icon: 'book',
-      },
-      {
-        slug: 'extensibility',
-        label: 'Adapters & Extensions Overview',
-        status: 'live',
-        file: 'extensibility-overview.md',
-        blurb: 'Tour the seams: convention, client, data layer, search adapter, and the two extension shapes.',
-        read: '3 min',
-        tags: ['overview'],
-        icon: 'layers',
-      },
-      {
-        slug: 'extensions-http',
-        label: 'HTTP Extensions',
-        status: 'live',
-        file: 'extensions.md',
-        blurb: 'Opt-in HTTP extensions add routes and middleware on top of the framework\'s OAuth, status, and MCP transport endpoints.',
-        read: '4 min',
-        tags: ['extensions', 'http'],
-        icon: 'wrench',
-      },
-      {
-        slug: 'api-extensions',
-        label: 'API Extensions',
-        status: 'live',
-        file: 'api-extensions.md',
-        blurb: 'Contribute MCP tools and ModelService methods beyond pure CRUD — custom verbs, search subsystems, bulk operations, RPC.',
-        read: '7 min',
-        tags: ['extensions', 'api'],
-        icon: 'net',
-      },
-      {
-        slug: 'tool-flow-extension',
-        label: 'Tool-Flow Extensions',
-        status: 'live',
-        file: 'tool-flow-extension-guide.md',
-        blurb: 'Sibling to HttpExtension: modify the MCP tool surface and the runtime context threaded into app tool handlers.',
-        read: '7 min',
-        tags: ['extensions', 'tools'],
-        icon: 'flow',
-      },
-      {
-        slug: 'authoring-extensions',
-        label: 'Authoring Extensions',
-        status: 'live',
-        file: 'authoring-extensions-guide.md',
-        blurb: 'End-to-end walkthrough of writing an extension from scratch. Pick HttpExtension or ToolFlowExtension based on lifetime.',
-        read: '7 min',
-        tags: ['extensions', 'authoring'],
-        icon: 'book',
-      },
-      {
-        slug: 'custom-app',
-        label: 'Writing a Custom MCP App',
-        status: 'live',
-        file: 'custom-app-guide.md',
-        blurb: 'Build a seventh MCP app: kind taxonomy, formatter registry, form-schema generator, selection store, theming.',
-        read: '7 min',
-        tags: ['apps', 'authoring'],
-        icon: 'app',
-      },
       {
         slug: 'api-client',
         label: 'Custom API Client',
@@ -437,6 +387,83 @@ export const SECTIONS: Section[] = [
         read: '6 min',
         tags: ['adapter', 'search'],
         icon: 'search',
+      },
+    ],
+  },
+  {
+    num: 'IX',
+    title: 'Extensions',
+    blurb: 'Add new capability on top of the framework: HTTP routes, tool-flow hooks, custom MCP apps, and ModelService verbs beyond plain CRUD.',
+    guides: [
+      {
+        slug: 'extensibility',
+        label: 'Extensions Overview',
+        status: 'live',
+        file: 'extensibility-overview.md',
+        blurb: 'Tour the seams: convention, client, data layer, search adapter, and the two extension shapes.',
+        read: '3 min',
+        tags: ['overview'],
+        icon: 'layers',
+      },
+      {
+        slug: 'extension-recipes',
+        label: 'Extension Recipes',
+        status: 'live',
+        file: 'extension-recipes.md',
+        blurb: 'Inverse map — "I want to do X, which seam does that?" Copy-pasteable starting points for the common extension patterns.',
+        read: '9 min',
+        tags: ['extensions', 'cookbook'],
+        icon: 'book',
+      },
+      {
+        slug: 'authoring-extensions',
+        label: 'Authoring Extensions',
+        status: 'live',
+        file: 'authoring-extensions-guide.md',
+        blurb: 'End-to-end walkthrough of writing an extension from scratch. Pick HttpExtension or ToolFlowExtension based on lifetime.',
+        read: '7 min',
+        tags: ['extensions', 'authoring'],
+        icon: 'book',
+      },
+      {
+        slug: 'api-extensions',
+        label: 'API Extensions',
+        status: 'live',
+        file: 'api-extensions.md',
+        blurb: 'Contribute MCP tools and ModelService methods beyond pure CRUD — custom verbs, search subsystems, bulk operations, RPC.',
+        read: '7 min',
+        tags: ['extensions', 'api'],
+        icon: 'net',
+      },
+      {
+        slug: 'tool-flow-extension',
+        label: 'Tool-Flow Extensions',
+        status: 'live',
+        file: 'tool-flow-extension-guide.md',
+        blurb: 'Sibling to HttpExtension: modify the MCP tool surface and the runtime context threaded into app tool handlers.',
+        read: '7 min',
+        tags: ['extensions', 'tools'],
+        icon: 'flow',
+      },
+      {
+        slug: 'extensions-http',
+        label: 'HTTP Extensions',
+        status: 'live',
+        file: 'extensions.md',
+        blurb: 'Opt-in HTTP extensions add routes and middleware on top of the framework\'s OAuth, status, and MCP transport endpoints.',
+        read: '4 min',
+        tags: ['extensions', 'http'],
+        icon: 'wrench',
+      },
+      {
+        slug: 'custom-app',
+        label: 'Writing a Custom MCP App',
+        status: 'live',
+        file: 'custom-app-guide.md',
+        blurb: 'Build a seventh MCP app: kind taxonomy, formatter registry, form-schema generator, selection store, theming.',
+        read: '7 min',
+        tags: ['apps', 'authoring'],
+        icon: 'app',
       },
     ],
   },
