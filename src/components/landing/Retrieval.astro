@@ -1,0 +1,322 @@
+---
+// Retrieval / GraphRAG band — port of PrRetrieval in page-landing-rag.jsx.
+// Sits between Hero and Pillars; surfaces the retrieval story (vectors,
+// relationship graph, domain grounding, map-reduce) that the Analysis Memories
+// pillar alone under-sells.
+
+interface RagCard {
+  tag: string;
+  tagColor: string;
+  title: string;
+  bodyHtml: string;
+  foot: string;
+}
+
+const cards: RagCard[] = [
+  {
+    tag: 'vectors',
+    tagColor: '#7ee2c1',
+    title: 'Recall by meaning',
+    bodyHtml: 'Every page summary and stored finding is embedded with <strong>all-MiniLM-L6-v2</strong> (384-dim) into local <strong>pgvector</strong>. The <code>semantic</code> mode ranks by cosine distance — "rule failures about rating" finds the right memory, no keywords.',
+    foot: 'analysis_query · mode: semantic',
+  },
+  {
+    tag: 'graph',
+    tagColor: '#a78bfa',
+    title: 'Walk the relationships',
+    bodyHtml: 'Multi-hop ingest follows associations across models and stores the <strong>edges</strong>. The four <strong>GraphRAG-aware</strong> strategies — relationship-coverage, concept-touch — read that graph, not just flat fields.',
+    foot: 'multi-hop ingest → edges[]',
+  },
+  {
+    tag: 'domain',
+    tagColor: '#f0c674',
+    title: 'Grounded in your terms',
+    bodyHtml: 'A registry of <strong>concepts</strong> and <strong>business rules</strong> grounds findings in your vocabulary. The rule-violation strategy evaluates every rule against every record and embeds the result as a queryable memory.',
+    foot: 'DomainRegistry · concepts · rules',
+  },
+  {
+    tag: 'map-reduce',
+    tagColor: '#8aa6ff',
+    title: 'Act without re-exposing',
+    bodyHtml: '<code>analysis_act</code> mutates a filtered subset server-side — matched IDs <strong>never return to context</strong>. Five query modes; proximity sampling spreads a sample evenly across a date window.',
+    foot: 'describe · aggregate · filter · sample · semantic',
+  },
+];
+
+const tools = [
+  'analysis_ingest',
+  'analysis_query',
+  'analysis_store',
+  'analysis_act',
+  'analysis_summarize',
+  'analysis_clear',
+];
+---
+<section class="retrieval">
+  <div class="retrieval-wash"></div>
+
+  <div class="pr-wrap retrieval-inner">
+    <div class="retrieval-intro">
+      <div class="retrieval-eyebrow">
+        <span class="eyebrow-bar"></span>
+        <span class="eyebrow-text">RETRIEVAL · GRAPHRAG</span>
+        <span class="eyebrow-bar"></span>
+      </div>
+      <h2 class="pr-display retrieval-title">
+        Retrieval that understands<br />your domain.
+      </h2>
+      <p class="retrieval-lede">
+        Most MCP servers can only hand the agent raw rows. mcp-rune indexes an
+        entire dataset three ways — <span class="hi">vectors</span>, a
+        <span class="hi">relationship graph</span>, and your
+        <span class="hi">domain vocabulary</span> — then answers by meaning,
+        aggregate, or stratified sample. The agent reasons over findings, never
+        the whole table.
+      </p>
+    </div>
+
+    <div class="pipeline-figure">
+      <div class="pipeline-chrome">
+        <span class="pipeline-label">tools/analysis · the GraphRAG loop</span>
+        <span class="flex-spacer"></span>
+        <span class="pipeline-flag">opt-in · ANALYSIS_ENABLED=true</span>
+      </div>
+      <div class="pipeline-canvas">
+        <img
+          src="/illustrations/graphrag-pipeline.svg"
+          alt="The retrieval / GraphRAG pipeline: analysis_ingest auto-paginates an API model into offline storage; records are indexed as vectors (MiniLM 384-dim pgvector), edges (multi-hop relationship graph) and domain grounding; analysis_query answers in five modes (describe, aggregate, filter, sample as SQL; semantic as cosine recall) with nine summary strategies; the LLM stores recallable findings and synthesises the answer with zero raw rows in context."
+        />
+      </div>
+    </div>
+
+    <div class="capability-cards">
+      {cards.map((c) => (
+        <div class="cap-card">
+          <div class="cap-card-head">
+            <span class="cap-card-dot" style={`background: ${c.tagColor}`}></span>
+            <span class="cap-card-tag" style={`color: ${c.tagColor}`}>{c.tag}</span>
+          </div>
+          <h3 class="cap-card-title">{c.title}</h3>
+          <p class="cap-card-body" set:html={c.bodyHtml}></p>
+          <div class="cap-card-foot">{c.foot}</div>
+        </div>
+      ))}
+    </div>
+
+    <div class="tool-rail">
+      <span class="tool-rail-label">SIX TOOLS</span>
+      <div class="tool-rail-tools">
+        {tools.map((t) => <span class="tool-chip">{t}</span>)}
+      </div>
+      <span class="tool-rail-foot">
+        local embeddings · <span class="muted">no external vector DB, no embedding API</span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .retrieval {
+    position: relative;
+    border-top: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .retrieval-wash {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(ellipse 70% 45% at 50% 8%, rgba(124, 92, 255, 0.10), transparent 60%);
+  }
+  .retrieval-inner {
+    position: relative;
+    z-index: 1;
+    padding: 96px 32px;
+  }
+
+  .retrieval-intro {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 12px;
+  }
+  .retrieval-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--acc-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    margin-bottom: 18px;
+    letter-spacing: 0.4px;
+  }
+  .eyebrow-bar { width: 16px; height: 1px; background: var(--acc); }
+  .eyebrow-text { white-space: nowrap; }
+  .retrieval-title {
+    font-size: 52px;
+    margin: 0;
+  }
+  .retrieval-lede {
+    margin: 20px auto 0;
+    max-width: 660px;
+    font-size: 17.5px;
+    line-height: 1.55;
+    color: var(--ink-3);
+  }
+  .hi { color: var(--ink-2); }
+  .muted { color: var(--ink-4); }
+
+  /* Pipeline figure */
+  .pipeline-figure {
+    margin-top: 44px;
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line-2);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow:
+      0 30px 80px -40px rgba(0, 0, 0, 0.65),
+      0 0 0 1px rgba(124, 92, 255, 0.06);
+  }
+  .pipeline-chrome {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-3);
+  }
+  .pipeline-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .flex-spacer { flex: 1; }
+  .pipeline-flag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+  }
+  .pipeline-canvas {
+    padding: 26px 26px 22px;
+    background: #0b0b10;
+  }
+  .pipeline-canvas img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Capability cards */
+  .capability-cards {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .cap-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 22px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .cap-card-head {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 12px;
+  }
+  .cap-card-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+  }
+  .cap-card-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .cap-card-title {
+    font-family: 'Geist', sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin: 0 0 8px;
+  }
+  .cap-card-body {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink-3);
+    margin: 0;
+  }
+  .cap-card-body strong { color: var(--ink-2); font-weight: 500; }
+  .cap-card-body code {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--acc-2);
+  }
+  .cap-card-foot {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+  }
+
+  /* Tool rail */
+  .tool-rail {
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 16px 20px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .tool-rail-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.4px;
+  }
+  .tool-rail-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    flex: 1;
+  }
+  .tool-chip {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    padding: 5px 10px;
+    background: rgba(124, 92, 255, 0.06);
+    border: 1px solid rgba(124, 92, 255, 0.22);
+    border-radius: 6px;
+    color: var(--ink-2);
+  }
+  .tool-rail-foot {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+  }
+
+  @media (max-width: 1024px) {
+    .capability-cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .retrieval-inner { padding: 56px 16px; }
+    .retrieval-title { font-size: 32px; }
+    .retrieval-title br { display: none; }
+    .retrieval-lede { font-size: 15.5px; margin-top: 16px; }
+    .pipeline-figure { margin-top: 28px; }
+    .pipeline-canvas { padding: 14px; }
+    .capability-cards { grid-template-columns: 1fr; gap: 12px; }
+    .tool-rail { padding: 14px 16px; gap: 12px; }
+  }
+</style>

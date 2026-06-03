@@ -1,0 +1,246 @@
+---
+// MCP Apps showcase — port of PrAppsShowcase in page-landing-apps-showcase.jsx.
+// Show-don't-tell: real captures of the four generated apps, so the
+// "schema-driven UI inside the host" claim is grounded in something visual.
+
+interface App {
+  img: string;
+  tool: string;
+  cat: string;
+  title: string;
+  desc: string;
+}
+
+const apps: App[] = [
+  {
+    img: '/screenshots/01-app.png',
+    tool: 'list_records_app',
+    cat: 'table · multi-select',
+    title: 'List view',
+    desc: 'Sortable, multi-select table with filter chips, pagination, and a send-to-conversation selection bar.',
+  },
+  {
+    img: '/screenshots/02-app.png',
+    tool: 'update_model_form',
+    cat: 'form · validation',
+    title: 'Model form',
+    desc: 'Fields derived straight from attributesConfig — enums, numeric ranges, embedded text, required markers.',
+  },
+  {
+    img: '/screenshots/03-app.png',
+    tool: 'autocomplete_picker',
+    cat: 'search · single-select',
+    title: 'Autocomplete picker',
+    desc: 'Live association lookup with highlighted matches and keyboard pick — fetched through the same EndpointResolver.',
+  },
+  {
+    img: '/screenshots/04-app.png',
+    tool: 'workflow_panel',
+    cat: 'launcher · grouped',
+    title: 'Workflow launcher',
+    desc: 'Grouped, browsable workflow cards the agent can run — wired to suggest_workflow and get_workflow_step.',
+  },
+];
+---
+<section class="apps">
+  <div class="pr-wrap apps-inner">
+    <div class="apps-intro">
+      <div class="apps-eyebrow">
+        <span class="eyebrow-bar"></span>
+        <span class="eyebrow-text">MCP APPS · RENDERED, NOT DESCRIBED</span>
+        <span class="eyebrow-bar"></span>
+      </div>
+      <h2 class="pr-display apps-title">
+        Real interactive UI,<br />inside the host.
+      </h2>
+      <p class="apps-lede">
+        Six generic app factories turn the same model spec into forms, tables,
+        detail views, search and pickers — rendered inside Claude Desktop and any
+        MCP Apps host. These are the actual generated surfaces, on mcp-rune's
+        default theme.
+      </p>
+    </div>
+
+    <div class="apps-gallery">
+      {apps.map((app) => (
+        <article class="app-card">
+          <div class="app-card-thumb">
+            <img
+              src={app.img}
+              alt={`${app.title} — ${app.tool}`}
+              loading="lazy"
+              width="600"
+              height="378"
+            />
+          </div>
+          <div class="app-card-body">
+            <div class="app-card-head">
+              <span class="app-card-title">{app.title}</span>
+              <span class="flex-spacer"></span>
+              <span class="app-card-cat">{app.cat}</span>
+            </div>
+            <div class="app-card-tool">{app.tool}</div>
+            <p class="app-card-desc">{app.desc}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="apps-foot">
+      <span class="apps-foot-text">
+        One <span class="hi-acc">attributesConfig</span> powers tools, prompts
+        <span class="muted">and</span> apps — they never drift.
+        <span class="muted">Light + dark, host-adaptive. Zero per-model HTML.</span>
+      </span>
+      <a class="apps-foot-link" href="/docs/mcp-apps">
+        Explore the default app theme →
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .apps {
+    position: relative;
+    border-top: 1px solid var(--line);
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      var(--bg-2) 40%,
+      var(--bg-2) 70%,
+      transparent 100%
+    );
+  }
+  .apps-inner { padding: 96px 32px; }
+
+  .apps-intro {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 12px;
+  }
+  .apps-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--acc-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    margin-bottom: 18px;
+    letter-spacing: 0.4px;
+  }
+  .eyebrow-bar { width: 16px; height: 1px; background: var(--acc); }
+  .eyebrow-text { white-space: nowrap; }
+  .apps-title { font-size: 52px; margin: 0; }
+  .apps-lede {
+    margin: 20px auto 0;
+    max-width: 640px;
+    font-size: 17.5px;
+    line-height: 1.55;
+    color: var(--ink-3);
+  }
+  .hi-acc { color: var(--acc-2); }
+  .muted { color: var(--ink-4); }
+
+  /* Gallery */
+  .apps-gallery {
+    margin-top: 44px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .app-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px -36px rgba(0, 0, 0, 0.7);
+  }
+  .app-card-thumb {
+    height: 252px;
+    background: #0b0b10;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .app-card-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .app-card-body { padding: 16px 18px 18px; }
+  .app-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .flex-spacer { flex: 1; }
+  .app-card-title {
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .app-card-cat {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-4);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .app-card-tool {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--acc-2);
+    margin-bottom: 9px;
+  }
+  .app-card-desc {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-3);
+    margin: 0;
+  }
+
+  /* Foot strip */
+  .apps-foot {
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .apps-foot-text {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+    flex: 1;
+    min-width: 280px;
+  }
+  .apps-foot-link {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--acc-2);
+    padding: 7px 14px;
+    border: 1px solid rgba(124, 92, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(124, 92, 255, 0.06);
+    white-space: nowrap;
+  }
+  .apps-foot-link:hover { border-color: rgba(124, 92, 255, 0.5); }
+
+  @media (max-width: 768px) {
+    .apps-inner { padding: 56px 16px; }
+    .apps-title { font-size: 32px; }
+    .apps-title br { display: none; }
+    .apps-lede { font-size: 15.5px; margin-top: 16px; }
+    .apps-gallery { grid-template-columns: 1fr; gap: 14px; margin-top: 28px; }
+    .app-card-thumb { height: 200px; }
+    .apps-foot { padding: 14px 16px; gap: 12px; }
+  }
+</style>

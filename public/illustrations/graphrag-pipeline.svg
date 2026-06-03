@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 480" width="1120" height="480" font-family="&#39;Geist Mono&#39;,ui-monospace,monospace" role="img" aria-label="The mcp-rune retrieval / GraphRAG pipeline, four stages. Ingest: analysis_ingest auto-paginates an API model into offline storage. Index — the GraphRAG index: records become vectors (analysis_memories, MiniLM-L6-v2, 384-dim pgvector), edges (multi-hop ingest, a relationship graph) and domain grounding (DomainRegistry concepts and rules), over a raw ingested_records JSONB table with 1-hour TTL. Query: analysis_query answers in five modes — describe, aggregate, filter and sample run as SQL; semantic embeds the query and ranks by cosine distance; nine summary strategies seed page summaries. Synthesize: the LLM stores findings that are themselves semantically recallable and writes the answer, with zero raw rows crossing the context window.">
+  <rect x="0.5" y="0.5" width="1119" height="479" rx="16" fill="#0c0c12" stroke="#23232f"></rect>
+  <text x="32" y="38" font-size="11.5" letter-spacing="0.1em" fill="#7a7a88">RETRIEVAL · GRAPHRAG PIPELINE</text>
+  <text x="1088" y="38" font-size="11" text-anchor="end" fill="#6a6a78">MiniLM-L6-v2 · 384-dim · pgvector · local, no external services</text>
+
+  
+  <rect x="28" y="84" width="220" height="312" rx="11" fill="#101019" stroke="#2a2a38"></rect>
+  <circle cx="48" cy="110" r="4" fill="#8aa6ff"></circle>
+  <text x="60" y="114" font-size="12" letter-spacing="0.08em" fill="#aebfff">① INGEST</text>
+  <line x1="44" y1="126" x2="232" y2="126" stroke="#2a2a38" stroke-dasharray="2 4"></line>
+  <rect x="48" y="146" width="180" height="44" rx="8" fill="#14141e" stroke="#2a2a38"></rect>
+  <text x="64" y="168" font-size="11.5" fill="#e7e7ee">your API</text>
+  <text x="64" y="184" font-size="10.5" fill="#6a6a78">GET /api/&lt;model&gt;?page=N</text>
+  <path d="M138 192 V214" fill="none" stroke="#7c5cff" stroke-width="1.6"></path><path d="M132 210 L138 222 L144 210 Z" fill="#7c5cff"></path>
+  <rect x="48" y="224" width="180" height="60" rx="8" fill="#14141e" stroke="#2a2a38"></rect>
+  <rect x="48" y="224" width="3" height="60" rx="1.5" fill="#7c5cff"></rect>
+  <text x="64" y="246" font-size="11.5" fill="#a78bfa">analysis_ingest()</text>
+  <text x="64" y="263" font-size="10.5" fill="#9a9aa8">auto-paginate ≤ 50 pages</text>
+  <text x="64" y="278" font-size="10.5" fill="#6a6a78">batched · once per analysis_id</text>
+  <text x="48" y="316" font-size="10.5" fill="#6a6a78">download once.</text>
+  <text x="48" y="332" font-size="10.5" fill="#6a6a78">reason many times.</text>
+
+  
+  <line x1="252" y1="240" x2="286" y2="240" stroke="#4a4a5e" stroke-width="1.75"></line><path d="M282 234 L294 240 L282 246 Z" fill="#7c5cff"></path>
+
+  
+  <rect x="298" y="64" width="320" height="352" rx="12" fill="#101019" stroke="#4f3da6"></rect>
+  <circle cx="318" cy="92" r="4" fill="#7c5cff"></circle>
+  <text x="330" y="96" font-size="12" letter-spacing="0.08em" fill="#c9b8ff">② INDEX — the GraphRAG index</text>
+  <line x1="314" y1="108" x2="602" y2="108" stroke="#2a2a38" stroke-dasharray="2 4"></line>
+
+  
+  <rect x="316" y="122" width="286" height="56" rx="8" fill="#14141e" stroke="#2a2a38"></rect>
+  <rect x="316" y="122" width="3" height="56" rx="1.5" fill="#7ee2c1"></rect>
+  <text x="332" y="143" font-size="11.5" fill="#7ee2c1">vectors</text>
+  <text x="332" y="161" font-size="11" fill="#e7e7ee">analysis_memories</text>
+  <text x="446" y="161" font-size="10.5" fill="#6a6a78">· MiniLM · 384-dim</text>
+  <text x="332" y="174" font-size="9.5" fill="#5a5a68">embed on write · cosine recall</text>
+
+  
+  <rect x="316" y="186" width="286" height="56" rx="8" fill="#14141e" stroke="#2a2a38"></rect>
+  <rect x="316" y="186" width="3" height="56" rx="1.5" fill="#7c5cff"></rect>
+  <text x="332" y="207" font-size="11.5" fill="#a78bfa">edges</text>
+  <text x="332" y="225" font-size="11" fill="#e7e7ee">multi-hop ingest</text>
+  <text x="446" y="225" font-size="10.5" fill="#6a6a78">· relationship graph</text>
+  <text x="332" y="238" font-size="9.5" fill="#5a5a68">records linked across models</text>
+  
+  <g stroke="#7c5cff" stroke-width="1.1" fill="#0c0c12">
+    <line x1="556" y1="200" x2="578" y2="212" stroke-opacity="0.6"></line>
+    <line x1="578" y1="212" x2="560" y2="226" stroke-opacity="0.6"></line>
+    <line x1="556" y1="200" x2="560" y2="226" stroke-opacity="0.6"></line>
+    <circle cx="556" cy="200" r="3.2" fill="#a78bfa" stroke="none"></circle>
+    <circle cx="578" cy="212" r="3.2" fill="#a78bfa" stroke="none"></circle>
+    <circle cx="560" cy="226" r="3.2" fill="#a78bfa" stroke="none"></circle>
+  </g>
+
+  
+  <rect x="316" y="250" width="286" height="56" rx="8" fill="#14141e" stroke="#2a2a38"></rect>
+  <rect x="316" y="250" width="3" height="56" rx="1.5" fill="#f0c674"></rect>
+  <text x="332" y="271" font-size="11.5" fill="#f0c674">domain</text>
+  <text x="332" y="289" font-size="11" fill="#e7e7ee">DomainRegistry</text>
+  <text x="430" y="289" font-size="10.5" fill="#6a6a78">· concepts · rules</text>
+  <text x="332" y="302" font-size="9.5" fill="#5a5a68">grounds findings in your vocabulary</text>
+
+  
+  <rect x="316" y="346" width="286" height="40" rx="8" fill="#0e0e16" stroke="#2a2a38" stroke-dasharray="3 3"></rect>
+  <text x="332" y="370" font-size="10.5" fill="#8c8c9a">ingested_records · raw JSONB · 1h TTL</text>
+
+  
+  <line x1="622" y1="240" x2="656" y2="240" stroke="#4a4a5e" stroke-width="1.75"></line><path d="M652 234 L664 240 L652 246 Z" fill="#7c5cff"></path>
+
+  
+  <rect x="668" y="84" width="246" height="312" rx="11" fill="#101019" stroke="#2a2a38"></rect>
+  <circle cx="688" cy="110" r="4" fill="#7c5cff"></circle>
+  <text x="700" y="114" font-size="12" letter-spacing="0.08em" fill="#c9b8ff">③ QUERY</text>
+  <line x1="684" y1="126" x2="898" y2="126" stroke="#2a2a38" stroke-dasharray="2 4"></line>
+  <text x="684" y="146" font-size="10.5" fill="#6a6a78">analysis_query · five modes</text>
+  <g font-size="11">
+    <rect x="684" y="156" width="100" height="24" rx="6" fill="#14141e" stroke="#2a2a38"></rect><text x="697" y="172" fill="#c7c7d1">describe</text>
+    <rect x="790" y="156" width="108" height="24" rx="6" fill="#14141e" stroke="#2a2a38"></rect><text x="803" y="172" fill="#c7c7d1">aggregate</text>
+    <rect x="684" y="186" width="100" height="24" rx="6" fill="#14141e" stroke="#2a2a38"></rect><text x="697" y="202" fill="#c7c7d1">filter</text>
+    <rect x="790" y="186" width="108" height="24" rx="6" fill="#14141e" stroke="#2a2a38"></rect><text x="803" y="202" fill="#c7c7d1">sample</text>
+  </g>
+  <text x="684" y="228" font-size="9.5" fill="#5a5a68">↑ deterministic SQL · GROUP BY, JSONB</text>
+  <rect x="684" y="238" width="214" height="42" rx="8" fill="#7ee2c1" fill-opacity="0.06" stroke="#7ee2c1" stroke-opacity="0.3"></rect>
+  <text x="697" y="258" font-size="11" fill="#7ee2c1">semantic</text>
+  <text x="752" y="258" font-size="10" fill="#8c8c9a">embed(query) → cosine</text>
+  <text x="697" y="272" font-size="9.5" fill="#5a5a68">ranks vectors + your findings</text>
+  <line x1="684" y1="298" x2="898" y2="298" stroke="#2a2a38" stroke-dasharray="2 4"></line>
+  <text x="684" y="318" font-size="10.5" fill="#9a9aa8">9 summary strategies</text>
+  <text x="684" y="334" font-size="9.5" fill="#6a6a78">seed page summaries · 5 field-level</text>
+  <text x="684" y="348" font-size="9.5" fill="#6a6a78">+ 4 GraphRAG-aware (edges/domain)</text>
+  <text x="684" y="372" font-size="9.5" fill="#6a6a78">proximity sampling · date-windowed</text>
+
+  
+  <line x1="918" y1="240" x2="952" y2="240" stroke="#2f6e57" stroke-width="1.75"></line><path d="M948 234 L960 240 L948 246 Z" fill="#7ee2c1"></path>
+
+  
+  <rect x="964" y="104" width="128" height="272" rx="11" fill="#101019" stroke="#2a2a38"></rect>
+  <circle cx="984" cy="130" r="4" fill="#7ee2c1"></circle>
+  <text x="996" y="134" font-size="11.5" letter-spacing="0.06em" fill="#7ee2c1">④ ANSWER</text>
+  <line x1="980" y1="146" x2="1076" y2="146" stroke="#2a2a38" stroke-dasharray="2 4"></line>
+  <rect x="980" y="160" width="96" height="52" rx="8" fill="#14141e" stroke="#2a2a38"></rect>
+  <text x="994" y="180" font-size="11" fill="#e7e7ee">findings[]</text>
+  <text x="994" y="196" font-size="9.5" fill="#6a6a78">stored &amp;</text>
+  <text x="994" y="207" font-size="9.5" fill="#6a6a78">recallable</text>
+  <path d="M1028 212 V232" fill="none" stroke="#7ee2c1" stroke-width="1.5"></path><path d="M1022 228 L1028 240 L1034 228 Z" fill="#7ee2c1"></path>
+  <text x="980" y="262" font-size="13" fill="#f4f4f7">the answer</text>
+  <text x="980" y="280" font-size="9.5" fill="#8c8c9a">synthesised</text>
+  <text x="980" y="293" font-size="9.5" fill="#8c8c9a">from findings</text>
+  <rect x="980" y="312" width="96" height="48" rx="8" fill="#7ee2c1" fill-opacity="0.07" stroke="#7ee2c1" stroke-opacity="0.3"></rect>
+  <text x="994" y="330" font-size="13" fill="#7ee2c1">0</text>
+  <text x="1010" y="330" font-size="9.5" fill="#9a9aa8">raw rows</text>
+  <text x="994" y="345" font-size="9.5" fill="#9a9aa8">cross the</text>
+  <text x="994" y="356" font-size="9.5" fill="#9a9aa8">context window</text>
+</svg>
