@@ -1,17 +1,13 @@
 ---
-import { getCollection } from 'astro:content';
 import { FLAT_GUIDES, SECTIONS } from '../../data/guides';
+import { loadSeries } from '../../data/extensions';
 import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
 
 const total = FLAT_GUIDES.length;
-const live = FLAT_GUIDES.filter((g) => g.guide.status === 'live').length;
-const wip = total - live;
 const sectionCount = SECTIONS.length;
-
-const entries = await getCollection('guides');
-const totalLines = entries.reduce((sum, entry) => sum + entry.body.split('\n').length, 0);
-const pagesEstimate = Math.round(totalLines / 40 / 5) * 5; // ~40 lines/page, rounded to nearest 5
-const linesLabel = totalLines >= 1000 ? `~${(totalLines / 1000).toFixed(1)}K lines of MD` : `~${totalLines} lines of MD`;
+const series = await loadSeries();
+const quickstartCount = Array.from(series.values()).filter((s) => s.name === 'Quickstart').length;
+const quickstartSub = quickstartCount === 2 ? 'a 2-part tutorial' : `${quickstartCount}-part tutorial`;
 ---
 <section class="docs-hero">
   <div class="docs-hero-glow" />
@@ -38,17 +34,17 @@ const linesLabel = totalLines >= 1000 ? `~${(totalLines / 1000).toFixed(1)}K lin
       <div class="stat">
         <div class="stat-big pr-display">{total}</div>
         <div class="stat-label">guides</div>
-        <div class="stat-sub">across {sectionCount} sections</div>
+        <div class="stat-sub">all of docs/guides</div>
       </div>
       <div class="stat">
-        <div class="stat-big pr-display">{live}</div>
-        <div class="stat-label">live</div>
-        <div class="stat-sub">{wip > 0 ? `${wip} in progress` : 'all shipped'}</div>
+        <div class="stat-big pr-display">{sectionCount}</div>
+        <div class="stat-label">sections</div>
+        <div class="stat-sub">balance 3·5·3·4·5·1·1·4·7</div>
       </div>
       <div class="stat">
-        <div class="stat-big pr-display">~{pagesEstimate}</div>
-        <div class="stat-label">pages of docs</div>
-        <div class="stat-sub">{linesLabel}</div>
+        <div class="stat-big pr-display">{quickstartCount}</div>
+        <div class="stat-label">quickstarts</div>
+        <div class="stat-sub">{quickstartSub}</div>
       </div>
       <div class="stat">
         <a href="https://github.com/mcp-rune/mcp-rune" class="stat-link">

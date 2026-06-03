@@ -2,13 +2,14 @@
 import GuideRow from './GuideRow.astro';
 import PlugIcon from './PlugIcon.astro';
 import type { Section } from '../../data/guides';
-import type { ExtensionPoint } from '../../data/extensions';
+import type { ExtensionPoint, SeriesInfo } from '../../data/extensions';
 
 interface Props {
   section: Section;
   extensions?: Map<string, ExtensionPoint>;
+  series?: Map<string, SeriesInfo>;
 }
-const { section, extensions } = Astro.props;
+const { section, extensions, series } = Astro.props;
 const extCount = extensions
   ? section.guides.filter((g) => extensions.has(g.slug)).length
   : 0;
@@ -40,7 +41,12 @@ const extCount = extensions
 
   <div class="section-rows">
     {section.guides.map((guide, i) => (
-      <GuideRow guide={guide} index={i + 1} extension={extensions?.get(guide.slug)} />
+      <GuideRow
+        guide={guide}
+        index={i + 1}
+        extension={extensions?.get(guide.slug)}
+        series={series?.get(guide.slug)}
+      />
     ))}
   </div>
 </div>

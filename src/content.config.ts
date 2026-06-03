@@ -15,6 +15,13 @@ const guides = defineCollection({
         what: z.string(),
       })
       .optional(),
+    series: z
+      .object({
+        name: z.string(),
+        part: z.number().int().positive(),
+        total: z.number().int().positive(),
+      })
+      .optional(),
   }),
 });
 
