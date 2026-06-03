@@ -247,7 +247,31 @@ async function ghGet<T>(url: string, token: string): Promise<T | null> {
   }
 }
 
+// `astro dev` re-executes page frontmatter on every request, so each /roadmap
+// visit would otherwise re-issue the full milestones + per-milestone-issues
+// fetch chain. Memoize for the dev process lifetime; build (`MODE=production`)
+// and Vitest (`MODE=test`) bypass the cache so we always get a fresh fetch
+// at build time and tests don't bleed state into each other.
+const devCache = new Map<string, Promise<RoadmapData | null>>();
+const isDevMode = import.meta.env.MODE === 'development';
+
 export async function fetchRoadmap(opts: {
+  owner: string;
+  repo: string;
+  token?: string;
+}): Promise<RoadmapData | null> {
+  if (isDevMode) {
+    const key = `${opts.owner}/${opts.repo}/${opts.token ?? ''}`;
+    const hit = devCache.get(key);
+    if (hit) return hit;
+    const promise = doFetchRoadmap(opts);
+    devCache.set(key, promise);
+    return promise;
+  }
+  return doFetchRoadmap(opts);
+}
+
+async function doFetchRoadmap(opts: {
   owner: string;
   repo: string;
   token?: string;
@@ -262,14 +286,18 @@ export async function fetchRoadmap(opts: {
   );
   if (!milestones) return null;
 
-  const issuesByMilestone = new Map<number, GithubIssue[]>();
-  for (const m of milestones) {
-    const issues = await ghGet<GithubIssue[]>(
-      `${GITHUB_API}/repos/${owner}/${repo}/issues?milestone=${m.number}&state=all&per_page=100`,
-      token,
-    );
-    issuesByMilestone.set(m.number, issues ?? []);
-  }
+  // Fan out the per-milestone issue fetches in parallel. Was a sequential
+  // for-await loop paying N×latency — at ~6 milestones that dominated both
+  // the 1.7s build time and the 5s dev-mode page render.
+  const entries = await Promise.all(
+    milestones.map((m) =>
+      ghGet<GithubIssue[]>(
+        `${GITHUB_API}/repos/${owner}/${repo}/issues?milestone=${m.number}&state=all&per_page=100`,
+        token,
+      ).then((issues) => [m.number, issues ?? []] as const),
+    ),
+  );
+  const issuesByMilestone = new Map<number, GithubIssue[]>(entries);
 
   return mapMilestonesToRoadmap(milestones, issuesByMilestone, { source });
 }
