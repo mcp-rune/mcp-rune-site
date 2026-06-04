@@ -261,7 +261,7 @@ export const SECTIONS: Section[] = [
         slug: 'retrieval-graphrag',
         label: 'GraphRAG Overview',
         status: 'new',
-        file: 'retrieval-graphrag-guide.md',
+        file: '05-retrieval-graphrag/retrieval-graphrag.md',
         blurb: 'Start here. How vectors, a relationship graph, and domain grounding combine into GraphRAG over your own models — and which guide owns each piece.',
         read: '7 min',
         tags: ['retrieval', 'graphrag'],
