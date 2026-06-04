@@ -4,7 +4,7 @@
 
 export const RUNE_REPO     = 'mcp-rune/mcp-rune';
 export const RUNE_REPO_URL = `https://github.com/${RUNE_REPO}`;
-export const RUNE_DISCORD  = 'https://discord.gg/mcp-rune';
+export const RUNE_DISCORD  = 'https://discord.gg/fxM2yndabX';
 export const RUNE_EMAIL    = 'hello@mcp-rune.dev';
 
 // Below this many stars, render the "Be star #N" invitation instead of the
