@@ -52,7 +52,7 @@ registry:
 builder:
   arch: amd64
   secrets:
-    - GITHUB_TOKEN_MCP_RUNE
+    - GITHUB_TOKEN
 
 # Astro emits hashed assets straight into dist/_astro; we don't use kamal's
 # Rails-style asset bridging.
