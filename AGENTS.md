@@ -59,11 +59,11 @@ The guide markdown files have **no frontmatter**. All descriptive metadata (slug
 
 ### Roadmap page is GitHub-driven at build time
 
-`src/pages/roadmap.astro` calls `fetchRoadmap()` (in `src/lib/github-milestones.ts`) during `astro build`. It reads `GITHUB_TOKEN_MCP_RUNE` first, falling back to `GITHUB_TOKEN` if the namespaced var is unset — operators with a generic shell `GITHUB_TOKEN` (npm install against GitHub Packages, gh CLI) can keep that untouched and set the namespaced var for the Roadmap. Both reach the same fetcher; both never leave the build container.
+`src/pages/roadmap.astro` calls `fetchRoadmap()` (in `src/lib/github-milestones.ts`) during `astro build`. It reads `GITHUB_TOKEN` from the build environment. The token never leaves the build container.
 
 The page hits the GitHub REST API for milestones + issues in `mcp-rune/mcp-rune` and bakes the result into the static HTML. A fine-grained PAT scoped to the single `mcp-rune/mcp-rune` repo with **Issues: Read-only** + **Metadata: Read-only** is sufficient. Missing token, fetch failure, or zero milestones all render the empty-state design — intentional, not a failure mode. Run `npm test` (Vitest) to cover the mapping logic.
 
-In production the token is wired as a Kamal builder secret (`.kamal/secrets` line `GITHUB_TOKEN_MCP_RUNE=$(op read "op://${OP_VAULT}/${OP_ITEM}/GITHUB_TOKEN_MCP_RUNE")`), declared in `config/deploy.yml` under `builder.secrets`, and mounted into the `node:20-alpine` build stage in `Dockerfile` via `--mount=type=secret,id=GITHUB_TOKEN_MCP_RUNE`. The secret never lands on disk in the image — only the rendered static HTML does.
+In production the token is wired as a Kamal builder secret (`.kamal/secrets` line `GITHUB_TOKEN=$(op read "op://${OP_VAULT}/${OP_ITEM}/GITHUB_TOKEN")`), declared in `config/deploy.yml` under `builder.secrets`, and mounted into the `node:20-alpine` build stage in `Dockerfile` via `--mount=type=secret,id=GITHUB_TOKEN`. The secret never lands on disk in the image — only the rendered static HTML does.
 
 #### What surfaces on the Roadmap
 
@@ -117,10 +117,9 @@ Theme milestones may span multiple releases. The `shipped-in:0.50.0`, `shipped-i
 #### Local preview
 
 ```bash
-GITHUB_TOKEN_MCP_RUNE=<your-pat> npm run dev
-# or, if you already have a GITHUB_TOKEN with `repo` (or Issues:Read +
-# Metadata:Read on mcp-rune/mcp-rune) exported, the fallback picks it up:
 GITHUB_TOKEN=<your-pat> npm run dev
 ```
+
+The PAT needs `repo` scope (or, for a fine-grained token, Issues: Read-only + Metadata: Read-only on `mcp-rune/mcp-rune`).
 
 Without the token the Roadmap renders the empty-state design — no warnings or errors. `npm test` exercises the milestone/issue → Roadmap mapping logic in isolation; no network call needed for the test suite.

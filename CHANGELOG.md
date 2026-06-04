@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.3] - 2026-06-05
+
+> Collapses the dual-token Roadmap fetcher (`GITHUB_TOKEN_MCP_RUNE` preferred, `GITHUB_TOKEN` fallback) down to a single `GITHUB_TOKEN`. The namespaced variant existed so a generic shell `GITHUB_TOKEN` (e.g. a `read:packages`-scoped PAT for npm install against GitHub Packages) wouldn't collide with the Roadmap's `Issues:Read` PAT — but in practice the production 1Password item was already keyed `GITHUB_TOKEN`, and carrying the alias through `src/pages/roadmap.astro`, `.kamal/secrets`, `config/deploy.yml`, `Dockerfile`, and `AGENTS.md` was busywork on every rotation. The 1Password entry has been renamed to `GITHUB_TOKEN`; the codebase now reads the unprefixed name everywhere.
+
+### Changed
+
+- **`src/pages/roadmap.astro`** — frontmatter now reads `import.meta.env.GITHUB_TOKEN` directly; the `GITHUB_TOKEN_MCP_RUNE ?? GITHUB_TOKEN` coalesce and its explanatory comment are gone.
+- **`.kamal/secrets`** — the line populated from 1Password is now `GITHUB_TOKEN=$(op read "op://${OP_VAULT}/${OP_ITEM}/GITHUB_TOKEN")`. The 1Password key was already `GITHUB_TOKEN`; only the local secret-binding name changed.
+- **`config/deploy.yml`** — `builder.secrets` lists `GITHUB_TOKEN` instead of `GITHUB_TOKEN_MCP_RUNE`.
+- **`Dockerfile`** — BuildKit secret id, the `cat /run/secrets/...` source path, and the env var exported into `npm run build` all renamed to `GITHUB_TOKEN`; the surrounding comment is updated to match.
+- **`AGENTS.md`** — the Roadmap section, Kamal wiring paragraph, and local-preview snippet drop the dual-var explanation and document a single `GITHUB_TOKEN=<pat> npm run dev`.
+
+### Notes
+
+- Operators with a pre-existing shell `GITHUB_TOKEN` for an unrelated purpose (npm install against GitHub Packages, `gh` CLI) now need to override it for `npm run dev` if that token lacks `Issues:Read` on `mcp-rune/mcp-rune`: `GITHUB_TOKEN=$(op read "op://CLI/Production/GITHUB_TOKEN") npm run dev`. Missing or wrong-scope tokens still soft-fall back to the empty-state Roadmap, same as before — nothing breaks loudly.
+- Historical CHANGELOG entries (v0.4.1) that introduced the `GITHUB_TOKEN_MCP_RUNE` alias are intentionally left untouched as an audit trail of when the alias existed.
+
+[0.8.3]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.8.2...v0.8.3
+
 ## [0.8.2] - 2026-06-04
 
 > Submodule-only. Bumps `vendor/mcp-rune` to v0.72.0, which lands the full illustration gallery: 29 newly-ported authoring modules, 76 new SVG artifacts, and 56 `<!-- illustration: id -->` markers across 38 guides. No site code changes — the remark plugin from v0.8.0 + the CSS slim-down from v0.8.1 are sufficient to render the new gallery. Fresh `npm run build` confirms 30 guide pages now inline at least one SVG (model-form-customization and mcp-apps both inline 5, tool-creation inlines 4, project-structure inlines 3, several others inline 2 each).
