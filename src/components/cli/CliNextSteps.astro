@@ -1,0 +1,182 @@
+---
+import Terminal from './Terminal.astro';
+import CliSectionHeader from './CliSectionHeader.astro';
+
+interface Script {
+  cmd: string;
+  runs: string;
+  desc: string;
+  status: 'live' | 'wip';
+}
+
+const SCRIPTS: Script[] = [
+  { cmd: 'npm run start:local', runs: 'rune dev --transport both', desc: 'dev server with hot-reload',     status: 'live' },
+  { cmd: 'npm run start',       runs: 'node ./dist/server.js',     desc: 'production stdio + http',         status: 'live' },
+  { cmd: 'npm run test',        runs: 'vitest',                    desc: 'scaffolded smoke test passes',    status: 'live' },
+  { cmd: 'npm run inspect',     runs: 'rune inspect',              desc: 'open MCP Inspector pre-wired',    status: 'wip' },
+  { cmd: 'npm run typecheck',   runs: 'tsc --noEmit',              desc: 'no codegen, just verifies',       status: 'live' },
+];
+---
+<section class="cli-next">
+  <div class="cli-next-inner">
+    <CliSectionHeader
+      number="05"
+      eyebrow="AFTER SCAFFOLD"
+      title="Next steps."
+      rightHint="what the CLI prints, expanded"
+    />
+
+    <div class="next-grid">
+      <Terminal title="my-server · running" sub="stdio + http"
+><span class="t-prompt">›&nbsp;</span><span class="t-white">cd my-server</span>
+<span class="t-prompt">›&nbsp;</span><span class="t-white">npm run start:local</span>
+
+<span class="t-dim">&gt; my-server@0.0.1 start:local</span>
+<span class="t-dim">&gt; rune dev --transport both</span>
+
+<span class="t-dim">  reading </span><span class="t-path">rune.config.ts</span>
+<span class="t-dim">  loaded </span><span class="t-arg-b">3</span><span class="t-dim"> models · </span><span class="t-arg-b">0</span><span class="t-dim"> prompts · </span><span class="t-arg-b">0</span><span class="t-dim"> apps</span>
+<span class="t-check">✓ </span><span class="t-white">stdio transport ready</span>
+<span class="t-check">✓ </span><span class="t-white">http transport ready on </span><span class="t-path">http://localhost:4100</span>
+
+<span class="t-dim">  watching </span><span class="t-path">src/**</span><span class="t-dim">  ·  hot-reloading</span>
+<span class="t-check">✓ </span><span class="t-white">ready</span>  <span class="t-dim">· press </span><span class="t-warn">r</span><span class="t-dim"> to reload, </span><span class="t-warn">i</span><span class="t-dim"> to open inspector, </span><span class="t-warn">q</span><span class="t-dim"> to quit</span></Terminal>
+
+      <div>
+        <div class="next-eyebrow">SCRIPTS · package.json</div>
+
+        <div class="scripts">
+          {SCRIPTS.map((s, i) => (
+            <div class:list={['script-row', { first: i === 0 }]}>
+              <span class="script-cmd">{s.cmd}</span>
+              <div class="script-body">
+                <div class="script-runs">{s.runs}</div>
+                <div class="script-desc">{s.desc}</div>
+              </div>
+              <span class:list={['script-status', s.status]}>
+                <span class="script-status-dot" />
+                {s.status}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div class="next-ctas">
+          <a class="pr-btn acc" href="/docs/quickstart">
+            Read the Quickstart <span class="arr">↗</span>
+          </a>
+          <a class="pr-btn ghost" href="/docs">
+            See all generators <span class="arr">→</span>
+          </a>
+          <a
+            class="pr-btn ghost"
+            href="https://github.com/mcp-rune/mcp-rune"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            CLI source on GitHub <span class="arr">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cli-next {
+    background: linear-gradient(180deg, transparent 0%, rgba(124, 92, 255, 0.05) 100%);
+    border-bottom: 1px solid var(--line);
+  }
+  .cli-next-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 72px 32px;
+  }
+  .next-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 32px;
+    align-items: flex-start;
+  }
+  .next-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .scripts {
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .script-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 60px;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 18px;
+    border-top: 1px solid var(--line);
+  }
+  .script-row.first { border-top: none; }
+  .script-cmd {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12.5px;
+    color: var(--acc-2);
+  }
+  .script-runs {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+    margin-bottom: 2px;
+  }
+  .script-desc { font-size: 12.5px; color: var(--ink-4); }
+  .script-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    justify-self: flex-end;
+  }
+  .script-status.live {
+    background: rgba(126, 226, 193, 0.1);
+    border: 1px solid rgba(126, 226, 193, 0.3);
+    color: #7ee2c1;
+  }
+  .script-status.wip {
+    background: rgba(240, 198, 116, 0.1);
+    border: 1px solid rgba(240, 198, 116, 0.3);
+    color: #f0c674;
+  }
+  .script-status-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 2px;
+    background: currentColor;
+  }
+
+  .next-ctas {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .next-ctas .pr-btn { height: 38px; font-size: 13px; }
+
+  @media (max-width: 1024px) {
+    .next-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .cli-next-inner { padding: 40px 16px; }
+    .script-row { grid-template-columns: 1fr; gap: 4px; padding: 14px; }
+    .script-status { justify-self: flex-start; }
+  }
+</style>

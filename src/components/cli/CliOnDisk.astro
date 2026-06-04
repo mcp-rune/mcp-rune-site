@@ -1,0 +1,318 @@
+---
+import CliSectionHeader from './CliSectionHeader.astro';
+
+interface TreeLine {
+  pre: string;
+  name: string;
+  comment?: string;
+  kind?: 'file' | 'dir';
+  only?: 'simple' | 'advanced';
+  highlight?: boolean;
+}
+
+const TREE: TreeLine[] = [
+  { pre: '',              name: 'my-server/',        kind: 'dir' },
+  { pre: '├─ ',           name: 'package.json' },
+  { pre: '├─ ',           name: 'rune.config.ts',    comment: '# preset & transport recorded here', highlight: true },
+  { pre: '├─ ',           name: '.gitignore' },
+  { pre: '├─ ',           name: '.env.example' },
+  { pre: '├─ ',           name: 'docker-compose.yml', comment: '# only with --analysis', only: 'advanced' },
+  { pre: '├─ src/',       name: '',                  kind: 'dir' },
+  { pre: '│  ├─ ',        name: 'registry.ts',       comment: '# the single entry point', highlight: true },
+  { pre: '│  ├─ ',        name: 'server.ts',         comment: '# stdio + http transport' },
+  { pre: '│  ├─ models/', name: '',                  kind: 'dir' },
+  { pre: '│  │  ├─ ',     name: 'base-model.ts' },
+  { pre: '│  │  ├─ ',     name: 'example.ts',        comment: '# only in --preset simple', only: 'simple' },
+  { pre: '│  │  ├─ ',     name: 'book.ts',           comment: '# --models book,…', only: 'advanced' },
+  { pre: '│  │  ├─ ',     name: 'shelf.ts',          only: 'advanced' },
+  { pre: '│  │  └─ ',     name: 'home.ts',           only: 'advanced' },
+  { pre: '│  ├─ analysis/', name: '',                kind: 'dir', only: 'advanced' },
+  { pre: '│  │  └─ ',     name: 'index.ts',          comment: '# pgvector wiring', only: 'advanced' },
+  { pre: '│  └─ domain/', name: '',                  kind: 'dir', only: 'advanced' },
+  { pre: '│     ├─ ',     name: 'concepts.ts',       only: 'advanced' },
+  { pre: '│     ├─ ',     name: 'rules.ts',          only: 'advanced' },
+  { pre: '│     ├─ ',     name: 'diagrams.ts',       only: 'advanced' },
+  { pre: '│     └─ ',     name: 'workflows.ts',      only: 'advanced' },
+  { pre: '└─ test/',      name: '',                  kind: 'dir' },
+  { pre: '   └─ ',        name: 'smoke.test.ts',     comment: '# scaffolded smoke test' },
+];
+
+const STATS: Array<[string, string, string]> = [
+  ['package size', '1 pkg', '16 pkgs'],
+  ['audited', '3', '18'],
+  ['scaffold time', '560 ms', '823 ms'],
+  ['bytes on disk', '~ 14 KB', '~ 42 KB'],
+];
+
+const CALLOUTS: Array<[string, string]> = [
+  ['Convention recorded in rune.config.ts',
+   'Every choice you made at scaffold time is written, named and editable. Re-running rune new on an existing folder respects it.'],
+  ['The registry is the single entry point',
+   'src/registry.ts wires everything together — models, prompts, tools, apps, workflows. Nothing is hidden in node_modules.'],
+  ['Local-link mode is for framework hackers',
+   '--mcp-rune-local rewrites @mcp-rune/mcp-rune to file:<path>. When you cd into mcp-rune and edit, your scaffold sees it.'],
+];
+---
+<section class="cli-disk" data-mode="advanced">
+  <div class="cli-disk-inner">
+    <CliSectionHeader number="03" eyebrow="ON DISK" title="What lands in your repo.">
+      <div slot="right" class="disk-toggle" role="tablist" aria-label="Preset">
+        <button type="button" data-mode-btn="simple" role="tab" aria-selected="false">SIMPLE</button>
+        <button type="button" data-mode-btn="advanced" role="tab" aria-selected="true">ADVANCED</button>
+      </div>
+    </CliSectionHeader>
+
+    <div class="disk-grid">
+      <!-- TREE -->
+      <div class="tree-shell">
+        <div class="tree-head">
+          <span class="tree-dot" />
+          <span class="tree-title">
+            my-server/ · tree · <span class="t-name disk-mode-label">advanced</span>
+          </span>
+        </div>
+        <pre class="tree-body">{TREE.map((row) => (
+          <div
+            class:list={['tree-line', { 'tree-hl': row.highlight }]}
+            data-only={row.only}
+            data-kind={row.kind ?? 'file'}
+          >
+            <span class="tl-pre">{row.pre}</span><span class="tl-name">{row.name}</span>{row.comment && <span class="tl-comment">{row.comment}</span>}
+          </div>
+        ))}</pre>
+      </div>
+
+      <!-- DELTAS -->
+      <div>
+        <div class="disk-eyebrow">
+          FILE COUNT ·
+          <span data-show="simple">12 files · 3 dirs</span>
+          <span data-show="advanced">24 files · 6 dirs</span>
+        </div>
+
+        <div class="disk-stats">
+          {STATS.map(([k, sv, av]) => (
+            <div class="disk-stat">
+              <div class="disk-stat-k">{k}</div>
+              <div class="pr-display disk-stat-v">
+                <span data-show="simple">{sv}</span>
+                <span data-show="advanced">{av}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <ul class="disk-callouts">
+          {CALLOUTS.map(([h, b], i) => (
+            <li class="disk-callout">
+              <span class="disk-callout-n">0{i + 1}.</span>
+              <div>
+                <div class="disk-callout-h">{h}</div>
+                <div class="disk-callout-b">{b}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cli-disk {
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+  .cli-disk-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 64px 32px;
+  }
+  .disk-toggle {
+    display: inline-flex;
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+    padding: 3px;
+  }
+  .disk-toggle button {
+    padding: 5px 14px;
+    border-radius: 5px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.3px;
+    color: var(--ink-3);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .disk-toggle button[aria-selected='true'] {
+    color: var(--ink);
+    background: var(--bg-3);
+  }
+
+  .disk-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 32px;
+  }
+
+  .tree-shell {
+    background: var(--term-bg);
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .tree-head {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--term-rule);
+    background: var(--term-chrome);
+  }
+  .tree-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--term-check);
+  }
+  .tree-title {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--term-dim);
+  }
+  .tree-body {
+    margin: 0;
+    padding: 20px 24px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.85;
+    color: var(--ink-2);
+    overflow: auto;
+    min-height: 540px;
+  }
+  .tree-line {
+    display: flex;
+    white-space: pre;
+    transition: opacity 0.18s ease;
+  }
+  .tl-pre { color: var(--ink-4); }
+  .tl-name { color: var(--ink-2); }
+  .tree-line[data-kind='dir'] .tl-name { color: var(--ink); font-weight: 500; }
+  .tree-line.tree-hl .tl-name { color: var(--acc-2); }
+  .tl-comment {
+    color: var(--ink-4);
+    margin-left: auto;
+    padding-left: 24px;
+  }
+  /* Fade rows not matching the active mode. */
+  .cli-disk[data-mode='simple']  .tree-line[data-only='advanced'] { opacity: 0.35; }
+  .cli-disk[data-mode='advanced'] .tree-line[data-only='simple']  { opacity: 0.35; }
+
+  /* Mode-conditional inline text. */
+  .cli-disk[data-mode='simple']  [data-show='advanced'] { display: none; }
+  .cli-disk[data-mode='advanced'] [data-show='simple']  { display: none; }
+
+  .disk-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .disk-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .disk-stat {
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+  }
+  .disk-stat-k {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .disk-stat-v {
+    font-size: 22px;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .disk-callouts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .disk-callout {
+    padding: 16px 0;
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 14px;
+    align-items: flex-start;
+    border-top: 1px solid var(--line-2);
+  }
+  .disk-callout + .disk-callout { border-top-style: dashed; }
+  .disk-callout:last-child { border-bottom: 1px solid var(--line-2); }
+  .disk-callout-n {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--acc-2);
+    letter-spacing: 0.5px;
+    padding-top: 2px;
+  }
+  .disk-callout-h {
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .disk-callout-b {
+    font-size: 13px;
+    color: var(--ink-3);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 1024px) {
+    .disk-grid { grid-template-columns: 1fr; gap: 24px; }
+  }
+  @media (max-width: 768px) {
+    .cli-disk-inner { padding: 40px 16px; }
+    .tree-body { font-size: 11px; padding: 16px 14px; min-height: 420px; }
+    .disk-stats { grid-template-columns: 1fr 1fr; }
+    .disk-stat-v { font-size: 18px; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.cli-disk').forEach((root) => {
+    const label = root.querySelector<HTMLElement>('.disk-mode-label');
+    root.querySelectorAll<HTMLButtonElement>('[data-mode-btn]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.modeBtn ?? 'advanced';
+        root.dataset.mode = mode;
+        root.querySelectorAll<HTMLButtonElement>('[data-mode-btn]').forEach((b) => {
+          b.setAttribute('aria-selected', String(b.dataset.modeBtn === mode));
+        });
+        if (label) label.textContent = mode;
+      });
+    });
+  });
+</script>

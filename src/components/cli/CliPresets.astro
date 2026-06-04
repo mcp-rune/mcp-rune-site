@@ -1,0 +1,202 @@
+---
+import Terminal from './Terminal.astro';
+import CliSectionHeader from './CliSectionHeader.astro';
+---
+<section class="cli-presets">
+  <div class="cli-presets-inner">
+    <CliSectionHeader
+      number="01"
+      eyebrow="PRESETS"
+      title="Two ways to start."
+      rightHint="--preset SIMPLE · --preset ADVANCED"
+    />
+
+    <div class="presets-grid">
+      <!-- SIMPLE -->
+      <div class="preset-card">
+        <div class="preset-head">
+          <div class="preset-tagrow">
+            <span class="preset-tag">ONE-SHOT</span>
+            <span class="preset-flag">--preset simple --yes</span>
+          </div>
+          <div class="pr-display preset-name">Simple.</div>
+          <p class="preset-blurb">
+            Zero prompts, one package added, three audited. The smallest thing the framework
+            can boot — a single stdio transport, one example model, no analysis, no domain stubs.
+          </p>
+          <div class="preset-stats">
+            <span><span class="acc">1</span> pkgs</span>
+            <span>·</span>
+            <span><span class="acc">3</span> audited</span>
+            <span>·</span>
+            <span><span class="acc">560</span> ms</span>
+          </div>
+        </div>
+
+        <div class="preset-term-wrap">
+          <Terminal title="my-server · simple" sub="560 ms · 1 pkg"
+><span class="t-prompt">›&nbsp;</span><span class="t-white">rune new </span><span class="t-name">my-server</span> <span class="t-flag">--preset</span> <span class="t-arg">simple</span> <span class="t-flag">--yes</span>
+
+<span class="t-heading">Scaffolding </span><span class="t-name">my-server</span> <span class="t-dim-i">(simple)…</span>
+
+<span class="t-check">✓ </span><span class="t-white">wrote files to </span><span class="t-path">/Users/dsaenz/Code/my-server</span>
+<span class="t-check">✓ </span><span class="t-white">initialized git repo</span>
+<span class="t-dim">    running npm install…</span>
+
+<span class="t-text">added 1 package, audited 3 in 560ms</span>
+<span class="t-check">✓ </span><span class="t-white">installed dependencies</span>
+
+<span class="t-heading">Next steps:</span>
+<span class="t-text">    cd my-server</span>
+<span class="t-text">    npm run start:local</span></Terminal>
+        </div>
+
+        <div class="preset-foot">
+          <span>WHAT YOU GET</span>
+          <span class="preset-foot-r">stdio · 1 example model · empty registry</span>
+        </div>
+      </div>
+
+      <!-- ADVANCED -->
+      <div class="preset-card">
+        <div class="preset-head">
+          <div class="preset-tagrow">
+            <span class="preset-tag">INTERACTIVE</span>
+            <span class="preset-flag">--preset advanced</span>
+          </div>
+          <div class="pr-display preset-name">Advanced.</div>
+          <p class="preset-blurb">
+            Four prompts. You name the models, pick stdio / http / both, opt in to the analysis
+            module (Postgres + docker-compose) and to the domain workflow stubs. Sixteen packages,
+            eighteen audited.
+          </p>
+          <div class="preset-stats">
+            <span><span class="acc">16</span> pkgs</span>
+            <span>·</span>
+            <span><span class="acc">18</span> audited</span>
+            <span>·</span>
+            <span><span class="acc">823</span> ms</span>
+          </div>
+        </div>
+
+        <div class="preset-term-wrap">
+          <Terminal title="my-server · advanced" sub="823 ms · 16 pkgs"
+><span class="t-prompt">›&nbsp;</span><span class="t-white">rune new </span><span class="t-name">my-server</span> <span class="t-flag">--preset</span> <span class="t-arg">advanced</span>
+<span class="t-check">✓ </span><span class="t-white">Models to scaffold </span><span class="t-dim">(comma-separated, empty for none)</span> <span class="t-arg-b">book,shelf,home</span>
+<span class="t-check">✓ </span><span class="t-white">Transport?</span> <span class="t-arg-b">both</span> <span class="t-dim">(recommended)</span>
+<span class="t-check">✓ </span><span class="t-white">Enable analysis module? </span><span class="t-dim">(adds docker-compose.yml + pg dep)</span> <span class="t-arg-b">Yes</span>
+<span class="t-check">✓ </span><span class="t-white">Enable domain workflows? </span><span class="t-dim">(creates src/domain/ stubs)</span> <span class="t-arg-b">Yes</span>
+
+<span class="t-heading">Scaffolding </span><span class="t-name">my-server</span> <span class="t-dim-i">(advanced)…</span>
+
+<span class="t-check">✓ </span><span class="t-white">wrote files to </span><span class="t-path">/Users/dsaenz/Code/my-server</span>
+<span class="t-check">✓ </span><span class="t-white">initialized git repo</span>
+<span class="t-dim">    running npm install…</span>
+
+<span class="t-text">added 16 packages, audited 18 in 823ms</span>
+<span class="t-check">✓ </span><span class="t-white">installed dependencies</span></Terminal>
+        </div>
+
+        <div class="preset-foot">
+          <span>WHAT YOU GET</span>
+          <span class="preset-foot-r">stdio+http · N models · pg · src/domain/</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cli-presets {
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+  .cli-presets-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 64px 32px;
+  }
+  .presets-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .preset-card {
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .preset-head {
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--line);
+  }
+  .preset-tagrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .preset-tag {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .preset-flag {
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--bg-3);
+    border: 1px solid var(--line-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+  }
+  .preset-name {
+    font-size: 32px;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 8px;
+  }
+  .preset-blurb {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--ink-3);
+    line-height: 1.55;
+  }
+  .preset-stats {
+    margin-top: 14px;
+    display: flex;
+    gap: 14px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+    letter-spacing: 0.3px;
+  }
+  .preset-stats .acc { color: var(--acc-2); }
+  .preset-term-wrap { padding: 16px; flex: 1; }
+  .preset-foot {
+    padding: 14px 24px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+  .preset-foot-r { color: var(--ink-4); }
+
+  @media (max-width: 1024px) {
+    .presets-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .cli-presets-inner { padding: 40px 16px; }
+    .preset-name { font-size: 26px; }
+    .preset-head { padding: 18px; }
+    .preset-foot { padding: 12px 18px; flex-direction: column; gap: 4px; }
+  }
+</style>

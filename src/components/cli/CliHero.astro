@@ -1,0 +1,282 @@
+---
+import Terminal from './Terminal.astro';
+
+const signatureChips: Array<[string, string]> = [
+  ['name', 'positional, required'],
+  ['--preset', 'simple · advanced'],
+  ['--yes / -y', 'skip all prompts'],
+  ['--mcp-rune-local', 'point at a local checkout'],
+];
+
+const stats: Array<[string, string, string]> = [
+  ['1', 'verb', '`rune new` — that\'s the whole API'],
+  ['2', 'presets', 'simple (zero deps) · advanced (full kit)'],
+  ['4', 'prompts', 'only in advanced · skippable with --yes'],
+  ['560', 'ms typical', 'scaffold + git init + npm i (simple)'],
+];
+---
+<section class="cli-hero">
+  <div class="cli-hero-bg" aria-hidden="true" />
+  <div class="cli-hero-grid pr-grid-faint" aria-hidden="true" />
+
+  <div class="cli-hero-inner">
+    <div class="hero-pill">
+      <span class="hero-pill-chip">CLI · rune new</span>
+      <span class="hero-pill-sub">one verb · two presets · four prompts</span>
+    </div>
+
+    <div class="hero-cols">
+      <div class="hero-copy">
+        <h1 class="pr-display hero-headline">
+          <span class="hero-gradient">rune new.</span>
+        </h1>
+        <p class="hero-tagline">
+          One command, <span class="hero-tagline-strong">one server.</span>
+        </p>
+
+        <p class="hero-lede">
+          <code class="hero-code">rune new</code> is the only scaffolder. Pick a preset,
+          answer four prompts (or skip them with <code class="hero-code">--yes</code>), and
+          walk away with a git&#8209;initialized project, deps installed, ready to
+          <code class="hero-code">npm run start:local</code>.
+        </p>
+
+        <div class="hero-signature">
+          <div class="hero-eyebrow">signature</div>
+          <div class="signature-line">
+            <span class="t-prompt">›&nbsp;</span><span class="t-white">rune new</span>
+            <span class="t-arg">&lt;name&gt;</span>
+            <span class="t-flag">--preset</span>
+            <span class="t-arg">&lt;simple|advanced&gt;</span>
+            <span class="t-flag">[--yes]</span>
+            <span class="t-flag">[--mcp-rune-local</span>
+            <span class="t-path">&lt;path&gt;</span><span class="t-flag">]</span>
+          </div>
+
+          <div class="signature-chips">
+            {signatureChips.map(([k, v]) => (
+              <div class="sig-chip">
+                <div class="sig-chip-k">{k}</div>
+                <div class="sig-chip-v">{v}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <Terminal title="~/Code · zsh" sub="node 20.10 · rune 0.1.0"
+><span class="t-prompt">›&nbsp;</span><span class="t-white">rune new </span><span class="t-name">my-server</span> <span class="t-flag">--preset</span> <span class="t-arg">simple</span> <span class="t-flag">--yes</span> <span class="t-flag">--mcp-rune-local</span> <span class="t-path">~/Code/mcp-rune</span>
+
+<span class="t-heading">Scaffolding </span><span class="t-name">my-server</span> <span class="t-dim-i">(simple)…</span>
+<span class="t-dim">    </span><span class="t-path">@mcp-rune/mcp-rune</span> <span class="t-dim">→</span> <span class="t-path">file:/Users/dsaenz/Code/mcp-rune</span>
+
+<span class="t-check">✓ </span><span class="t-white">wrote files to </span><span class="t-path">/Users/dsaenz/Code/my-server</span>
+<span class="t-check">✓ </span><span class="t-white">initialized git repo</span>
+<span class="t-dim">    running npm install…</span>
+
+<span class="t-text">added 1 package, and audited 3 packages in 560ms</span>
+
+<span class="t-text">found </span><span class="t-check">0</span><span class="t-text"> vulnerabilities</span>
+<span class="t-check">✓ </span><span class="t-white">installed dependencies</span>
+
+<span class="t-heading">Next steps:</span>
+<span class="t-text">    cd my-server</span>
+<span class="t-text">    npm run start:local</span></Terminal>
+    </div>
+
+    <div class="hero-stats">
+      {stats.map(([big, lbl, sub], i) => (
+        <div class:list={['stat', { last: i === stats.length - 1 }]}>
+          <div class="pr-display stat-big">{big}</div>
+          <div class="stat-lbl">{lbl}</div>
+          <div class="stat-sub">{sub}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cli-hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+  }
+  .cli-hero-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124, 92, 255, 0.14), transparent 60%);
+    pointer-events: none;
+  }
+  .cli-hero-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    mask-image: radial-gradient(ellipse 60% 80% at 50% 0%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 60% 80% at 50% 0%, black 30%, transparent 80%);
+  }
+  .cli-hero-inner {
+    position: relative;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 72px 32px 56px;
+  }
+
+  .hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 12px 4px 4px;
+    background: rgba(124, 92, 255, 0.07);
+    border: 1px solid rgba(124, 92, 255, 0.25);
+    border-radius: 999px;
+    margin-bottom: 28px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+  }
+  .hero-pill-chip {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.5px;
+  }
+  .hero-pill-sub {
+    color: var(--ink-3);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+  }
+
+  .hero-cols {
+    display: grid;
+    grid-template-columns: 1.05fr 1.15fr;
+    gap: 56px;
+    align-items: flex-end;
+  }
+
+  .hero-headline {
+    font-size: 104px;
+    margin: 0;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+  }
+  .hero-gradient {
+    background-image: linear-gradient(180deg, #ffffff 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-tagline {
+    margin-top: 18px;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--ink-3);
+    letter-spacing: -0.04em;
+    font-weight: 500;
+    font-family: 'Geist', sans-serif;
+  }
+  .hero-tagline-strong { color: var(--ink); }
+  .hero-lede {
+    margin-top: 28px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    max-width: 540px;
+  }
+  .hero-code {
+    color: var(--acc-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 14px;
+    background: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  .hero-signature { margin-top: 32px; }
+  .hero-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .signature-line {
+    background: var(--term-bg);
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--term-text);
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .signature-chips {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 14px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-3);
+  }
+  .sig-chip {
+    padding: 8px 10px;
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: 6px;
+  }
+  .sig-chip-k { color: var(--acc-2); margin-bottom: 2px; }
+  .sig-chip-v { color: var(--ink-4); font-size: 10.5px; }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--line-2);
+    margin-top: 56px;
+  }
+  .stat {
+    padding: 24px 32px 0 32px;
+    border-right: 1px solid var(--line-2);
+    margin-right: -1px;
+  }
+  .stat:first-child { padding-left: 0; padding-right: 32px; }
+  .stat.last { border-right: none; margin-right: 0; }
+  .stat-big {
+    font-size: 44px;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-lbl {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+  .stat-sub { font-size: 12.5px; color: var(--ink-4); margin-top: 2px; }
+
+  @media (max-width: 1024px) {
+    .hero-cols { grid-template-columns: 1fr; gap: 40px; }
+    .hero-headline { font-size: 76px; }
+    .hero-tagline { font-size: 38px; }
+  }
+  @media (max-width: 768px) {
+    .cli-hero-inner { padding: 48px 16px 32px; }
+    .hero-headline { font-size: 56px; }
+    .hero-tagline { font-size: 28px; }
+    .hero-lede { font-size: 15px; }
+    .signature-line { font-size: 12px; padding: 12px 14px; }
+    .signature-chips { grid-template-columns: repeat(2, 1fr); }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); margin-top: 36px; }
+    .stat { padding: 16px; border-right: none; border-bottom: 1px solid var(--line-2); margin: 0; }
+    .stat:first-child { padding: 16px; }
+    .stat:nth-child(odd) { border-right: 1px solid var(--line-2); }
+    .stat-big { font-size: 32px; }
+  }
+</style>

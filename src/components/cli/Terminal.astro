@@ -1,0 +1,143 @@
+---
+interface Props {
+  title: string;
+  sub?: string;
+  /** Single accent dot (used by the file-tree shell) instead of mac chrome. */
+  singleDot?: boolean;
+  padded?: boolean;
+  /** Optional min-height for the body so columns line up. */
+  minHeight?: number;
+}
+const {
+  title,
+  sub,
+  singleDot = false,
+  padded = true,
+  minHeight,
+} = Astro.props;
+---
+<div class="term">
+  <div class="term-head">
+    {singleDot ? (
+      <span class="term-dot single" />
+    ) : (
+      <>
+        <span class="term-dot r" />
+        <span class="term-dot y" />
+        <span class="term-dot g" />
+      </>
+    )}
+    <span class="term-title"><Fragment set:html={title} /></span>
+    {sub && <span class="term-sub">{sub}</span>}
+  </div>
+  <pre
+    class:list={['term-body', { 'no-pad': !padded }]}
+    style={minHeight ? `min-height: ${minHeight}px;` : undefined}
+  ><slot /></pre>
+</div>
+
+<style is:global>
+  /* Terminal palette — shared across the CLI page. */
+  :root {
+    --term-bg: #1b1d2b;
+    --term-bg-2: #22243a;
+    --term-chrome: #161827;
+    --term-rule: #2c2f47;
+    --term-text: #e6e6ef;
+    --term-dim: #7c7f99;
+    --term-mute: #4f5273;
+    --term-prompt: #f4b860;
+    --term-check: #5ed4c0;
+    --term-name: #ff8b6e;
+    --term-path: #9ccfff;
+    --term-flag: #c8b6ff;
+    --term-arg: #ffd28f;
+    --term-warn: #f0c674;
+    --term-heading: #ffffff;
+  }
+
+  .term {
+    background: var(--term-bg);
+    border: 1px solid var(--line-2);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+  }
+  .term-head {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 14px;
+    background: var(--term-chrome);
+    border-bottom: 1px solid var(--term-rule);
+  }
+  .term-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    flex-shrink: 0;
+  }
+  .term-dot.r { background: rgba(255, 122, 144, 0.55); }
+  .term-dot.y { background: rgba(240, 198, 116, 0.55); }
+  .term-dot.g { background: rgba(126, 226, 193, 0.55); }
+  .term-dot.single {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--term-check);
+  }
+  .term-title {
+    flex: 1;
+    text-align: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--term-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .term-dot.single + .term-title { text-align: left; }
+  .term-sub {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--term-mute);
+    white-space: nowrap;
+  }
+  .term-body {
+    margin: 0;
+    padding: 18px 22px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--term-text);
+    flex: 1;
+    overflow: auto;
+  }
+  .term-body.no-pad { padding: 0; }
+
+  /* Inline token colors used inside <pre class="term-body"> spans. */
+  .t-prompt   { color: var(--term-prompt); font-weight: 600; }
+  .t-check    { color: var(--term-check); }
+  .t-dim      { color: var(--term-dim); }
+  .t-dim-i    { color: var(--term-dim); font-style: italic; }
+  .t-mute     { color: var(--term-mute); }
+  .t-name     { color: var(--term-name); font-weight: 600; }
+  .t-path     { color: var(--term-path); }
+  .t-flag     { color: var(--term-flag); }
+  .t-arg      { color: var(--term-arg); }
+  .t-arg-b    { color: var(--term-arg); font-weight: 600; }
+  .t-warn     { color: var(--term-warn); }
+  .t-heading  { color: var(--term-heading); font-weight: 600; }
+  .t-text     { color: var(--term-text); }
+  .t-white    { color: #fff; }
+
+  @media (max-width: 768px) {
+    .term-body { font-size: 11.5px; padding: 14px 16px; }
+    .term-head { padding: 0 10px; }
+    .term-title { font-size: 10.5px; }
+    .term-sub { display: none; }
+  }
+</style>
