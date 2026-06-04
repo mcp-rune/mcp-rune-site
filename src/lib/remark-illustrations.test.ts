@@ -75,7 +75,7 @@ describe('remark-illustrations', () => {
     warnSpy.mockRestore();
   });
 
-  it('replaces a marker + ASCII fence with a figure containing the svg', async () => {
+  it('replaces a marker + ASCII fence with a figure wrapping only the svg', async () => {
     await withFixtureSvgs(
       {
         'demo--fan.svg': '<svg id="probe-svg" width="10" height="10"></svg>',
@@ -96,12 +96,10 @@ describe('remark-illustrations', () => {
         expect(html).toContain('<figure class="ill ill-rendered"');
         expect(html).toContain('data-illustration="demo#fan"');
         expect(html).toContain('<svg id="probe-svg"');
-        expect(html).toContain(
-          '<details class="ill-src"><summary>ASCII</summary>',
-        );
-        expect(html).toContain('ASCII contents');
-        // The original code fence should no longer appear.
-        expect(html).not.toMatch(/^```\n?ASCII contents/m);
+        // The original ASCII is dropped entirely from the rendered output —
+        // the source markdown keeps it for off-site readers.
+        expect(html).not.toContain('ASCII contents');
+        expect(html).not.toContain('<details');
         expect(warnSpy).not.toHaveBeenCalled();
       },
     );

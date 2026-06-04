@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2026-06-04
+
+> Polish pass on the illustration-substitution shape introduced in v0.8.0, after seeing the first live render at `/docs/quickstart`. Two issues surfaced. First, the plugin emitted a collapsed `<details><summary>ASCII</summary>…</details>` toggle below each figure as a copy-paste + screen-reader fallback; in practice it read as visual noise — the SVG's `aria-label` already covers screen-readers and the source `.md` keeps the ASCII for off-site readers, so the toggle is now removed and the rendered output is SVG-only. Second, the figure wrapper had its own background, border, and border-radius — but `illus.mjs`'s `svg()` helper already draws a framed `<rect>` as the SVG's first child, producing a visible double-frame. The figure is now reduced to a semantic wrapper for vertical spacing and overflow handling; the SVG owns the visible frame.
+
+### Changed
+
+- **`src/lib/remark-illustrations.mjs`** — `renderFigure()` no longer appends a `<details class="ill-src">` wrapper around the original ASCII. The figure emits just the SVG. The `escapeHtml` helper is renamed `escapeAttribute` and tightened (now also escapes `"`) since the only remaining escaping site is the `data-illustration` attribute value.
+- **`src/styles/illustrations.css`** — `figure.ill` stripped to `margin`, `padding: 0`, and `overflow-x: auto`. The previous `background`, `border`, and `border-radius` are gone — `illus.mjs`'s `svg()` helper already draws those on the outer SVG `<rect>`. All `details.ill-src` rules are gone too, since the plugin no longer emits the element.
+- **`src/lib/remark-illustrations.test.ts`** — the substitution test now asserts the original ASCII does **not** appear in the rendered HTML and `<details>` is absent, instead of the previous assertion that both appeared.
+- **`vendor/mcp-rune`** — bumped from `4d62952` to `e91f175` (mcp-rune v0.71.1) to pull in the matching README updates.
+
+[0.8.1]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.8.0...v0.8.1
+
 ## [0.8.0] - 2026-06-04
 
 > Adds the site-side remark plugin that consumes the build-time SVG illustrations shipped by the companion mcp-rune v0.71.0 release. Guides under `vendor/mcp-rune/docs/guides/` keep their ASCII fences for off-site readers; on the site, a fenced block immediately preceded by a `<!-- illustration: id -->` HTML comment is rewritten into an inlined `<figure>` containing the matching SVG from `vendor/mcp-rune/docs/illustrations/svgs/`, with the original ASCII tucked into a collapsible `<details>` for screen-readers and copy-paste. Missing svgs, malformed markers, or markers that don't precede a fence all soft-fall back to the ASCII — the site build never fails on an illustration issue.

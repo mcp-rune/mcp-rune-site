@@ -12,8 +12,9 @@
 //   ```
 //
 // Render side: a `<figure class="ill ill-rendered">` wrapper containing
-// the SVG, with the original ASCII tucked into a collapsible `<details>`
-// so screen readers and copy-paste still work.
+// just the SVG. The original ASCII fence is dropped from the rendered
+// output — the SVG's `aria-label` covers screen-readers, and the source
+// .md keeps the ASCII for off-site readers (terminal, nvim, GitHub).
 //
 // Soft-failure:
 //   - missing svg file        → console.warn, leave both nodes untouched
@@ -52,22 +53,20 @@ function idToFilename(id) {
   return id.includes('#') ? `${id.replace('#', '--')}.svg` : `${id}.svg`;
 }
 
-/** Escape user text for safe placement inside a <pre> block in HTML. */
-function escapeHtml(value) {
+/** Escape an attribute value for safe placement inside an HTML attribute. */
+function escapeAttribute(value) {
   return String(value)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
-/** Build the final HTML block: figure + svg + details/ASCII. */
-function renderFigure({ id, svg, ascii }) {
+/** Build the final HTML block: figure wrapping just the SVG. */
+function renderFigure({ id, svg }) {
   return (
-    `<figure class="ill ill-rendered" data-illustration="${escapeHtml(id)}">` +
+    `<figure class="ill ill-rendered" data-illustration="${escapeAttribute(id)}">` +
     svg +
-    `<details class="ill-src"><summary>ASCII</summary>` +
-    `<pre>${escapeHtml(ascii)}</pre>` +
-    `</details>` +
     `</figure>`
   );
 }
@@ -119,11 +118,7 @@ export default function remarkIllustrations() {
         if (svg) {
           out.push({
             type: 'html',
-            value: renderFigure({
-              id: markerId,
-              svg,
-              ascii: next.value,
-            }),
+            value: renderFigure({ id: markerId, svg }),
           });
           i += 1; // skip the fence — it has been consumed
           continue;
