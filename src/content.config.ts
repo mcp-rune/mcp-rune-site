@@ -7,7 +7,7 @@ import { glob } from 'astro/loaders';
 // Descriptive metadata (label, blurb, status, icon, section grouping) still
 // lives in src/data/guides.ts — see the migration note in that file.
 const guides = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/guides' }),
+  loader: glob({ pattern: ['**/*.md', '!**/index.md'], base: './src/content/guides' }),
   schema: z.object({
     extension: z
       .object({
