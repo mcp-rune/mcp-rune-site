@@ -5,6 +5,52 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.2] - 2026-06-04
+
+> Submodule-only. Bumps `vendor/mcp-rune` to v0.72.0, which lands the full illustration gallery: 29 newly-ported authoring modules, 76 new SVG artifacts, and 56 `<!-- illustration: id -->` markers across 38 guides. No site code changes — the remark plugin from v0.8.0 + the CSS slim-down from v0.8.1 are sufficient to render the new gallery. Fresh `npm run build` confirms 30 guide pages now inline at least one SVG (model-form-customization and mcp-apps both inline 5, tool-creation inlines 4, project-structure inlines 3, several others inline 2 each).
+
+### Changed
+
+- **`vendor/mcp-rune`** — bumped from `e91f175` to `4da609f` (mcp-rune v0.72.0). Brings in 29 new `docs/illustrations/pages/*.mjs` modules, 76 new `docs/illustrations/svgs/*.svg` files, and `<!-- illustration: … -->` markers across `docs/guides/*.md` and `docs/guides/summary-strategies/*.md`.
+
+### Notes
+
+- The 9 per-strategy `summary-strategies/<slug>.md` sub-guides have markers in place but are not yet registered as routable pages in `src/data/guides.ts` — they will pick up the SVGs automatically once added to the route map.
+- 4 of 5 `model-form-customization` figures emit raw HTML form mockups (matching the pilot's `ds.css` form classes — `.fs`, `.frow`, `.checks`, `.field-stacked`, `.sel`, `.prevtag`) rather than SVG. Those classes need to be added to `src/styles/illustrations.css` for the mockups to render correctly on the site; flagged as a follow-up.
+
+[0.8.2]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.8.1...v0.8.2
+
+## [0.8.1] - 2026-06-04
+
+> Polish pass on the illustration-substitution shape introduced in v0.8.0, after seeing the first live render at `/docs/quickstart`. Two issues surfaced. First, the plugin emitted a collapsed `<details><summary>ASCII</summary>…</details>` toggle below each figure as a copy-paste + screen-reader fallback; in practice it read as visual noise — the SVG's `aria-label` already covers screen-readers and the source `.md` keeps the ASCII for off-site readers, so the toggle is now removed and the rendered output is SVG-only. Second, the figure wrapper had its own background, border, and border-radius — but `illus.mjs`'s `svg()` helper already draws a framed `<rect>` as the SVG's first child, producing a visible double-frame. The figure is now reduced to a semantic wrapper for vertical spacing and overflow handling; the SVG owns the visible frame.
+
+### Changed
+
+- **`src/lib/remark-illustrations.mjs`** — `renderFigure()` no longer appends a `<details class="ill-src">` wrapper around the original ASCII. The figure emits just the SVG. The `escapeHtml` helper is renamed `escapeAttribute` and tightened (now also escapes `"`) since the only remaining escaping site is the `data-illustration` attribute value.
+- **`src/styles/illustrations.css`** — `figure.ill` stripped to `margin`, `padding: 0`, and `overflow-x: auto`. The previous `background`, `border`, and `border-radius` are gone — `illus.mjs`'s `svg()` helper already draws those on the outer SVG `<rect>`. All `details.ill-src` rules are gone too, since the plugin no longer emits the element.
+- **`src/lib/remark-illustrations.test.ts`** — the substitution test now asserts the original ASCII does **not** appear in the rendered HTML and `<details>` is absent, instead of the previous assertion that both appeared.
+- **`vendor/mcp-rune`** — bumped from `4d62952` to `e91f175` (mcp-rune v0.71.1) to pull in the matching README updates.
+
+[0.8.1]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.8.0...v0.8.1
+
+## [0.8.0] - 2026-06-04
+
+> Adds the site-side remark plugin that consumes the build-time SVG illustrations shipped by the companion mcp-rune v0.71.0 release. Guides under `vendor/mcp-rune/docs/guides/` keep their ASCII fences for off-site readers; on the site, a fenced block immediately preceded by a `<!-- illustration: id -->` HTML comment is rewritten into an inlined `<figure>` containing the matching SVG from `vendor/mcp-rune/docs/illustrations/svgs/`, with the original ASCII tucked into a collapsible `<details>` for screen-readers and copy-paste. Missing svgs, malformed markers, or markers that don't precede a fence all soft-fall back to the ASCII — the site build never fails on an illustration issue.
+
+### Added
+
+- **`src/lib/remark-illustrations.mjs`** — remark plugin that walks the mdast, matches `<!-- illustration: id -->` comments adjacent to fenced ASCII code blocks, reads `vendor/mcp-rune/docs/illustrations/svgs/<id>.svg`, and replaces the marker + fence pair with a single `<figure class="ill ill-rendered">` wrapping the inlined SVG and a `<details class="ill-src">` containing the original ASCII. SVG content is cached per-id for the lifetime of the build process. Missing files emit a `console.warn` with the source file path and continue.
+- **`src/lib/remark-illustrations.test.ts`** — vitest covering the substitution path, the short marker form (no `#fig`), the missing-svg soft-fail, the bare-fence (no marker) untouched path, and the misplaced-marker (no fence after) warn path. 5/5 passing.
+- **`src/styles/illustrations.css`** — small subset of the pilot `ds.css` covering only the embedded-figure rules (`.ill`, `.ill svg`, `details.ill-src`, `.tree` family). Imported globally from `src/styles/global.css`.
+
+### Changed
+
+- **`astro.config.mjs`** — registers `remarkIllustrations` in the `markdown.remarkPlugins` array alongside the existing `remarkCodePairs`. Both run before Shiki so unmarked/unpaired fences still get the default highlighting treatment.
+- **`scripts/sync-mcp-rune.sh`** — after the submodule fast-forward and before `npm run build`, runs `node docs/illustrations/scripts/check-illustrations.mjs` inside `vendor/mcp-rune` to fail the sync if a page module was edited without rebuilding its SVG. Falls through gracefully if the submodule doesn't yet have the illustrations pipeline (i.e. a sync rolled back to a pre-v0.71.0 commit).
+- **`vendor/mcp-rune`** — bumped from `428e90a` to `4d62952` (the mcp-rune v0.71.0 feature branch HEAD) so the symlinked guides surface the new illustration pipeline. The rendered `/docs/quickstart` page now inlines the `quickstart--fan.svg` in place of its ASCII fence.
+
+[0.8.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.7.0...v0.8.0
+
 ## [0.7.0] - 2026-06-01
 
 ### Added

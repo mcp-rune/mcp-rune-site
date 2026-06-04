@@ -1,0 +1,47 @@
+/* illustrations.css
+ *
+ * Styles for SVG illustrations inlined into guide markdown by the
+ * remark-illustrations plugin. The plugin emits:
+ *
+ *   <figure class="ill ill-rendered" data-illustration="…">
+ *     <svg …>…</svg>
+ *   </figure>
+ *
+ * The original ASCII fence is dropped from the rendered output — the
+ * source .md keeps it for off-site readers (terminal, nvim, GitHub).
+ * Adapted from the pilot's ds.css; only the rules relevant to embedded
+ * figures are shipped.
+ */
+
+/* The SVG already draws its own framed background via illus.mjs's svg()
+ * helper (an outer <rect> with the frame colour and stroke). The figure
+ * is therefore just a semantic wrapper for vertical spacing and
+ * horizontal overflow handling — no background, border, or padding of
+ * its own, otherwise we get visible double-framing. */
+figure.ill {
+  margin: 22px 0;
+  padding: 0;
+  overflow-x: auto;
+}
+
+figure.ill svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Directory-tree colourisation, used by tree-archetype figures.
+ * The HTML for this comes from illus.mjs's colorizeTree() helper. */
+figure.ill .tree {
+  font-family: 'Geist Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: var(--ink-2);
+  white-space: pre;
+}
+figure.ill .tree .dir  { color: var(--acc-2); }
+figure.ill .tree .file { color: var(--ink); }
+figure.ill .tree .g    { color: var(--line-3); }
+figure.ill .tree .cm   { color: var(--ink-4); }
+figure.ill .tree .hl   { color: var(--teal); }
+figure.ill .tree .am   { color: var(--amber); }

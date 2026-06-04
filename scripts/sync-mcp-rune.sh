@@ -54,6 +54,17 @@ fi
 echo "==> Checking out $UPSTREAM_SHA inside $SUBMODULE"
 git -C "$SUBMODULE" checkout --quiet --detach "$UPSTREAM_SHA"
 
+echo "==> Verifying illustration svgs are in sync"
+if [[ -f "$SUBMODULE/docs/illustrations/scripts/check-illustrations.mjs" ]]; then
+  if ! ( cd "$SUBMODULE" && node docs/illustrations/scripts/check-illustrations.mjs ); then
+    echo "ERROR: illustration svgs are stale in mcp-rune." >&2
+    echo "       Run 'npm run illustrations:build' there and re-commit before bumping." >&2
+    exit 1
+  fi
+else
+  echo "  (skip — submodule has no illustrations pipeline yet)"
+fi
+
 echo "==> Verifying with npm run build"
 npm run build
 
