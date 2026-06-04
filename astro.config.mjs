@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import remarkCodePairs from './src/lib/remark-code-pairs.mjs';
+import remarkIllustrations from './src/lib/remark-illustrations.mjs';
 
 export default defineConfig({
   integrations: [react()],
@@ -10,10 +11,14 @@ export default defineConfig({
     service: { entrypoint: 'astro/assets/services/noop' },
   },
   markdown: {
-    // Pair adjacent ts/js code fences with matching `file=` meta into a
-    // CodeSnippet wrapper. Must run before Shiki for unpaired blocks to
-    // still get the standard treatment.
-    remarkPlugins: [remarkCodePairs],
+    // - remarkCodePairs: pair adjacent ts/js fences with matching `file=`
+    //   meta into a CodeSnippet wrapper.
+    // - remarkIllustrations: replace `<!-- illustration: id -->` + adjacent
+    //   ASCII fences with the matching SVG from
+    //   vendor/mcp-rune/docs/illustrations/svgs/.
+    // Both run before Shiki so unpaired/unmarked blocks still get the
+    // standard treatment.
+    remarkPlugins: [remarkCodePairs, remarkIllustrations],
     shikiConfig: {
       theme: 'github-dark-default',
       wrap: false,

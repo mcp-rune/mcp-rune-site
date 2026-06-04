@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-06-04
+
+> Adds the site-side remark plugin that consumes the build-time SVG illustrations shipped by the companion mcp-rune v0.71.0 release. Guides under `vendor/mcp-rune/docs/guides/` keep their ASCII fences for off-site readers; on the site, a fenced block immediately preceded by a `<!-- illustration: id -->` HTML comment is rewritten into an inlined `<figure>` containing the matching SVG from `vendor/mcp-rune/docs/illustrations/svgs/`, with the original ASCII tucked into a collapsible `<details>` for screen-readers and copy-paste. Missing svgs, malformed markers, or markers that don't precede a fence all soft-fall back to the ASCII — the site build never fails on an illustration issue.
+
+### Added
+
+- **`src/lib/remark-illustrations.mjs`** — remark plugin that walks the mdast, matches `<!-- illustration: id -->` comments adjacent to fenced ASCII code blocks, reads `vendor/mcp-rune/docs/illustrations/svgs/<id>.svg`, and replaces the marker + fence pair with a single `<figure class="ill ill-rendered">` wrapping the inlined SVG and a `<details class="ill-src">` containing the original ASCII. SVG content is cached per-id for the lifetime of the build process. Missing files emit a `console.warn` with the source file path and continue.
+- **`src/lib/remark-illustrations.test.ts`** — vitest covering the substitution path, the short marker form (no `#fig`), the missing-svg soft-fail, the bare-fence (no marker) untouched path, and the misplaced-marker (no fence after) warn path. 5/5 passing.
+- **`src/styles/illustrations.css`** — small subset of the pilot `ds.css` covering only the embedded-figure rules (`.ill`, `.ill svg`, `details.ill-src`, `.tree` family). Imported globally from `src/styles/global.css`.
+
+### Changed
+
+- **`astro.config.mjs`** — registers `remarkIllustrations` in the `markdown.remarkPlugins` array alongside the existing `remarkCodePairs`. Both run before Shiki so unmarked/unpaired fences still get the default highlighting treatment.
+- **`scripts/sync-mcp-rune.sh`** — after the submodule fast-forward and before `npm run build`, runs `node docs/illustrations/scripts/check-illustrations.mjs` inside `vendor/mcp-rune` to fail the sync if a page module was edited without rebuilding its SVG. Falls through gracefully if the submodule doesn't yet have the illustrations pipeline (i.e. a sync rolled back to a pre-v0.71.0 commit).
+- **`vendor/mcp-rune`** — bumped from `428e90a` to `4d62952` (the mcp-rune v0.71.0 feature branch HEAD) so the symlinked guides surface the new illustration pipeline. The rendered `/docs/quickstart` page now inlines the `quickstart--fan.svg` in place of its ASCII fence.
+
+[0.8.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.7.0...v0.8.0
+
 ## [0.7.0] - 2026-06-01
 
 ### Added
