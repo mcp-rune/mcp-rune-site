@@ -16,6 +16,24 @@ const SCRIPTS: Script[] = [
   { cmd: 'npm run inspect',     runs: 'rune inspect',              desc: 'open MCP Inspector pre-wired',    status: 'wip' },
   { cmd: 'npm run typecheck',   runs: 'tsc --noEmit',              desc: 'no codegen, just verifies',       status: 'live' },
 ];
+
+// Rendered via `set:html` — see CliHero.astro for why slot-of-spans
+// collapses inside the terminal's `<pre>`.
+const runningTerm = [
+  '<span class="t-prompt">›&nbsp;</span><span class="t-white">cd my-server</span>',
+  '<span class="t-prompt">›&nbsp;</span><span class="t-white">npm run start:local</span>',
+  '',
+  '<span class="t-dim">&gt; my-server@0.0.1 start:local</span>',
+  '<span class="t-dim">&gt; rune dev --transport both</span>',
+  '',
+  '<span class="t-dim">  reading </span><span class="t-path">rune.config.ts</span>',
+  '<span class="t-dim">  loaded </span><span class="t-arg-b">3</span><span class="t-dim"> models · </span><span class="t-arg-b">0</span><span class="t-dim"> prompts · </span><span class="t-arg-b">0</span><span class="t-dim"> apps</span>',
+  '<span class="t-check">✓ </span><span class="t-white">stdio transport ready</span>',
+  '<span class="t-check">✓ </span><span class="t-white">http transport ready on </span><span class="t-path">http://localhost:4100</span>',
+  '',
+  '<span class="t-dim">  watching </span><span class="t-path">src/**</span><span class="t-dim">  ·  hot-reloading</span>',
+  '<span class="t-check">✓ </span><span class="t-white">ready</span>  <span class="t-dim">· press </span><span class="t-warn">r</span><span class="t-dim"> to reload, </span><span class="t-warn">i</span><span class="t-dim"> to open inspector, </span><span class="t-warn">q</span><span class="t-dim"> to quit</span>',
+].join('\n');
 ---
 <section class="cli-next">
   <div class="cli-next-inner">
@@ -27,20 +45,9 @@ const SCRIPTS: Script[] = [
     />
 
     <div class="next-grid">
-      <Terminal title="my-server · running" sub="stdio + http"
-><span class="t-prompt">›&nbsp;</span><span class="t-white">cd my-server</span>
-<span class="t-prompt">›&nbsp;</span><span class="t-white">npm run start:local</span>
-
-<span class="t-dim">&gt; my-server@0.0.1 start:local</span>
-<span class="t-dim">&gt; rune dev --transport both</span>
-
-<span class="t-dim">  reading </span><span class="t-path">rune.config.ts</span>
-<span class="t-dim">  loaded </span><span class="t-arg-b">3</span><span class="t-dim"> models · </span><span class="t-arg-b">0</span><span class="t-dim"> prompts · </span><span class="t-arg-b">0</span><span class="t-dim"> apps</span>
-<span class="t-check">✓ </span><span class="t-white">stdio transport ready</span>
-<span class="t-check">✓ </span><span class="t-white">http transport ready on </span><span class="t-path">http://localhost:4100</span>
-
-<span class="t-dim">  watching </span><span class="t-path">src/**</span><span class="t-dim">  ·  hot-reloading</span>
-<span class="t-check">✓ </span><span class="t-white">ready</span>  <span class="t-dim">· press </span><span class="t-warn">r</span><span class="t-dim"> to reload, </span><span class="t-warn">i</span><span class="t-dim"> to open inspector, </span><span class="t-warn">q</span><span class="t-dim"> to quit</span></Terminal>
+      <Terminal title="my-server · running" sub="stdio + http">
+        <Fragment set:html={runningTerm} />
+      </Terminal>
 
       <div>
         <div class="next-eyebrow">SCRIPTS · package.json</div>

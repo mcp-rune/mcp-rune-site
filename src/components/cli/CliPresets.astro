@@ -1,6 +1,42 @@
 ---
 import Terminal from './Terminal.astro';
 import CliSectionHeader from './CliSectionHeader.astro';
+
+// Bodies rendered via `set:html` — see CliHero.astro for why slot-of-spans
+// won't work here (Astro collapses inter-element whitespace inside the pre).
+const simpleTerm = [
+  '<span class="t-prompt">›&nbsp;</span><span class="t-white">rune new </span><span class="t-name">my-server</span> <span class="t-flag">--preset</span> <span class="t-arg">simple</span> <span class="t-flag">--yes</span>',
+  '',
+  '<span class="t-heading">Scaffolding </span><span class="t-name">my-server</span> <span class="t-dim-i">(simple)…</span>',
+  '',
+  '<span class="t-check">✓ </span><span class="t-white">wrote files to </span><span class="t-path">/Users/dsaenz/Code/my-server</span>',
+  '<span class="t-check">✓ </span><span class="t-white">initialized git repo</span>',
+  '<span class="t-dim">    running npm install…</span>',
+  '',
+  '<span class="t-text">added 1 package, audited 3 in 560ms</span>',
+  '<span class="t-check">✓ </span><span class="t-white">installed dependencies</span>',
+  '',
+  '<span class="t-heading">Next steps:</span>',
+  '<span class="t-text">    cd my-server</span>',
+  '<span class="t-text">    npm run start:local</span>',
+].join('\n');
+
+const advancedTerm = [
+  '<span class="t-prompt">›&nbsp;</span><span class="t-white">rune new </span><span class="t-name">my-server</span> <span class="t-flag">--preset</span> <span class="t-arg">advanced</span>',
+  '<span class="t-check">✓ </span><span class="t-white">Models to scaffold </span><span class="t-dim">(comma-separated, empty for none)</span> <span class="t-arg-b">book,shelf,home</span>',
+  '<span class="t-check">✓ </span><span class="t-white">Transport?</span> <span class="t-arg-b">both</span> <span class="t-dim">(recommended)</span>',
+  '<span class="t-check">✓ </span><span class="t-white">Enable analysis module? </span><span class="t-dim">(adds docker-compose.yml + pg dep)</span> <span class="t-arg-b">Yes</span>',
+  '<span class="t-check">✓ </span><span class="t-white">Enable domain workflows? </span><span class="t-dim">(creates src/domain/ stubs)</span> <span class="t-arg-b">Yes</span>',
+  '',
+  '<span class="t-heading">Scaffolding </span><span class="t-name">my-server</span> <span class="t-dim-i">(advanced)…</span>',
+  '',
+  '<span class="t-check">✓ </span><span class="t-white">wrote files to </span><span class="t-path">/Users/dsaenz/Code/my-server</span>',
+  '<span class="t-check">✓ </span><span class="t-white">initialized git repo</span>',
+  '<span class="t-dim">    running npm install…</span>',
+  '',
+  '<span class="t-text">added 16 packages, audited 18 in 823ms</span>',
+  '<span class="t-check">✓ </span><span class="t-white">installed dependencies</span>',
+].join('\n');
 ---
 <section class="cli-presets">
   <div class="cli-presets-inner">
@@ -34,21 +70,9 @@ import CliSectionHeader from './CliSectionHeader.astro';
         </div>
 
         <div class="preset-term-wrap">
-          <Terminal title="my-server · simple" sub="560 ms · 1 pkg"
-><span class="t-prompt">›&nbsp;</span><span class="t-white">rune new </span><span class="t-name">my-server</span> <span class="t-flag">--preset</span> <span class="t-arg">simple</span> <span class="t-flag">--yes</span>
-
-<span class="t-heading">Scaffolding </span><span class="t-name">my-server</span> <span class="t-dim-i">(simple)…</span>
-
-<span class="t-check">✓ </span><span class="t-white">wrote files to </span><span class="t-path">/Users/dsaenz/Code/my-server</span>
-<span class="t-check">✓ </span><span class="t-white">initialized git repo</span>
-<span class="t-dim">    running npm install…</span>
-
-<span class="t-text">added 1 package, audited 3 in 560ms</span>
-<span class="t-check">✓ </span><span class="t-white">installed dependencies</span>
-
-<span class="t-heading">Next steps:</span>
-<span class="t-text">    cd my-server</span>
-<span class="t-text">    npm run start:local</span></Terminal>
+          <Terminal title="my-server · simple" sub="560 ms · 1 pkg">
+            <Fragment set:html={simpleTerm} />
+          </Terminal>
         </div>
 
         <div class="preset-foot">
@@ -80,21 +104,9 @@ import CliSectionHeader from './CliSectionHeader.astro';
         </div>
 
         <div class="preset-term-wrap">
-          <Terminal title="my-server · advanced" sub="823 ms · 16 pkgs"
-><span class="t-prompt">›&nbsp;</span><span class="t-white">rune new </span><span class="t-name">my-server</span> <span class="t-flag">--preset</span> <span class="t-arg">advanced</span>
-<span class="t-check">✓ </span><span class="t-white">Models to scaffold </span><span class="t-dim">(comma-separated, empty for none)</span> <span class="t-arg-b">book,shelf,home</span>
-<span class="t-check">✓ </span><span class="t-white">Transport?</span> <span class="t-arg-b">both</span> <span class="t-dim">(recommended)</span>
-<span class="t-check">✓ </span><span class="t-white">Enable analysis module? </span><span class="t-dim">(adds docker-compose.yml + pg dep)</span> <span class="t-arg-b">Yes</span>
-<span class="t-check">✓ </span><span class="t-white">Enable domain workflows? </span><span class="t-dim">(creates src/domain/ stubs)</span> <span class="t-arg-b">Yes</span>
-
-<span class="t-heading">Scaffolding </span><span class="t-name">my-server</span> <span class="t-dim-i">(advanced)…</span>
-
-<span class="t-check">✓ </span><span class="t-white">wrote files to </span><span class="t-path">/Users/dsaenz/Code/my-server</span>
-<span class="t-check">✓ </span><span class="t-white">initialized git repo</span>
-<span class="t-dim">    running npm install…</span>
-
-<span class="t-text">added 16 packages, audited 18 in 823ms</span>
-<span class="t-check">✓ </span><span class="t-white">installed dependencies</span></Terminal>
+          <Terminal title="my-server · advanced" sub="823 ms · 16 pkgs">
+            <Fragment set:html={advancedTerm} />
+          </Terminal>
         </div>
 
         <div class="preset-foot">

@@ -14,6 +14,29 @@ const stats: Array<[string, string, string]> = [
   ['4', 'prompts', 'only in advanced · skippable with --yes'],
   ['560', 'ms typical', 'scaffold + git init + npm i (simple)'],
 ];
+
+// Terminal body rendered via `set:html` because Astro collapses
+// newlines between sibling elements inside a `<pre>` slot, which
+// otherwise flattens the output to a single line.
+const heroTerm = [
+  '<span class="t-prompt">›&nbsp;</span><span class="t-white">rune new </span><span class="t-name">my-server</span> <span class="t-flag">--preset</span> <span class="t-arg">simple</span> <span class="t-flag">--yes</span> <span class="t-flag">--mcp-rune-local</span> <span class="t-path">~/Code/mcp-rune</span>',
+  '',
+  '<span class="t-heading">Scaffolding </span><span class="t-name">my-server</span> <span class="t-dim-i">(simple)…</span>',
+  '<span class="t-dim">    </span><span class="t-path">@mcp-rune/mcp-rune</span> <span class="t-dim">→</span> <span class="t-path">file:/Users/dsaenz/Code/mcp-rune</span>',
+  '',
+  '<span class="t-check">✓ </span><span class="t-white">wrote files to </span><span class="t-path">/Users/dsaenz/Code/my-server</span>',
+  '<span class="t-check">✓ </span><span class="t-white">initialized git repo</span>',
+  '<span class="t-dim">    running npm install…</span>',
+  '',
+  '<span class="t-text">added 1 package, and audited 3 packages in 560ms</span>',
+  '',
+  '<span class="t-text">found </span><span class="t-check">0</span><span class="t-text"> vulnerabilities</span>',
+  '<span class="t-check">✓ </span><span class="t-white">installed dependencies</span>',
+  '',
+  '<span class="t-heading">Next steps:</span>',
+  '<span class="t-text">    cd my-server</span>',
+  '<span class="t-text">    npm run start:local</span>',
+].join('\n');
 ---
 <section class="cli-hero">
   <div class="cli-hero-bg" aria-hidden="true" />
@@ -64,24 +87,9 @@ const stats: Array<[string, string, string]> = [
         </div>
       </div>
 
-      <Terminal title="~/Code · zsh" sub="node 20.10 · rune 0.1.0"
-><span class="t-prompt">›&nbsp;</span><span class="t-white">rune new </span><span class="t-name">my-server</span> <span class="t-flag">--preset</span> <span class="t-arg">simple</span> <span class="t-flag">--yes</span> <span class="t-flag">--mcp-rune-local</span> <span class="t-path">~/Code/mcp-rune</span>
-
-<span class="t-heading">Scaffolding </span><span class="t-name">my-server</span> <span class="t-dim-i">(simple)…</span>
-<span class="t-dim">    </span><span class="t-path">@mcp-rune/mcp-rune</span> <span class="t-dim">→</span> <span class="t-path">file:/Users/dsaenz/Code/mcp-rune</span>
-
-<span class="t-check">✓ </span><span class="t-white">wrote files to </span><span class="t-path">/Users/dsaenz/Code/my-server</span>
-<span class="t-check">✓ </span><span class="t-white">initialized git repo</span>
-<span class="t-dim">    running npm install…</span>
-
-<span class="t-text">added 1 package, and audited 3 packages in 560ms</span>
-
-<span class="t-text">found </span><span class="t-check">0</span><span class="t-text"> vulnerabilities</span>
-<span class="t-check">✓ </span><span class="t-white">installed dependencies</span>
-
-<span class="t-heading">Next steps:</span>
-<span class="t-text">    cd my-server</span>
-<span class="t-text">    npm run start:local</span></Terminal>
+      <Terminal title="~/Code · zsh" sub="node 20.10 · rune 0.1.0">
+        <Fragment set:html={heroTerm} />
+      </Terminal>
     </div>
 
     <div class="hero-stats">
