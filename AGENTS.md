@@ -63,7 +63,7 @@ The guide markdown files have **no frontmatter**. All descriptive metadata (slug
 
 The page hits the GitHub REST API for milestones + issues in `mcp-rune/mcp-rune` and bakes the result into the static HTML. A fine-grained PAT scoped to the single `mcp-rune/mcp-rune` repo with **Issues: Read-only** + **Metadata: Read-only** is sufficient. Missing token, fetch failure, or zero milestones all render the empty-state design — intentional, not a failure mode. Run `npm test` (Vitest) to cover the mapping logic.
 
-In production the token is wired as a Kamal builder secret (`.kamal/secrets` line `GITHUB_TOKEN=$(op read "op://${OP_VAULT}/${OP_ITEM}/GITHUB_TOKEN")`), declared in `config/deploy.yml` under `builder.secrets`, and mounted into the `node:20-alpine` build stage in `Dockerfile` via `--mount=type=secret,id=GITHUB_TOKEN`. The secret never lands on disk in the image — only the rendered static HTML does.
+In production the token is wired as a Kamal builder secret (`.kamal/secrets` line `GITHUB_TOKEN=$(op read "op://${OP_VAULT}/${OP_ITEM}/GITHUB_TOKEN")`), declared in `config/deploy.yml` under `builder.secrets`, and mounted into the `node:22-alpine` build stage in `Dockerfile` via `--mount=type=secret,id=GITHUB_TOKEN`. The secret never lands on disk in the image — only the rendered static HTML does.
 
 #### What surfaces on the Roadmap
 

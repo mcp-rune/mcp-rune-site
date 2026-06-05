@@ -1,5 +1,5 @@
 # Multi-stage build:
-#   1. node:20-alpine builds the static Astro site. The src/content/guides
+#   1. node:22-alpine builds the static Astro site. The src/content/guides
 #      symlink → ../../vendor/mcp-rune/docs/guides resolves inside the
 #      Docker context because kamal clones the repo with --recurse-submodules,
 #      populating vendor/mcp-rune/ from github.com:mcp-rune/mcp-rune.
@@ -8,7 +8,7 @@
 # Nothing pre-built on the host is shipped: dist/ stays out of git and is
 # regenerated from source on every image build.
 
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 WORKDIR /app
 
 # Install deps in a dedicated layer so it caches across content-only changes.

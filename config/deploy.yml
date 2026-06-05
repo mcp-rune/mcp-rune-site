@@ -6,7 +6,7 @@
 # rather than a *.dsaenz.dev subdomain (kamal-proxy still provisions a
 # per-host Let's Encrypt cert via HTTP-01 the same way).
 #
-# The image is a multi-stage build: a node:20-alpine stage runs
+# The image is a multi-stage build: a node:22-alpine stage runs
 # `npm ci && npm run build`, then nginx:alpine serves the resulting
 # dist/. The src/content/guides symlink resolves through the
 # vendor/mcp-rune git submodule (github.com:mcp-rune/mcp-rune), which
