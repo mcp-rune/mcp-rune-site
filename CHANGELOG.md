@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.4] - 2026-06-06
+
+> Consolidates every per-guide metadata decision in `src/data/guides.ts`. The docs hub previously read `extension:` / `series:` from YAML frontmatter on each markdown file in `vendor/mcp-rune` and reconciled them back through a hand-maintained slug-translation table in `src/data/extensions.ts`. The legend went silent (*"0 of 28 guides expose one"*) when mcp-rune reorganised guides into numbered subdirectories and the table fell out of sync. The right shape is a single source of truth on the site side: the framework repo no longer carries site-presentation classification at all, and the site registry now declares which guides expose an extension point, what kind, and which form a multi-part series. Also bumps `vendor/mcp-rune` from v0.73.2 to v0.73.9 (carries the upstream frontmatter strip plus six unrelated package updates), refreshes the four landing-page app screenshots, and adjusts the matching `<img height>` to fit.
+
+### Added
+
+- **`Guide.extension?: ExtensionPoint` and `Guide.series?: SeriesInfo` fields in `src/data/guides.ts`** — populated on the 20 guides that document a configurable seam and on the two Quickstart parts. The `ExtensionKind`, `ExtensionPoint`, and `SeriesInfo` types now live here too; `src/data/extensions.ts` re-exports them for backwards-compatible imports.
+
+### Changed
+
+- **`src/data/extensions.ts`** — `loadExtensions` and `loadSeries` now derive their maps from `FLAT_GUIDES` synchronously (still wrapped in `async` so the four callers don't need to change). No `getCollection('guides')` call, no `ENTRY_ID_TO_SLUG` lookup table, no drift-check assertion — all gone.
+- **`src/content.config.ts`** — the guides content collection schema is now `z.object({})`. The collection still loads every markdown so `[slug].astro` can render its body; no fields are validated because there's no frontmatter to validate.
+- **`src/pages/docs/[slug].astro`** — `getEntry('guides', entryId)` is keyed by `guide.file!.replace(/\.md$/, '')` again (path-based). With no frontmatter `slug:` overriding the entry id, the glob loader's filename-derived default is what we want.
+- **`vendor/mcp-rune`** — bumped from `0f3b243` (v0.73.2) to `617e0b2` (v0.73.9). Brings in `mcp-rune#217` (strip site-decoration frontmatter from docs/guides) plus v0.73.3–v0.73.8 type/export polish, OAuth/pgvector cleanup, and README/LICENSE updates. `MCP_RUNE_VERSION_LABEL` auto-tracks via `vendor/mcp-rune/package.json`.
+- **`public/screenshots/01-app.png` through `04-app.png`** — refreshed app screenshots (higher-resolution captures).
+- **`src/components/landing/Apps.astro`** — `<img height="378">` → `<img height="316">` to match the new screenshot aspect ratio.
+
+### Notes
+
+- The framework-side companion PR ([`mcp-rune#217`](https://github.com/mcp-rune/mcp-rune/pull/217)) stripped the `extension:` / `series:` frontmatter from 22 guide markdown files. Any third-party renderer that consumed those fields from upstream now needs to source the classification itself.
+- The drift mode that originally hid the badges (mismatched entry-id lookups) is now structurally impossible — there's only one place that declares which guides are extensible.
+
+[0.8.4]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.8.3...v0.8.4
+
 ## [0.8.3] - 2026-06-05
 
 > Collapses the dual-token Roadmap fetcher (`GITHUB_TOKEN_MCP_RUNE` preferred, `GITHUB_TOKEN` fallback) down to a single `GITHUB_TOKEN`. The namespaced variant existed so a generic shell `GITHUB_TOKEN` (e.g. a `read:packages`-scoped PAT for npm install against GitHub Packages) wouldn't collide with the Roadmap's `Issues:Read` PAT — but in practice the production 1Password item was already keyed `GITHUB_TOKEN`, and carrying the alias through `src/pages/roadmap.astro`, `.kamal/secrets`, `config/deploy.yml`, `Dockerfile`, and `AGENTS.md` was busywork on every rotation. The 1Password entry has been renamed to `GITHUB_TOKEN`; the codebase now reads the unprefixed name everywhere.
