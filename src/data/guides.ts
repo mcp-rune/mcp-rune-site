@@ -52,6 +52,26 @@ export type GuideIcon =
   | 'globe'
   | 'book';
 
+export type ExtensionKind =
+  | 'config'
+  | 'hook'
+  | 'strategy'
+  | 'plugin'
+  | 'override'
+  | 'registry'
+  | 'hub';
+
+export interface ExtensionPoint {
+  kind: ExtensionKind;
+  what: string;
+}
+
+export interface SeriesInfo {
+  name: string;
+  part: number;
+  total: number;
+}
+
 export interface Guide {
   slug: string;
   label: string;
@@ -64,6 +84,10 @@ export interface Guide {
   tags?: string[];
   /** See `GuideIcon` — key into `DocIcon.astro`; color comes from ancestor CSS via `currentColor`. */
   icon: GuideIcon;
+  /** Marks the guide as exposing an extension point — drives the blue plug badge. */
+  extension?: ExtensionPoint;
+  /** Multi-part tutorial sequencing (e.g. Quickstart parts 1 & 2). */
+  series?: SeriesInfo;
 }
 
 export interface Section {
@@ -81,6 +105,7 @@ export const SECTIONS: Section[] = [
     guides: [
       {
         slug: 'quickstart',
+        series: { name: 'Quickstart', part: 1, total: 2 },
         label: 'Quickstart',
         status: 'live',
         file: '01-getting-started/quickstart.md',
@@ -101,6 +126,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'api-config',
+        extension: { kind: 'config', what: 'Custom actions on a model API' },
         label: 'Configuring the API',
         status: 'live',
         file: '01-getting-started/api-config.md',
@@ -118,6 +144,7 @@ export const SECTIONS: Section[] = [
     guides: [
       {
         slug: 'prompt-creation',
+        extension: { kind: 'hook', what: 'askPrompts · per-section content enrichment' },
         label: 'Prompt Creation',
         status: 'live',
         file: '02-prompt-dsl/prompt-creation.md',
@@ -148,6 +175,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'stateful',
+        extension: { kind: 'strategy', what: 'Implement a custom StatefulStrategy' },
         label: 'Stateful Strategies',
         status: 'live',
         file: '02-prompt-dsl/stateful.md',
@@ -175,6 +203,7 @@ export const SECTIONS: Section[] = [
     guides: [
       {
         slug: 'tool-creation',
+        extension: { kind: 'plugin', what: 'Server-specific tools · interceptors · validators' },
         label: 'Tool Creation',
         status: 'live',
         file: '03-tools-and-services/tool-creation.md',
@@ -185,6 +214,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'service-layer',
+        extension: { kind: 'hook', what: 'Request interceptors · domain error mapping' },
         label: 'Service Layer',
         status: 'live',
         file: '03-tools-and-services/service-layer.md',
@@ -195,6 +225,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'workflow-creation',
+        extension: { kind: 'plugin', what: 'Author multi-step workflow definitions' },
         label: 'Workflow Creation',
         status: 'live',
         file: '03-tools-and-services/workflow-creation.md',
@@ -212,6 +243,7 @@ export const SECTIONS: Section[] = [
     guides: [
       {
         slug: 'mcp-apps',
+        extension: { kind: 'plugin', what: 'Ship your own sandboxed HTML apps' },
         label: 'MCP Apps',
         status: 'live',
         file: '04-apps-search-forms/mcp-apps.md',
@@ -232,6 +264,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'search-filters',
+        extension: { kind: 'plugin', what: 'Register custom filter types' },
         label: 'Search Filters',
         status: 'live',
         file: '04-apps-search-forms/search-filters.md',
@@ -242,6 +275,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'model-form',
+        extension: { kind: 'override', what: 'Per-fieldGroup layout overrides' },
         label: 'Model Form Customization',
         status: 'live',
         file: '04-apps-search-forms/model-form.md',
@@ -279,6 +313,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'summary-strategies',
+        extension: { kind: 'strategy', what: 'Implement a custom summary strategy' },
         label: 'Summary Strategies',
         status: 'live',
         file: '05-retrieval-graphrag/summary-strategies.md',
@@ -299,6 +334,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'analysis-quickstart',
+        series: { name: 'Quickstart', part: 2, total: 2 },
         label: 'Analysis Quickstart',
         status: 'new',
         file: '05-retrieval-graphrag/analysis-quickstart.md',
@@ -343,6 +379,7 @@ export const SECTIONS: Section[] = [
     guides: [
       {
         slug: 'domain-knowledge',
+        extension: { kind: 'registry', what: 'Register concepts · rules · workflows · diagrams' },
         label: 'Domain Knowledge Framework',
         status: 'live',
         file: '07-domain-intelligence/domain-knowledge.md',
@@ -360,6 +397,7 @@ export const SECTIONS: Section[] = [
     guides: [
       {
         slug: 'api-client',
+        extension: { kind: 'override', what: 'Implement a custom ApiClient' },
         label: 'Custom API Client',
         status: 'live',
         file: '08-adapters/api-client.md',
@@ -370,6 +408,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'api-convention',
+        extension: { kind: 'override', what: 'Implement a custom API convention' },
         label: 'Custom API Convention',
         status: 'live',
         file: '08-adapters/api-convention.md',
@@ -380,6 +419,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'data-layer',
+        extension: { kind: 'override', what: 'Implement a custom DataLayer' },
         label: 'Custom DataLayer',
         status: 'live',
         file: '08-adapters/data-layer.md',
@@ -390,6 +430,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'search-adapter',
+        extension: { kind: 'plugin', what: 'Implement a custom search adapter' },
         label: 'Custom Search Adapter',
         status: 'live',
         file: '08-adapters/search-adapter.md',
@@ -417,6 +458,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'extension-recipes',
+        extension: { kind: 'hub', what: 'Recipes — start here to pick the right extension surface' },
         label: 'Extension Recipes',
         status: 'live',
         file: '09-extensions/extension-recipes.md',
@@ -437,6 +479,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'api-extensions',
+        extension: { kind: 'plugin', what: 'Author API extensions — tools + ModelService methods' },
         label: 'API Extensions',
         status: 'live',
         file: '09-extensions/api-extensions.md',
@@ -447,6 +490,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'tool-flow-extension',
+        extension: { kind: 'plugin', what: 'Author tool-flow extensions' },
         label: 'Tool-Flow Extensions',
         status: 'live',
         file: '09-extensions/tool-flow-extension.md',
@@ -457,6 +501,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'extensions-http',
+        extension: { kind: 'plugin', what: 'Author HTTP extensions (routes + middleware)' },
         label: 'HTTP Extensions',
         status: 'live',
         file: '09-extensions/extensions-http.md',
@@ -467,6 +512,7 @@ export const SECTIONS: Section[] = [
       },
       {
         slug: 'custom-app',
+        extension: { kind: 'plugin', what: 'Write a custom MCP app' },
         label: 'Writing a Custom MCP App',
         status: 'live',
         file: '09-extensions/custom-app.md',
