@@ -1,0 +1,179 @@
+---
+// For Teams & API Owners — port of V2ForTeams in page-landing-v2.jsx.
+// Three use-case cards reframing the value prop for product-team buyers.
+
+interface Card {
+  icon: string;
+  label: string;
+  title: string;
+  body: string;
+  foot: string;
+}
+
+const cards: Card[] = [
+  {
+    icon: '◈',
+    label: 'SaaS with an API',
+    title: 'Expose your product to every AI host',
+    body: 'Point mcp-rune at your existing REST API and data model. It generates the MCP surface — tools, prompts, OAuth, interactive forms — so Claude, Cursor, and any MCP-compatible host can work with your product natively.',
+    foot: 'schema → MCP server → every AI host',
+  },
+  {
+    icon: '◇',
+    label: 'Internal tools',
+    title: 'Agents that understand your domain',
+    body: 'Encode your business rules, workflows, and vocabulary in the DomainRegistry. The agent validates before it writes, follows your multi-step processes, and speaks your terminology — not generic CRUD.',
+    foot: 'DomainRegistry · workflows · rules',
+  },
+  {
+    icon: '◉',
+    label: 'Data platforms',
+    title: 'Semantic search + analysis for any host',
+    body: 'The retrieval layer indexes your dataset three ways — vectors, relationship graph, and domain grounding. Agents reason over findings, not raw rows. No external vector DB, no embedding API — local pgvector.',
+    foot: 'analysis_ingest · analysis_query · local',
+  },
+];
+---
+<section class="for-teams">
+  <div class="pr-wrap section-wrap">
+    <div class="intro">
+      <div class="eyebrow">
+        <span class="eyebrow-line"></span>
+        <span>FOR TEAMS &amp; API OWNERS</span>
+        <span class="eyebrow-line"></span>
+      </div>
+      <h2 class="pr-display intro-headline">
+        Your product already has a data model.
+        <span class="dim">Make it AI-accessible.</span>
+      </h2>
+      <p class="intro-lede">
+        You don't think "I want to build an MCP server." You think "I want my product
+        to work with Claude, Cursor, and Copilot."
+        <span class="hi">
+          mcp-rune gives AI agents a first-class interface to your existing API — in a day,
+          not a sprint.
+        </span>
+      </p>
+    </div>
+
+    <div class="cards">
+      {cards.map((card) => (
+        <div class="card">
+          <div class="card-head">
+            <span class="card-icon">{card.icon}</span>
+            <span class="card-label">{card.label}</span>
+          </div>
+          <h3 class="card-title">{card.title}</h3>
+          <p class="card-body">{card.body}</p>
+          <div class="card-foot">{card.foot}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .for-teams {
+    position: relative;
+    border-top: 1px solid var(--line);
+    background: linear-gradient(180deg, transparent 0%, var(--bg-2) 30%, var(--bg-2) 70%, transparent 100%);
+  }
+  .section-wrap { padding: 96px 32px; }
+
+  .intro { text-align: center; max-width: 720px; margin: 0 auto; }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--acc-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    margin-bottom: 18px;
+    letter-spacing: 0.4px;
+  }
+  .eyebrow-line { width: 16px; height: 1px; background: var(--acc); }
+  .intro-headline { font-size: 52px; margin: 0; }
+  .intro-headline .dim { color: var(--ink-3); }
+  .intro-lede {
+    margin: 22px auto 0;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink-3);
+    max-width: 620px;
+  }
+  .intro-lede .hi { color: var(--ink-2); }
+
+  .cards {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px 26px;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .card-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(124, 92, 255, 0.08);
+    border: 1px solid rgba(124, 92, 255, 0.28);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--acc-2);
+    font-size: 14px;
+  }
+  .card-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .card-title {
+    font-family: 'Geist', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 0 0 12px;
+    line-height: 1.2;
+  }
+  .card-body {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-3);
+    margin: 0;
+    flex: 1;
+  }
+  .card-foot {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-4);
+  }
+
+  @media (max-width: 1024px) {
+    .cards { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .section-wrap { padding: 56px 16px; }
+    .intro-headline { font-size: 32px; }
+    .intro-lede { font-size: 15.5px; }
+  }
+</style>
