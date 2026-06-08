@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.5] - 2026-06-08
+
+### Added
+
+- `LICENSE` — MIT license file (copyright David Sáenz Tagarro).
+
+### Changed
+
+- `README.md` — badge row added under the title: MIT licence shield, MCP SDK version.
+
+[0.8.5]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.8.4...v0.8.5
+
 ## [0.8.4] - 2026-06-06
 
 > Consolidates every per-guide metadata decision in `src/data/guides.ts`. The docs hub previously read `extension:` / `series:` from YAML frontmatter on each markdown file in `vendor/mcp-rune` and reconciled them back through a hand-maintained slug-translation table in `src/data/extensions.ts`. The legend went silent (*"0 of 28 guides expose one"*) when mcp-rune reorganised guides into numbered subdirectories and the table fell out of sync. The right shape is a single source of truth on the site side: the framework repo no longer carries site-presentation classification at all, and the site registry now declares which guides expose an extension point, what kind, and which form a multi-part series. Also bumps `vendor/mcp-rune` from v0.73.2 to v0.73.9 (carries the upstream frontmatter strip plus six unrelated package updates), refreshes the four landing-page app screenshots, and adjusts the matching `<img height>` to fit.
