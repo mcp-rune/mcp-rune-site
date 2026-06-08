@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.1] - 2026-06-08
+
+> Brings the live docs in sync with framework `v0.101.0`. Bumps the `vendor/mcp-rune` submodule from `v0.73.9` to `v0.101.0` (the docs restructure around the Model + the three peer layers — see [`mcp-rune` v0.101.0 release notes](https://github.com/mcp-rune/mcp-rune/releases/tag/v0.101.0)), rebuilds `src/data/guides.ts` to mirror the new chapter structure, and audits per-guide extension annotations against the new chapters.
+
+### Changed
+
+- **`vendor/mcp-rune`** submodule bumped from `617e0b2` (v0.73.9) to `e7788ad` (v0.101.0). This makes every new chapter under `src/content/guides/` resolve — `02-the-model/{defining-a-model,attributes-and-kinds,associations,validation-and-defaults,definition-vs-consumption,derivation-overview}.md`, `04-tools/{the-three-layers,polymorphic-tools}.md`, `06-the-three-layers-up-close/{model-service,model-layer,analysis-layer,search-request-shaper}.md`, etc.
+- **`src/data/guides.ts`** rebuilt to 11 sections × 46 guides, matching the new framework structure (Foundations → The Three Layers Up Close → Intelligence → Extending → Reference). Section numbering shifted: section II is now **The Model** (new), section IV is **Tools** (was Tools & Services), section VI is **The Three Layers Up Close** (was Adapters), section X is **Extensions**.
+- **`src/components/Footer.astro`** Framework column: `'Prompt DSL'` → `'Prompts'` to match section II's new label in the framework docs.
+
+### Added
+
+- Two extension annotations added during the audit:
+  - `attributes-and-kinds` → `{ kind: 'plugin', what: 'Register custom kinds via AppRegistry({ kinds })' }`. The new chapter explicitly walks through `'string:isbn'` and the `AppRegistry({ kinds: … })` extension path.
+  - `authoring-extensions` → `{ kind: 'plugin', what: 'Walk through writing an extension end to end' }`. Symmetry with the other "Author X extensions" entries in section X.
+
 ## [0.9.0] - 2026-06-08
 
 > Restructures the landing page along the Landing v2 design's narrative arc. The hero is now outcome-first ("Turn your data model into a complete MCP server."), the book-model showcase is its own section, and two new bands — a problem statement with a before/after comparison and a For Teams / API Owners triptych — are inserted into the flow. Two existing sections get small copy tweaks; Architecture and Close are unchanged.
