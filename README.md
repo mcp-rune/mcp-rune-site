@@ -1,5 +1,8 @@
 # mcp-rune-site
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![MCP SDK](https://img.shields.io/badge/MCP_SDK-1.x-blue)](https://github.com/modelcontextprotocol/typescript-sdk)
+
 User-facing website for the [mcp-rune](../mcp-rune) framework.
 
 Built with **Astro 5** (static output) + React islands. Markdown guides are
