@@ -1,0 +1,260 @@
+---
+// "One spec → six surfaces" — the book-model showcase, ported from V2Showcase
+// in page-landing-v2.jsx. Was previously part of Hero; v2 promotes it to its
+// own section with an intro pair.
+
+const derived: Array<[string, string, string]> = [
+  ['prompt',    'BookPrompt',       'sections · validation · askPrompts'],
+  ['tools',     '5 CRUD tools',     'list · find · create · update · delete'],
+  ['search',    'SearchService',    'theme_id, duration_min · paginated'],
+  ['retrieval', 'GraphRAG index',   'vectors · edges · domain · 5 modes'],
+  ['oauth',     'OAuth 2.0',        'PRM · DCR · authorize · token'],
+  ['app',       'ui://book/create', 'fieldsets · two-column layout'],
+];
+---
+<section class="showcase-section">
+  <div class="pr-wrap section-wrap">
+    <div class="intro">
+      <div class="eyebrow">
+        <span class="eyebrow-line"></span>
+        <span>ONE SPEC → SIX SURFACES</span>
+        <span class="eyebrow-line"></span>
+      </div>
+      <h2 class="pr-display intro-headline">Declare once. Derive everything.</h2>
+    </div>
+
+    <div class="showcase">
+      <div class="showcase-chrome">
+        <div class="chrome-dots">
+          <span /><span /><span />
+        </div>
+        <div class="chrome-title">
+          ~/library-mcp · <span class="hi">rune dev</span>
+        </div>
+        <div class="chrome-status">
+          <span class="status-dot"></span>
+          <span>ready in 412ms</span>
+        </div>
+      </div>
+
+      <div class="showcase-body">
+        <div class="showcase-source">
+          <div class="showcase-source-head">
+            <span class="pr-tag">src/models/book.ts</span>
+            <span class="flex-spacer" />
+            <span class="source-of-truth">source of truth</span>
+          </div>
+          <pre class="source-code"><span class="c-com">// one declarative class — that's it</span>
+<span class="c-key">export class</span> <span class="c-name">Book</span> <span class="c-key">extends</span> <span class="c-fn">BaseModel</span> &#123;
+  <span class="c-com">static</span> <span class="c-num">attributes</span> = &#123;
+    title:        <span class="c-key">string</span>().<span class="c-fn">required</span>(),
+    theme_id:     <span class="c-key">enum</span>(<span class="c-name">Theme</span>),
+    duration_min: <span class="c-key">integer</span>().<span class="c-fn">range</span>(<span class="c-num">30</span>, <span class="c-num">180</span>),
+    summary:      <span class="c-key">text</span>().<span class="c-fn">embed</span>(),
+  &#125;
+  <span class="c-com">static</span> <span class="c-num">filters</span> = &#123; theme_id, duration_min &#125;
+  <span class="c-com">static</span> <span class="c-num">api</span> = &#123; base: <span class="c-str">'/api/v1/books'</span> &#125;
+&#125;</pre>
+          <div class="derives">
+            <span class="derives-label">↳ derives</span>
+            <span class="derives-bar"></span>
+            <span>6 surfaces</span>
+          </div>
+        </div>
+
+        <div class="showcase-derived">
+          <div class="showcase-derived-head">
+            <span class="pr-tag">derived surfaces</span>
+            <span class="flex-spacer" />
+            <span class="derived-meta">generated · 0 lines hand-written</span>
+          </div>
+          {derived.map(([kind, name, sub]) => (
+            <div class="derived-row">
+              <span class="derived-kind">{kind}</span>
+              <span class="derived-name">{name}</span>
+              <span class="derived-sub">{sub}</span>
+              <span class="derived-arr">→</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .showcase-section { position: relative; }
+  .section-wrap { padding: 0 32px 88px; }
+
+  .intro { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--acc-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    margin-bottom: 16px;
+    letter-spacing: 0.4px;
+  }
+  .eyebrow-line { width: 16px; height: 1px; background: var(--acc); }
+  .intro-headline { font-size: 44px; margin: 0; }
+
+  .showcase {
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
+    border: 1px solid var(--line-2);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(124, 92, 255, 0.08);
+  }
+  .showcase-chrome {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-3);
+  }
+  .chrome-dots { display: flex; gap: 6px; }
+  .chrome-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background: var(--line-3);
+  }
+  .chrome-title {
+    flex: 1;
+    text-align: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+  .chrome-title .hi { color: var(--ink-2); }
+  .chrome-status {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-4);
+  }
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    background: #7ee2c1;
+    box-shadow: 0 0 8px #7ee2c1;
+  }
+
+  .showcase-body {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    min-height: 480px;
+  }
+  .showcase-source { padding: 24px 28px; border-right: 1px solid var(--line); }
+  .showcase-source-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .flex-spacer { flex: 1; }
+  .source-of-truth {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+  }
+  .source-code {
+    margin: 0;
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    line-height: 1.75;
+    color: var(--c-plain);
+  }
+  .source-code .c-com { color: var(--c-com); }
+  .source-code .c-key { color: var(--c-key); }
+  .source-code .c-str { color: var(--c-str); }
+  .source-code .c-num { color: var(--c-num); }
+  .source-code .c-fn  { color: var(--c-fn); }
+  .source-code .c-name { color: #fff; }
+
+  .derives {
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line-2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
+  .derives-label { color: var(--acc-2); }
+  .derives-bar { flex: 1; height: 1px; background: var(--line-2); }
+
+  .showcase-derived {
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .showcase-derived-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .derived-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+  }
+  .derived-row {
+    display: grid;
+    grid-template-columns: 80px 200px 1fr 20px;
+    gap: 14px;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .derived-kind {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+    background: rgba(124, 92, 255, 0.08);
+    padding: 3px 7px;
+    border-radius: 4px;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+  .derived-name {
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .derived-sub { font-size: 12.5px; color: var(--ink-3); }
+  .derived-arr { color: var(--ink-4); text-align: right; }
+
+  @media (max-width: 768px) {
+    .section-wrap { padding: 0 16px 56px; }
+    .intro-headline { font-size: 30px; }
+    .showcase-body { grid-template-columns: 1fr; min-height: auto; }
+    .showcase-source {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+      padding: 18px 16px;
+    }
+    .showcase-derived { padding: 18px 16px; }
+    .source-code { font-size: 11.5px; overflow-x: auto; }
+    .derived-row {
+      grid-template-columns: 70px 1fr 18px;
+      gap: 8px;
+      padding: 10px 12px;
+    }
+    .derived-sub { display: none; }
+    .chrome-title { font-size: 10.5px; }
+  }
+</style>

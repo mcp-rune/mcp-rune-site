@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-06-08
+
+> Restructures the landing page along the Landing v2 design's narrative arc. The hero is now outcome-first ("Turn your data model into a complete MCP server."), the book-model showcase is its own section, and two new bands — a problem statement with a before/after comparison and a For Teams / API Owners triptych — are inserted into the flow. Two existing sections get small copy tweaks; Architecture and Close are unchanged.
+
+### Added
+
+- **`src/components/landing/Pain.astro`** — new section between Hero and Showcase. "THE PROBLEM" eyebrow, blockquote ("Most MCP frameworks scale tool count with model count — 10 models × 5 verbs = 50 handlers…"), and a five-row before/after comparison table contrasting hand-wired wiring against schema-derived output.
+- **`src/components/landing/Showcase.astro`** — extracts the source-model → derived-surfaces book example out of the hero into a standalone section under "ONE SPEC → SIX SURFACES / Declare once. Derive everything." Same chrome, code panel, and six-row derived list as before, now with its own intro pair.
+- **`src/components/landing/ForTeams.astro`** — new section between Apps and Architecture. "FOR TEAMS & API OWNERS" eyebrow, "Your product already has a data model. Make it AI-accessible." headline, and three use-case cards (SaaS with an API · Internal tools · Data platforms).
+
+### Changed
+
+- **`src/components/landing/Hero.astro`** — rewritten as the v2 outcome-first hero. Headline → "Turn your data model into a complete MCP server." with the second clause in the white→purple gradient. Subhead leads with the pain ("Every MCP integration starts the same way…") before pivoting to the resolution. The logo lockup, book-model showcase, and founding-adopter callout are removed (branding lives in `TopNav`; the showcase is its own section now; the founding callout will return on a dedicated band). Meta strip gains a "Ship by lunch" accent.
+- **`src/components/landing/Pillars.astro`** — pillar 01 title changed from *"Eight tools serve every model in your domain."* to *"A fixed tool set serves every model in your domain."* (matches the framing the comparison table introduces upstream).
+- **`src/components/landing/Retrieval.astro`** — section eyebrow changed from `RETRIEVAL · GRAPHRAG` to `RETRIEVAL · SEMANTIC GRAPH`.
+- **`src/pages/index.astro`** — section order is now Hero → Pain → Showcase → Pillars → Retrieval → Apps → ForTeams → Architecture → Close. Page `<title>` updated to "mcp-rune — turn your data model into a complete MCP server".
+
+[0.9.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.8.5...v0.9.0
+
 ## [0.8.5] - 2026-06-08
 
 ### Added

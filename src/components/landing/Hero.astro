@@ -1,49 +1,34 @@
 ---
-// Pristine landing hero — port of PrHero in page-landing-pristine.jsx.
-// Includes the announcement pill, gradient headline, lede, CTA row with copyable
-// install command, meta strip, the source-model → derived-surfaces showcase,
-// and the founding-adopter callout.
+// Landing v2 hero — outcome-first, pain-driven.
+// Port of V2Hero in design's page-landing-v2.jsx. The book-example showcase
+// that used to live here is now its own section (Showcase.astro); the
+// founding-adopter callout moves to a later band. Branding lives in TopNav.
 
 import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
-
-const derived: Array<[string, string, string]> = [
-  ['prompt',   'BookPrompt',       'sections · validation · askPrompts'],
-  ['tools',    '5 CRUD tools',     'list · find · create · update · delete'],
-  ['search',    'SearchService',    'theme_id, duration_min · paginated'],
-  ['retrieval', 'GraphRAG index',   'vectors · edges · domain · 5 modes'],
-  ['oauth',    'OAuth 2.0',        'PRM · DCR · authorize · token'],
-  ['app',      'ui://book/create', 'fieldsets · two-column layout'],
-];
 ---
 <section class="hero">
   <div class="hero-glow pr-glow"></div>
   <div class="hero-grid pr-grid-faint"></div>
 
   <div class="pr-wrap hero-top">
-    <div class="hero-lockup">
-      <img
-        src="/brand/logo-horizontal-clean.svg"
-        alt="mcp-rune"
-        width="277"
-        height="88"
-      />
-    </div>
-
     <a href="/docs/mcp-apps" class="announce">
       <span class="badge-new">NEW</span>
-      <span>{MCP_RUNE_VERSION_LABEL} · MCP Apps for CRUD, schema-derived</span>
+      <span>{MCP_RUNE_VERSION_LABEL}-alpha · MCP Apps, OAuth 2.1, GraphRAG — all derived</span>
       <span class="announce-cta">Read →</span>
     </a>
 
     <h1 class="pr-display headline">
-      The framework for
-      <span class="headline-grad">model-driven MCP servers.</span>
+      Turn your data model into
+      <span class="headline-grad">a complete MCP server.</span>
     </h1>
 
     <p class="lede">
-      Declare your models once. <span class="hi">mcp-rune</span> derives the prompts agents
-      can follow, generic CRUD tools, semantic search, OAuth 2.0, and rich MCP Apps —
-      from the same spec.
+      Every MCP integration starts the same way: hand-wiring route handlers, prompt templates,
+      and auth flows for every model you ship.
+      <span class="hi">
+        Declare your schema once — mcp-rune derives the tools, prompts, OAuth, search, and
+        interactive UI that agents need.
+      </span>
     </p>
 
     <div class="cta-row">
@@ -58,99 +43,16 @@ const derived: Array<[string, string, string]> = [
     </div>
 
     <div class="meta-strip">
-      <span>MIT</span>
+      <span>MIT <span class="meta-dim">— stays MIT</span></span>
       <span class="meta-bar"></span>
       <span>Node 20+ / Bun</span>
       <span class="meta-bar"></span>
       <span>TypeScript &amp; JavaScript</span>
       <span class="meta-bar"></span>
       <span>Zero external services</span>
+      <span class="meta-bar"></span>
+      <span class="meta-acc">Ship by lunch</span>
     </div>
-  </div>
-
-  <div class="pr-wrap hero-showcase-wrap">
-    <div class="showcase">
-      <div class="showcase-chrome">
-        <div class="chrome-dots">
-          <span /><span /><span />
-        </div>
-        <div class="chrome-title">
-          ~/library-mcp · <span class="hi">rune dev</span>
-        </div>
-        <div class="chrome-status">
-          <span class="status-dot"></span>
-          <span>ready in 412ms</span>
-        </div>
-      </div>
-
-      <div class="showcase-body">
-        <div class="showcase-source">
-          <div class="showcase-source-head">
-            <span class="pr-tag">src/models/book.ts</span>
-            <span class="flex-spacer" />
-            <span class="source-of-truth">source of truth</span>
-          </div>
-          <pre class="source-code"><span class="c-com">// one declarative class — that's it</span>
-<span class="c-key">export class</span> <span class="c-name">Book</span> <span class="c-key">extends</span> <span class="c-fn">BaseModel</span> &#123;
-  <span class="c-com">static</span> <span class="c-num">attributes</span> = &#123;
-    title:        <span class="c-key">string</span>().<span class="c-fn">required</span>(),
-    theme_id:     <span class="c-key">enum</span>(<span class="c-name">Theme</span>),
-    duration_min: <span class="c-key">integer</span>().<span class="c-fn">range</span>(<span class="c-num">30</span>, <span class="c-num">180</span>),
-    summary:      <span class="c-key">text</span>().<span class="c-fn">embed</span>(),
-  &#125;
-  <span class="c-com">static</span> <span class="c-num">filters</span> = &#123; theme_id, duration_min &#125;
-  <span class="c-com">static</span> <span class="c-num">api</span> = &#123; base: <span class="c-str">'/api/v1/books'</span> &#125;
-&#125;</pre>
-          <div class="derives">
-            <span class="derives-label">↳ derives</span>
-            <span class="derives-bar"></span>
-            <span>6 surfaces</span>
-          </div>
-        </div>
-
-        <div class="showcase-derived">
-          <div class="showcase-derived-head">
-            <span class="pr-tag">derived surfaces</span>
-            <span class="flex-spacer" />
-            <span class="derived-meta">generated · 0 lines hand-written</span>
-          </div>
-          {derived.map(([kind, name, sub]) => (
-            <div class="derived-row">
-              <span class="derived-kind">{kind}</span>
-              <span class="derived-name">{name}</span>
-              <span class="derived-sub">{sub}</span>
-              <span class="derived-arr">→</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    <a href="#adopters" class="founding-callout">
-      <div class="founding-chip">
-        <div class="founding-tag">FOUNDING ADOPTER</div>
-        <div class="founding-seat">
-          <span class="founding-seat-pre">Seat</span>
-          <span>01</span>
-        </div>
-      </div>
-      <div class="founding-seats">
-        {['01', '02', '03'].map((n, i) => (
-          <div class:list={['seat', { active: i === 0 }]}>
-            <span class="seat-dot"></span>
-            <span class="seat-num">SEAT {n}</span>
-            <span class="flex-spacer" />
-            <span class="seat-status">OPEN</span>
-          </div>
-        ))}
-      </div>
-      <div class="founding-side">
-        <div class="founding-pitch">
-          Three founding seats. Lifetime LTS, direct line to the maintainer, vote on every RFC.
-        </div>
-        <div class="founding-link">Read the charter →</div>
-      </div>
-    </a>
   </div>
 </section>
 
@@ -171,17 +73,7 @@ const derived: Array<[string, string, string]> = [
     padding: 88px 32px 56px;
     text-align: center;
   }
-  .hero-lockup {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 40px;
-  }
-  .hero-lockup img {
-    height: 88px;
-    width: auto;
-    flex-shrink: 0;
-    display: inline-block;
-  }
+
   .announce {
     display: inline-flex;
     align-items: center;
@@ -225,10 +117,10 @@ const derived: Array<[string, string, string]> = [
 
   .lede {
     font-size: 19px;
-    line-height: 1.5;
+    line-height: 1.55;
     color: var(--ink-3);
     margin: 28px auto 0;
-    max-width: 640px;
+    max-width: 680px;
     letter-spacing: -0.01em;
   }
   .lede .hi { color: var(--ink-2); }
@@ -292,255 +184,11 @@ const derived: Array<[string, string, string]> = [
     color: var(--ink-4);
   }
   .meta-bar { width: 1px; height: 12px; background: var(--line-2); }
-
-  /* showcase */
-  .hero-showcase-wrap { position: relative; z-index: 1; padding: 40px 32px 88px; }
-  .showcase {
-    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-2) 100%);
-    border: 1px solid var(--line-2);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(124, 92, 255, 0.08);
-  }
-  .showcase-chrome {
-    height: 40px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 0 14px;
-    border-bottom: 1px solid var(--line);
-    background: var(--bg-3);
-  }
-  .chrome-dots { display: flex; gap: 6px; }
-  .chrome-dots span {
-    width: 10px;
-    height: 10px;
-    border-radius: 5px;
-    background: var(--line-3);
-  }
-  .chrome-title {
-    flex: 1;
-    text-align: center;
-    font-family: 'Geist Mono', monospace;
-    font-size: 11.5px;
-    color: var(--ink-3);
-  }
-  .chrome-title .hi { color: var(--ink-2); }
-  .chrome-status {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-    font-family: 'Geist Mono', monospace;
-    font-size: 10.5px;
-    color: var(--ink-4);
-  }
-  .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 3px;
-    background: #7ee2c1;
-    box-shadow: 0 0 8px #7ee2c1;
-  }
-
-  .showcase-body {
-    display: grid;
-    grid-template-columns: 1.05fr 1fr;
-    min-height: 480px;
-  }
-  .showcase-source { padding: 24px 28px; border-right: 1px solid var(--line); }
-  .showcase-source-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .flex-spacer { flex: 1; }
-  .source-of-truth {
-    font-family: 'Geist Mono', monospace;
-    font-size: 10.5px;
-    color: var(--acc-2);
-  }
-  .source-code {
-    margin: 0;
-    font-family: 'Geist Mono', monospace;
-    font-size: 13px;
-    line-height: 1.75;
-    color: var(--c-plain);
-  }
-  .source-code .c-com { color: var(--c-com); }
-  .source-code .c-key { color: var(--c-key); }
-  .source-code .c-str { color: var(--c-str); }
-  .source-code .c-num { color: var(--c-num); }
-  .source-code .c-fn  { color: var(--c-fn); }
-  .source-code .c-name { color: #fff; }
-
-  .derives {
-    margin-top: 28px;
-    padding-top: 18px;
-    border-top: 1px dashed var(--line-2);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Geist Mono', monospace;
-    font-size: 11.5px;
-    color: var(--ink-3);
-  }
-  .derives-label { color: var(--acc-2); }
-  .derives-bar { flex: 1; height: 1px; background: var(--line-2); }
-
-  .showcase-derived {
-    padding: 24px 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .showcase-derived-head {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 6px;
-  }
-  .derived-meta {
-    font-family: 'Geist Mono', monospace;
-    font-size: 10.5px;
-    color: var(--ink-3);
-  }
-  .derived-row {
-    display: grid;
-    grid-template-columns: 80px 200px 1fr 20px;
-    gap: 14px;
-    align-items: center;
-    padding: 10px 14px;
-    background: var(--bg-2);
-    border: 1px solid var(--line);
-    border-radius: 6px;
-  }
-  .derived-kind {
-    font-family: 'Geist Mono', monospace;
-    font-size: 10.5px;
-    color: var(--acc-2);
-    background: rgba(124, 92, 255, 0.08);
-    padding: 3px 7px;
-    border-radius: 4px;
-    text-align: center;
-    letter-spacing: 0.3px;
-  }
-  .derived-name {
-    font-family: 'Geist Mono', monospace;
-    font-size: 13px;
-    color: var(--ink);
-  }
-  .derived-sub { font-size: 12.5px; color: var(--ink-3); }
-  .derived-arr { color: var(--ink-4); text-align: right; }
-
-  /* founding callout */
-  .founding-callout {
-    display: flex;
-    align-items: stretch;
-    margin-top: 56px;
-    background: linear-gradient(90deg, rgba(124, 92, 255, 0.06) 0%, transparent 60%);
-    border: 1px solid var(--line-2);
-    border-radius: 12px;
-    overflow: hidden;
-    color: inherit;
-  }
-  .founding-chip {
-    padding: 22px 26px;
-    border-right: 1px solid var(--line-2);
-    background: rgba(124, 92, 255, 0.04);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 200px;
-  }
-  .founding-tag {
-    font-family: 'Geist Mono', monospace;
-    font-size: 10.5px;
-    color: var(--acc-2);
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-  }
-  .founding-seat {
-    font-family: 'Geist', sans-serif;
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--ink);
-    letter-spacing: -0.02em;
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-  }
-  .founding-seat-pre { color: var(--ink-3); }
-
-  .founding-seats {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    padding: 0 26px;
-    gap: 16px;
-  }
-  .seat {
-    flex: 1;
-    padding: 14px 16px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: relative;
-  }
-  .seat.active { border-color: rgba(124, 92, 255, 0.35); }
-  .seat-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 4px;
-    background: var(--acc);
-    box-shadow: 0 0 10px var(--acc);
-  }
-  .seat-num {
-    font-family: 'Geist Mono', monospace;
-    font-size: 11px;
-    color: var(--ink-4);
-    letter-spacing: 0.3px;
-  }
-  .seat-status {
-    font-family: 'Geist Mono', monospace;
-    font-size: 10.5px;
-    color: var(--acc-2);
-    letter-spacing: 0.5px;
-    padding: 2px 8px;
-    border-radius: 999px;
-    background: rgba(124, 92, 255, 0.08);
-    border: 1px solid rgba(124, 92, 255, 0.25);
-  }
-
-  .founding-side {
-    padding: 22px 26px;
-    border-left: 1px solid var(--line-2);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 280px;
-    text-align: right;
-  }
-  .founding-pitch {
-    font-size: 13.5px;
-    color: var(--ink-2);
-    line-height: 1.4;
-    margin-bottom: 8px;
-  }
-  .founding-link {
-    font-family: 'Geist Mono', monospace;
-    font-size: 11.5px;
-    color: var(--acc-2);
-    letter-spacing: 0.3px;
-  }
+  .meta-dim { color: var(--ink-3); }
+  .meta-acc { color: var(--acc-2); }
 
   @media (max-width: 768px) {
     .hero-top { padding: 36px 16px 28px; }
-    .hero-lockup { margin-bottom: 24px; }
-    .hero-lockup img { height: 56px; }
     .announce { margin-bottom: 20px; font-size: 12px; padding: 4px 4px 4px 12px; }
     .headline { font-size: 44px; line-height: 1.02; }
     .lede { font-size: 16px; margin-top: 20px; }
@@ -564,46 +212,6 @@ const derived: Array<[string, string, string]> = [
       justify-content: center;
     }
     .meta-bar { display: none; }
-
-    .hero-showcase-wrap { padding: 24px 16px 56px; }
-    .showcase-body { grid-template-columns: 1fr; min-height: auto; }
-    .showcase-source {
-      border-right: none;
-      border-bottom: 1px solid var(--line);
-      padding: 18px 16px;
-    }
-    .showcase-derived { padding: 18px 16px; }
-    .source-code { font-size: 11.5px; overflow-x: auto; }
-    .derived-row {
-      grid-template-columns: 70px 1fr 18px;
-      gap: 8px;
-      padding: 10px 12px;
-    }
-    .derived-sub { display: none; }
-    .chrome-title { font-size: 10.5px; }
-
-    .founding-callout {
-      flex-direction: column;
-      margin-top: 32px;
-    }
-    .founding-chip {
-      border-right: none;
-      border-bottom: 1px solid var(--line-2);
-      min-width: 0;
-      padding: 16px 18px;
-    }
-    .founding-seats {
-      flex-direction: column;
-      padding: 14px 16px;
-      gap: 8px;
-    }
-    .founding-side {
-      border-left: none;
-      border-top: 1px solid var(--line-2);
-      min-width: 0;
-      text-align: left;
-      padding: 16px 18px;
-    }
   }
 </style>
 
