@@ -17,7 +17,7 @@ import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
       <a class="pr-btn acc" href="/docs/mcp-apps" style="height: 44px; padding: 0 20px; font-size: 14px;">
         Read the quickstart <span class="arr">→</span>
       </a>
-      <a class="pr-btn ghost" href="https://github.com/mcp-rune/mcp-rune" style="height: 44px; padding: 0 18px; font-size: 14px;">
+      <a class="pr-btn ghost" href="https://github.com/mcp-rune/mcp-rune" target="_blank" rel="noopener noreferrer" style="height: 44px; padding: 0 18px; font-size: 14px;">
         ★ Star on GitHub
       </a>
     </div>
@@ -37,7 +37,7 @@ import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
           { label: 'GitHub', href: 'https://github.com/mcp-rune/mcp-rune' },
           { label: 'Roadmap', href: '/roadmap' },
         ].map(({ label, href }) => (
-          <a href={href}>{label}</a>
+          <a href={href} {...(href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{label}</a>
         ))}
       </div>
     </div>

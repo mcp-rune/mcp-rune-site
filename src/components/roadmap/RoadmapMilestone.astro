@@ -48,7 +48,7 @@ const targetText = milestone.target;
               </div>
               <RoadmapStatusPill kind={item.status} />
               {item.issue ? (
-                <a class="rm-ms-issue" href={item.url ?? '#'}>#{item.issue}</a>
+                <a class="rm-ms-issue" href={item.url ?? '#'} target="_blank" rel="noopener noreferrer">#{item.issue}</a>
               ) : (
                 <span class="rm-ms-issue rm-ms-issue-empty">—</span>
               )}

@@ -46,7 +46,7 @@ const columns: Array<{ heading: string; items: Array<{ label: string; href: stri
           </summary>
           <ul class="footer-list">
             {items.map((item) => (
-              <li><a href={item.href}>{item.label}</a></li>
+              <li><a href={item.href} {...(item.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>{item.label}</a></li>
             ))}
           </ul>
         </details>
