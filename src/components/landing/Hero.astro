@@ -5,6 +5,7 @@
 // founding-adopter callout moves to a later band. Branding lives in TopNav.
 
 import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
+import { NPM_INSTALL } from '../../lib/site';
 ---
 <section class="hero">
   <div class="hero-glow pr-glow"></div>
@@ -41,8 +42,8 @@ import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
       </a>
       <div class="install">
         <span class="install-prompt">$</span>
-        <span class="pr-mono install-cmd">npm i mcp-rune</span>
-        <button type="button" class="install-copy" data-copy="npm i mcp-rune">COPY</button>
+        <span class="pr-mono install-cmd">{NPM_INSTALL}</span>
+        <button type="button" class="install-copy" data-copy={NPM_INSTALL}>COPY</button>
       </div>
     </div>
 

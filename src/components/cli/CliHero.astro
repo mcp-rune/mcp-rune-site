@@ -1,5 +1,6 @@
 ---
 import Terminal from './Terminal.astro';
+import { NPM_CREATE } from '../../lib/site';
 
 // Terminal body rendered via `set:html` because Astro collapses
 // newlines between sibling elements inside a `<pre>` slot, which
@@ -26,7 +27,7 @@ const heroTerm = [
   <div class="cli-hero-inner">
     <div class="hero-pill">
       <span class="hero-pill-chip">CLI</span>
-      <span class="hero-pill-sub">@mcp-rune/create</span>
+      <span class="hero-pill-sub">{NPM_CREATE}</span>
     </div>
 
     <div class="hero-cols">

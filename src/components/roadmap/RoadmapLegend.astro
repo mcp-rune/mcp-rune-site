@@ -1,6 +1,7 @@
 ---
 import RoadmapStatusPill from './RoadmapStatusPill.astro';
-const milestonesUrl = 'https://github.com/mcp-rune/mcp-rune/milestones';
+import { RUNE_MILESTONES_URL } from '../../lib/site';
+const milestonesUrl = RUNE_MILESTONES_URL;
 ---
 <section class="rm-legend-wrap">
   <div class="rm-legend-inner">

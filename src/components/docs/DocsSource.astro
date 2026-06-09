@@ -1,4 +1,6 @@
 ---
+import { RUNE_DOCS_BLOB_BASE, RUNE_DOCS_EDIT_BASE, RUNE_ISSUES_URL, RUNE_DISCUSSIONS_URL } from '../../lib/site';
+
 interface Props {
   sourceFile?: string;
 }
@@ -9,14 +11,14 @@ const { sourceFile } = Astro.props;
     <div class="ds-heading">Source</div>
     <a
       class="ds-link"
-      href={`https://github.com/mcp-rune/mcp-rune/blob/main/docs/guides/${sourceFile}`}
+      href={`${RUNE_DOCS_BLOB_BASE}/${sourceFile}`}
       target="_blank"
       rel="noopener noreferrer"
     >docs/guides/{sourceFile} ↗</a>
     <div class="ds-actions">
-      <a href={`https://github.com/mcp-rune/mcp-rune/edit/main/docs/guides/${sourceFile}`} target="_blank" rel="noopener noreferrer">✎ Edit this page</a>
-      <a href="https://github.com/mcp-rune/mcp-rune/issues/new" target="_blank" rel="noopener noreferrer">⚑ Report issue</a>
-      <a class="ds-full" href="https://github.com/mcp-rune/mcp-rune/discussions" target="_blank" rel="noopener noreferrer">↗ Discuss on GitHub</a>
+      <a href={`${RUNE_DOCS_EDIT_BASE}/${sourceFile}`} target="_blank" rel="noopener noreferrer">✎ Edit this page</a>
+      <a href={RUNE_ISSUES_URL} target="_blank" rel="noopener noreferrer">⚑ Report issue</a>
+      <a class="ds-full" href={RUNE_DISCUSSIONS_URL} target="_blank" rel="noopener noreferrer">↗ Discuss on GitHub</a>
     </div>
   </div>
 )}

@@ -1,4 +1,5 @@
 ---
+import { RUNE_DISCUSSIONS_URL, RUNE_GUIDES_URL } from '../../lib/site';
 ---
 <div class="contribute">
   <div class="contribute-glyph">+</div>
@@ -9,10 +10,10 @@
       <code>docs/guides/</code> — or file an RFC if you'd like the framework to grow.
     </div>
   </div>
-  <a class="pr-btn ghost contribute-btn" href="https://github.com/mcp-rune/mcp-rune/discussions" target="_blank" rel="noopener noreferrer">
+  <a class="pr-btn ghost contribute-btn" href={RUNE_DISCUSSIONS_URL} target="_blank" rel="noopener noreferrer">
     Open RFC <span class="arr">→</span>
   </a>
-  <a class="pr-btn acc contribute-btn" href="https://github.com/mcp-rune/mcp-rune/tree/main/docs/guides" target="_blank" rel="noopener noreferrer">
+  <a class="pr-btn acc contribute-btn" href={RUNE_GUIDES_URL} target="_blank" rel="noopener noreferrer">
     Edit on GitHub <span class="arr">↗</span>
   </a>
 </div>

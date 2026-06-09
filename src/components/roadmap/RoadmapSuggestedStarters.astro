@@ -38,8 +38,10 @@ const STARTERS: Starter[] = [
   },
 ];
 
+import { RUNE_MILESTONES_NEW_URL } from '../../lib/site';
+
 function ghUrl(s: Starter): string {
-  const base = 'https://github.com/mcp-rune/mcp-rune/milestones/new';
+  const base = RUNE_MILESTONES_NEW_URL;
   const q = new URLSearchParams({
     title: s.title,
     description: `${s.blurb}\n\n${s.desc}`,
