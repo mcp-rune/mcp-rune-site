@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] - 2026-06-09
+
+> Upgrades the framework dependency to v0.102.0 (DomainAdapter + InMemoryDomainAdapter + DomainModule), registers the new domain-adapters guide, and cleans up dead navigation links across the site.
+
+### Added
+
+- **`src/data/guides.ts`** — new `domain-adapters` guide (Section VIII) covering `DomainAdapter`, `InMemoryDomainAdapter`, rule evaluation semantics, and the remote-adapter roadmap introduced in framework v0.102.0.
+
+### Changed
+
+- **`src/data/guides.ts`** — updated `domain-knowledge` blurb to reflect the new `DomainModule`/`InMemoryDomainAdapter` wiring pattern that replaced flat arrays.
+- **`vendor/mcp-rune`** — bumped submodule to v0.102.0: `DomainAdapter` + `InMemoryDomainAdapter` + `DomainModule` + `domain-definitions.ts`; updated example vocabulary from media-rights to bookshelf/tasks across all guides.
+
+### Fixed
+
+- **`src/components/TopNav.astro`** — removed dead "Reference" and "Adopters" nav links (both `href="#"`); nav is now Docs / CLI / Roadmap.
+- **`src/components/Footer.astro`** — wired all footer links that have real destinations (Framework guide pages, `/cli`, GitHub, Discussions); removed entries with no corresponding page (Generators, Inspector, Types, Architecture, Adopter charter, RFCs).
+
 ## [0.10.0] - 2026-06-09
 
 > Redesigns the CLI page from a 6-section feature reference into a 4-section identity-first landing page. The redesign follows the same "identity, not inventory" principle as the Landing v2 redesign: each section describes what the CLI *is*, not what it enumerates. Also adds the mcp-rune brand lockup to the landing hero.
@@ -29,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`src/components/cli/CliNextSteps.astro`** — npm script table. Duplicates content the user sees in their generated `package.json`; the WIP badge on `npm run inspect` required manual upkeep.
 - **`src/components/cli/CliSectionHeader.astro`** — section header component used only by the deleted sections.
 
+[0.11.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.9.1...v0.10.0
 
 ## [0.9.1] - 2026-06-08
