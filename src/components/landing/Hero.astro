@@ -11,6 +11,10 @@ import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
   <div class="hero-grid pr-grid-faint"></div>
 
   <div class="pr-wrap hero-top">
+    <div class="hero-lockup">
+      <img src="/brand/logo-horizontal-clean.svg" alt="mcp-rune" class="hero-lockup-img" />
+    </div>
+
     <a href="/docs/mcp-apps" class="announce">
       <span class="badge-new">NEW</span>
       <span>{MCP_RUNE_VERSION_LABEL}-alpha · MCP Apps, OAuth 2.1, GraphRAG — all derived</span>
@@ -72,6 +76,18 @@ import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
     z-index: 1;
     padding: 88px 32px 56px;
     text-align: center;
+  }
+
+  .hero-lockup {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  .hero-lockup-img {
+    display: inline-block;
+    height: 88px;
+    width: auto;
+    flex-shrink: 0;
   }
 
   .announce {
@@ -189,6 +205,8 @@ import { MCP_RUNE_VERSION_LABEL } from '../../data/version';
 
   @media (max-width: 768px) {
     .hero-top { padding: 36px 16px 28px; }
+    .hero-lockup { margin-bottom: 28px; }
+    .hero-lockup-img { height: 56px; }
     .announce { margin-bottom: 20px; font-size: 12px; padding: 4px 4px 4px 12px; }
     .headline { font-size: 44px; line-height: 1.02; }
     .lede { font-size: 16px; margin-top: 20px; }
