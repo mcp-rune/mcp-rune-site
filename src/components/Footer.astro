@@ -2,12 +2,28 @@
 import Logo from './Logo.astro';
 import RuneContactStrip from './RuneContactStrip.astro';
 import { MCP_RUNE_VERSION_LABEL, SITE_VERSION_LABEL } from '../data/version';
+import { RUNE_REPO_URL } from '../lib/community';
 
-const columns: Array<{ heading: string; items: string[] }> = [
-  { heading: 'Framework', items: ['Models', 'Prompts', 'Tools', 'Apps', 'Analysis'] },
-  { heading: 'Tooling',   items: ['CLI', 'Generators', 'Inspector', 'Types'] },
-  { heading: 'Learn',     items: ['Quickstart', 'Guides', 'Architecture', 'Recipes'] },
-  { heading: 'Community', items: ['Adopter charter', 'GitHub', 'Discussions', 'RFCs'] },
+const columns: Array<{ heading: string; items: Array<{ label: string; href: string }> }> = [
+  { heading: 'Framework', items: [
+    { label: 'Models',   href: '/docs/defining-a-model' },
+    { label: 'Prompts',  href: '/docs/prompt-creation' },
+    { label: 'Tools',    href: '/docs/tool-creation' },
+    { label: 'Apps',     href: '/docs/mcp-apps' },
+    { label: 'Analysis', href: '/docs/analysis-memories' },
+  ]},
+  { heading: 'Tooling', items: [
+    { label: 'CLI', href: '/cli' },
+  ]},
+  { heading: 'Learn', items: [
+    { label: 'Quickstart', href: '/docs/quickstart' },
+    { label: 'Guides',     href: '/docs' },
+    { label: 'Recipes',    href: '/docs/extension-recipes' },
+  ]},
+  { heading: 'Community', items: [
+    { label: 'GitHub',      href: RUNE_REPO_URL },
+    { label: 'Discussions', href: `${RUNE_REPO_URL}/discussions` },
+  ]},
 ];
 ---
 <footer class="footer">
@@ -30,7 +46,7 @@ const columns: Array<{ heading: string; items: string[] }> = [
           </summary>
           <ul class="footer-list">
             {items.map((item) => (
-              <li><a href="#">{item}</a></li>
+              <li><a href={item.href}>{item.label}</a></li>
             ))}
           </ul>
         </details>
