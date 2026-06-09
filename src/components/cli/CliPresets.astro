@@ -1,6 +1,5 @@
 ---
 import Terminal from './Terminal.astro';
-import CliSectionHeader from './CliSectionHeader.astro';
 
 // Bodies rendered via `set:html` — see CliHero.astro for why slot-of-spans
 // won't work here (Astro collapses inter-element whitespace inside the pre).
@@ -9,11 +8,8 @@ const simpleTerm = [
   '',
   '<span class="t-heading">Scaffolding </span><span class="t-name">my-server</span> <span class="t-dim-i">(simple)…</span>',
   '',
-  '<span class="t-check">✓ </span><span class="t-white">wrote files to </span><span class="t-path">/Users/dsaenz/Code/my-server</span>',
+  '<span class="t-check">✓ </span><span class="t-white">wrote files</span>',
   '<span class="t-check">✓ </span><span class="t-white">initialized git repo</span>',
-  '<span class="t-dim">    running npm install…</span>',
-  '',
-  '<span class="t-text">added 1 package, audited 3 in 560ms</span>',
   '<span class="t-check">✓ </span><span class="t-white">installed dependencies</span>',
   '',
   '<span class="t-heading">Next steps:</span>',
@@ -23,97 +19,77 @@ const simpleTerm = [
 
 const advancedTerm = [
   '<span class="t-prompt">›&nbsp;</span><span class="t-white">rune new </span><span class="t-name">my-server</span> <span class="t-flag">--preset</span> <span class="t-arg">advanced</span>',
-  '<span class="t-check">✓ </span><span class="t-white">Models to scaffold </span><span class="t-dim">(comma-separated, empty for none)</span> <span class="t-arg-b">book,shelf,home</span>',
-  '<span class="t-check">✓ </span><span class="t-white">Transport?</span> <span class="t-arg-b">both</span> <span class="t-dim">(recommended)</span>',
-  '<span class="t-check">✓ </span><span class="t-white">Enable analysis module? </span><span class="t-dim">(adds docker-compose.yml + pg dep)</span> <span class="t-arg-b">Yes</span>',
-  '<span class="t-check">✓ </span><span class="t-white">Enable domain workflows? </span><span class="t-dim">(creates src/domain/ stubs)</span> <span class="t-arg-b">Yes</span>',
+  '<span class="t-check">✓ </span><span class="t-white">Models to scaffold </span><span class="t-dim">(comma-separated)</span> <span class="t-arg-b">book,shelf,home</span>',
+  '<span class="t-check">✓ </span><span class="t-white">Transport? </span><span class="t-arg-b">both</span> <span class="t-dim">(recommended)</span>',
+  '<span class="t-check">✓ </span><span class="t-white">Enable analysis? </span><span class="t-arg-b">Yes</span>',
+  '<span class="t-check">✓ </span><span class="t-white">Enable domain? </span><span class="t-arg-b">Yes</span>',
   '',
   '<span class="t-heading">Scaffolding </span><span class="t-name">my-server</span> <span class="t-dim-i">(advanced)…</span>',
   '',
-  '<span class="t-check">✓ </span><span class="t-white">wrote files to </span><span class="t-path">/Users/dsaenz/Code/my-server</span>',
+  '<span class="t-check">✓ </span><span class="t-white">wrote files</span>',
   '<span class="t-check">✓ </span><span class="t-white">initialized git repo</span>',
-  '<span class="t-dim">    running npm install…</span>',
-  '',
-  '<span class="t-text">added 16 packages, audited 18 in 823ms</span>',
   '<span class="t-check">✓ </span><span class="t-white">installed dependencies</span>',
 ].join('\n');
 ---
 <section class="cli-presets">
-  <div class="cli-presets-inner">
-    <CliSectionHeader
-      number="01"
-      eyebrow="PRESETS"
-      title="Two ways to start."
-      rightHint="--preset SIMPLE · --preset ADVANCED"
-    />
+  <div class="cp-inner">
+    <div class="cp-intro">
+      <div class="cp-eyebrow">
+        <span class="cp-rule" />
+        <span>ONE CHOICE</span>
+        <span class="cp-rule" />
+      </div>
+      <h2 class="pr-display cp-title">Simple or advanced.</h2>
+      <p class="cp-lede">
+        The only decision the scaffolder asks you to make.
+        Everything else is a prompt you can skip.
+      </p>
+    </div>
 
-    <div class="presets-grid">
-      <!-- SIMPLE -->
-      <div class="preset-card">
-        <div class="preset-head">
-          <div class="preset-tagrow">
-            <span class="preset-tag">ONE-SHOT</span>
-            <span class="preset-flag">--preset simple --yes</span>
+    <div class="cp-grid">
+      <div class="cp-card">
+        <div class="cp-card-head">
+          <div class="cp-card-titlerow">
+            <span class="pr-display cp-card-title">Simple.</span>
+            <span class="cp-flag">--preset simple</span>
           </div>
-          <div class="pr-display preset-name">Simple.</div>
-          <p class="preset-blurb">
-            Zero prompts, one package added, three audited. The smallest thing the framework
-            can boot — a single stdio transport, one example model, no analysis, no domain stubs.
+          <p class="cp-card-body">
+            For trying the framework right now. The smallest thing mcp&#8209;rune can boot —
+            a single transport, one example model, zero prompts asked.
+            Start here when you want to see it work before committing to anything.
           </p>
-          <div class="preset-stats">
-            <span><span class="acc">1</span> pkgs</span>
-            <span>·</span>
-            <span><span class="acc">3</span> audited</span>
-            <span>·</span>
-            <span><span class="acc">560</span> ms</span>
-          </div>
         </div>
-
-        <div class="preset-term-wrap">
-          <Terminal title="my-server · simple" sub="560 ms · 1 pkg">
+        <div class="cp-card-term">
+          <Terminal title="simple">
             <Fragment set:html={simpleTerm} />
           </Terminal>
         </div>
-
-        <div class="preset-foot">
-          <span>WHAT YOU GET</span>
-          <span class="preset-foot-r">stdio · 1 example model · empty registry</span>
-        </div>
       </div>
 
-      <!-- ADVANCED -->
-      <div class="preset-card">
-        <div class="preset-head">
-          <div class="preset-tagrow">
-            <span class="preset-tag">INTERACTIVE</span>
-            <span class="preset-flag">--preset advanced</span>
+      <div class="cp-card">
+        <div class="cp-card-head">
+          <div class="cp-card-titlerow">
+            <span class="pr-display cp-card-title">Advanced.</span>
+            <span class="cp-flag">--preset advanced</span>
           </div>
-          <div class="pr-display preset-name">Advanced.</div>
-          <p class="preset-blurb">
-            Four prompts. You name the models, pick stdio / http / both, opt in to the analysis
-            module (Postgres + docker-compose) and to the domain workflow stubs. Sixteen packages,
-            eighteen audited.
+          <p class="cp-card-body">
+            For a server you intend to keep. HTTP transport with OAuth,
+            your own named models, optional analysis and domain modules.
+            Start here when you know what you're building and want the
+            infrastructure from day one.
           </p>
-          <div class="preset-stats">
-            <span><span class="acc">16</span> pkgs</span>
-            <span>·</span>
-            <span><span class="acc">18</span> audited</span>
-            <span>·</span>
-            <span><span class="acc">823</span> ms</span>
-          </div>
         </div>
-
-        <div class="preset-term-wrap">
-          <Terminal title="my-server · advanced" sub="823 ms · 16 pkgs">
+        <div class="cp-card-term">
+          <Terminal title="advanced">
             <Fragment set:html={advancedTerm} />
           </Terminal>
         </div>
-
-        <div class="preset-foot">
-          <span>WHAT YOU GET</span>
-          <span class="preset-foot-r">stdio+http · N models · pg · src/domain/</span>
-        </div>
       </div>
+    </div>
+
+    <div class="cp-footnote">
+      Advanced asks a few questions; <code>--yes</code> skips them all
+      and takes the defaults.
     </div>
   </div>
 </section>
@@ -121,94 +97,121 @@ const advancedTerm = [
 <style>
   .cli-presets {
     border-bottom: 1px solid var(--line);
-    background: var(--bg-2);
   }
-  .cli-presets-inner {
+  .cp-inner {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 64px 32px;
+    padding: 72px 32px;
   }
-  .presets-grid {
+
+  .cp-intro {
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 48px;
+  }
+  .cp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--acc-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    margin-bottom: 16px;
+    letter-spacing: 0.4px;
+  }
+  .cp-rule {
+    width: 16px;
+    height: 1px;
+    background: var(--acc);
+  }
+  .cp-title {
+    font-size: 44px;
+    margin: 0;
+  }
+  .cp-lede {
+    margin: 16px auto 0;
+    font-size: 16px;
+    color: var(--ink-3);
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  .cp-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
   }
-  .preset-card {
+  .cp-card {
     background: var(--surface);
-    border: 1px solid var(--line-2);
-    border-radius: 10px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
   }
-  .preset-head {
-    padding: 22px 24px;
-    border-bottom: 1px solid var(--line);
+  .cp-card-head {
+    padding: 28px 26px 22px;
   }
-  .preset-tagrow {
+  .cp-card-titlerow {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 14px;
     flex-wrap: wrap;
   }
-  .preset-tag {
-    font-family: 'Geist Mono', monospace;
-    font-size: 10.5px;
-    color: var(--acc-2);
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+  .cp-card-title {
+    font-size: 30px;
+    letter-spacing: -0.03em;
   }
-  .preset-flag {
-    padding: 2px 8px;
-    border-radius: 4px;
+  .cp-flag {
+    padding: 3px 10px;
+    border-radius: 5px;
     background: var(--bg-3);
     border: 1px solid var(--line-2);
     font-family: 'Geist Mono', monospace;
     font-size: 10.5px;
-    color: var(--ink-3);
-  }
-  .preset-name {
-    font-size: 32px;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
-    margin-bottom: 8px;
-  }
-  .preset-blurb {
-    margin: 0;
-    font-size: 13.5px;
-    color: var(--ink-3);
-    line-height: 1.55;
-  }
-  .preset-stats {
-    margin-top: 14px;
-    display: flex;
-    gap: 14px;
-    font-family: 'Geist Mono', monospace;
-    font-size: 11px;
     color: var(--ink-4);
-    letter-spacing: 0.3px;
   }
-  .preset-stats .acc { color: var(--acc-2); }
-  .preset-term-wrap { padding: 16px; flex: 1; }
-  .preset-foot {
-    padding: 14px 24px;
-    border-top: 1px solid var(--line);
-    display: flex;
-    justify-content: space-between;
-    font-family: 'Geist Mono', monospace;
-    font-size: 11.5px;
+  .cp-card-body {
+    margin: 0;
+    font-size: 15px;
     color: var(--ink-3);
+    line-height: 1.65;
   }
-  .preset-foot-r { color: var(--ink-4); }
+  .cp-card-term {
+    padding: 0 14px 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .cp-card-term :global(.term) {
+    flex: 1;
+  }
+
+  .cp-footnote {
+    margin-top: 22px;
+    text-align: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-4);
+    line-height: 1.6;
+  }
+  .cp-footnote code {
+    color: var(--acc-2);
+    font-family: inherit;
+    font-size: inherit;
+    background: transparent;
+    padding: 0;
+  }
 
   @media (max-width: 1024px) {
-    .presets-grid { grid-template-columns: 1fr; }
+    .cp-grid { grid-template-columns: 1fr; }
+    .cp-title { font-size: 36px; }
   }
-  @media (max-width: 768px) {
-    .cli-presets-inner { padding: 40px 16px; }
-    .preset-name { font-size: 26px; }
-    .preset-head { padding: 18px; }
-    .preset-foot { padding: 12px 18px; flex-direction: column; gap: 4px; }
+  @media (max-width: 640px) {
+    .cp-inner { padding: 48px 16px; }
+    .cp-title { font-size: 30px; }
+    .cp-card-head { padding: 22px 18px 16px; }
+    .cp-card-title { font-size: 26px; }
   }
 </style>
