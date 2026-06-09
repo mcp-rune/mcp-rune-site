@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] - 2026-06-09
+
+> Redesigns the CLI page from a 6-section feature reference into a 4-section identity-first landing page. The redesign follows the same "identity, not inventory" principle as the Landing v2 redesign: each section describes what the CLI *is*, not what it enumerates. Also adds the mcp-rune brand lockup to the landing hero.
+
+### Added
+
+- **`src/components/cli/CliSellingPoints.astro`** — new 4-card identity band: *One verb · Two presets · Ready to run · Local-link mode*. Each card is a claim about the CLI's character with no version-coupled facts (no flag enumerations, no package counts, no millisecond stats). Replaces CliPresets + CliPrompts + CliLocalLink as the second section.
+- **`src/components/cli/CliCtaBand.astro`** — new CTA band replacing CliNextSteps. Three actions: "Read the Quickstart →" (`/docs/quickstart`), "All flags & prompts →" (`/docs`), "CLI source on GitHub ↗". No npm script table, no WIP badges.
+- **`src/components/landing/Hero.astro`** — 88 px mcp-rune brand lockup added above the announce pill for name recognition on first paint; scales to 56 px on mobile (≤768 px).
+
+### Changed
+
+- **`src/components/cli/CliHero.astro`** — tightened to headline + tagline + lede + signature line + terminal demo. Removed: 4-stat strip (1 verb / 2 presets / 4 prompts / 560 ms — drift-prone), 4 signature chips (reference-manual chrome), pill sub-label "one verb · two presets · four prompts". Pill now reads `CLI · @mcp-rune/create`. Lede rewritten: "rune new is the entire CLI. Pick a preset, answer the prompts or skip them with --yes, and walk away with a project that boots on the first try."
+- **`src/components/cli/CliPresets.astro`** — rewritten as intent-driven narrative compare. "Simple is for trying it now; advanced is for a server you intend to keep." Two terminals kept; all spec content (package counts, audit counts, scaffold ms, file-tree callouts, WHAT YOU GET tag rows) removed. Footer line: "Advanced asks a few questions; --yes skips them all and takes the defaults."
+- **`src/pages/cli.astro`** — section order now Hero → SellingPoints → Presets → CtaBand (4 sections, down from 6).
+
+### Removed
+
+- **`src/components/cli/CliPrompts.astro`** — 4-prompt gallery. The dedicated section was the most drift-prone part of the page (every prompt renamed/added required a card update). The idea survives as the footer note in CliPresets ("Advanced asks a few questions; --yes skips them").
+- **`src/components/cli/CliOnDisk.astro`** — file tree + stats section. Directory tree, file/dir counts, and "bytes on disk" stats are all version-coupled. Nothing here belongs on a landing page.
+- **`src/components/cli/CliLocalLink.astro`** — before/after package.json diff section. Local-link mode survives as one selling-point card in CliSellingPoints; the before/after JSON is documentation that belongs in `/docs/cli`.
+- **`src/components/cli/CliNextSteps.astro`** — npm script table. Duplicates content the user sees in their generated `package.json`; the WIP badge on `npm run inspect` required manual upkeep.
+- **`src/components/cli/CliSectionHeader.astro`** — section header component used only by the deleted sections.
+
+[0.10.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.9.1...v0.10.0
+
 ## [0.9.1] - 2026-06-08
 
 > Brings the live docs in sync with framework `v0.101.0`. Bumps the `vendor/mcp-rune` submodule from `v0.73.9` to `v0.101.0` (the docs restructure around the Model + the three peer layers — see [`mcp-rune` v0.101.0 release notes](https://github.com/mcp-rune/mcp-rune/releases/tag/v0.101.0)), rebuilds `src/data/guides.ts` to mirror the new chapter structure, and audits per-guide extension annotations against the new chapters.
@@ -20,6 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Two extension annotations added during the audit:
   - `attributes-and-kinds` → `{ kind: 'plugin', what: 'Register custom kinds via AppRegistry({ kinds })' }`. The new chapter explicitly walks through `'string:isbn'` and the `AppRegistry({ kinds: … })` extension path.
   - `authoring-extensions` → `{ kind: 'plugin', what: 'Walk through writing an extension end to end' }`. Symmetry with the other "Author X extensions" entries in section X.
+
+[0.9.1]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.9.0...v0.9.1
 
 ## [0.9.0] - 2026-06-08
 

@@ -1,0 +1,84 @@
+---
+const POINTS: Array<{ title: string; body: string }> = [
+  {
+    title: 'One verb.',
+    body: 'Everything the scaffolder can do, it does behind <code>rune new</code>. There is no second command to learn — and no plan to add one.',
+  },
+  {
+    title: 'Two presets.',
+    body: '<code>simple</code> for the fastest boot the framework allows. <code>advanced</code> for the full kit. You pick one and move on.',
+  },
+  {
+    title: 'Ready to run.',
+    body: 'Files written, git initialized, deps installed, <code>npm run start:local</code> works. No "next, you\'ll need to…" step after the scaffold.',
+  },
+  {
+    title: 'Local-link mode.',
+    body: 'Point <code>--mcp-rune-local</code> at a clone of <code>mcp-rune</code> and your scaffold reads from disk. Built for the pre&#8209;1.0 contributor workflow.',
+  },
+];
+---
+<section class="cli-selling-points">
+  <div class="sp-inner">
+    <div class="sp-grid">
+      {POINTS.map((p) => (
+        <div class="sp-card">
+          <div class="sp-title">{p.title}</div>
+          <div class="sp-body" set:html={p.body} />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cli-selling-points {
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+  .sp-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 56px 32px;
+  }
+  .sp-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .sp-card {
+    padding: 26px 24px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--acc);
+    border-radius: 10px;
+  }
+  .sp-title {
+    font-family: 'Geist', sans-serif;
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .sp-body {
+    font-size: 14px;
+    color: var(--ink-3);
+    line-height: 1.65;
+  }
+  .sp-body :global(code) {
+    color: var(--acc-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: inherit;
+    background: transparent;
+    padding: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .sp-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .sp-inner { padding: 40px 16px; }
+    .sp-grid { grid-template-columns: 1fr; }
+  }
+</style>
