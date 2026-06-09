@@ -5,10 +5,8 @@ import { MCP_RUNE_VERSION } from '../data/version';
 
 interface Props {
   active?: 'docs' | 'cli' | 'roadmap' | null;
-  /** Wider container for the docs-section pages (1440px), narrower for landing (1240px). */
-  wide?: boolean;
 }
-const { active = null, wide = false } = Astro.props;
+const { active = null } = Astro.props;
 
 const links: Array<{ label: string; key: NonNullable<Props['active']>; href: string }> = [
   { label: 'Docs',     key: 'docs',    href: '/docs' },
@@ -17,7 +15,7 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
 ];
 ---
 <header class="topnav">
-  <div class="topnav-inner" style={wide ? 'max-width: 1440px;' : 'max-width: 1240px;'}>
+  <div class="topnav-inner">
     <a href="/" class="brand">
       <Logo size={24} />
       <span class="brand-name">mcp-rune</span>
@@ -68,6 +66,7 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
     border-bottom: 1px solid var(--line);
   }
   .topnav-inner {
+    max-width: 1440px;
     margin: 0 auto;
     padding: 0 32px;
     height: 60px;
@@ -118,8 +117,6 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
     display: flex;
     gap: 8px;
   }
-  .pr-btn.compact { height: 32px; padding: 0 12px; font-size: 13px; }
-
   /* mobile chrome — hidden by default */
   .topnav-mobile { display: none; }
   .icon-btn {

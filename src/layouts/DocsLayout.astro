@@ -10,7 +10,7 @@ interface Props {
 const { title, description } = Astro.props;
 ---
 <BaseLayout title={title} description={description}>
-  <TopNav active="docs" wide />
+  <TopNav active="docs" />
   <main>
     <slot />
   </main>
