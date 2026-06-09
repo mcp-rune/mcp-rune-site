@@ -5,8 +5,9 @@ import { MCP_RUNE_VERSION } from '../data/version';
 
 interface Props {
   active?: 'docs' | 'cli' | 'roadmap' | null;
+  width?: 'wide' | 'narrow';
 }
-const { active = null } = Astro.props;
+const { active = null, width = 'wide' } = Astro.props;
 
 const links: Array<{ label: string; key: NonNullable<Props['active']>; href: string }> = [
   { label: 'Docs',     key: 'docs',    href: '/docs' },
@@ -15,7 +16,7 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
 ];
 ---
 <header class="topnav">
-  <div class="topnav-inner">
+  <div class:list={['topnav-inner', `width-${width}`]}>
     <a href="/" class="brand">
       <Logo size={24} />
       <span class="brand-name">mcp-rune</span>
@@ -66,7 +67,6 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
     border-bottom: 1px solid var(--line);
   }
   .topnav-inner {
-    max-width: 1440px;
     margin: 0 auto;
     padding: 0 32px;
     height: 60px;
@@ -74,6 +74,8 @@ const links: Array<{ label: string; key: NonNullable<Props['active']>; href: str
     align-items: center;
     gap: 32px;
   }
+  .topnav-inner.width-wide { max-width: 1440px; }
+  .topnav-inner.width-narrow { max-width: 1240px; }
   .brand {
     display: inline-flex;
     align-items: center;
