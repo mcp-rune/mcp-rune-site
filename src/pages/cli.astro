@@ -3,24 +3,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import TopNav from '../components/TopNav.astro';
 import Footer from '../components/Footer.astro';
 import CliHero from '../components/cli/CliHero.astro';
+import CliSellingPoints from '../components/cli/CliSellingPoints.astro';
 import CliPresets from '../components/cli/CliPresets.astro';
-import CliPrompts from '../components/cli/CliPrompts.astro';
-import CliOnDisk from '../components/cli/CliOnDisk.astro';
-import CliLocalLink from '../components/cli/CliLocalLink.astro';
-import CliNextSteps from '../components/cli/CliNextSteps.astro';
+import CliCtaBand from '../components/cli/CliCtaBand.astro';
 ---
 <BaseLayout
   title="CLI · rune new · mcp-rune"
-  description="One verb, two presets, four prompts. rune new is the only scaffolder — git-init, deps installed, ready to npm run start:local."
+  description="rune new is the entire CLI. Pick a preset, skip the prompts with --yes, and walk away with a project that boots on the first try."
 >
   <TopNav active="cli" wide />
   <main>
     <CliHero />
+    <CliSellingPoints />
     <CliPresets />
-    <CliPrompts />
-    <CliOnDisk />
-    <CliLocalLink />
-    <CliNextSteps />
+    <CliCtaBand />
   </main>
   <Footer />
 </BaseLayout>
