@@ -1,5 +1,5 @@
 ---
-import { RUNE_REPO_URL } from '../../lib/site';
+import { RUNE_CLI_REPO_URL } from '../../lib/site';
 ---
 <section class="cli-cta-band">
   <div class="cta-bg" aria-hidden="true" />
@@ -13,12 +13,17 @@ import { RUNE_REPO_URL } from '../../lib/site';
       <a class="pr-btn acc cta-btn" href="/docs/quickstart">
         Read the Quickstart <span class="arr">→</span>
       </a>
-      <a class="pr-btn ghost cta-btn" href="/docs">
-        All flags &amp; prompts <span class="arr">→</span>
+      <a
+        class="pr-btn ghost cta-btn"
+        href={`${RUNE_CLI_REPO_URL}#flags--prompts`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        All flags &amp; prompts <span class="arr">↗</span>
       </a>
       <a
         class="pr-btn ghost cta-btn"
-        href={RUNE_REPO_URL}
+        href={RUNE_CLI_REPO_URL}
         target="_blank"
         rel="noopener noreferrer"
       >

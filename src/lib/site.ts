@@ -11,6 +11,11 @@ export const NPM_CREATE    = '@mcp-rune/create';
 export const RUNE_REPO     = 'mcp-rune/mcp-rune';
 export const RUNE_REPO_URL = `https://github.com/${RUNE_REPO}`;
 
+// The CLI scaffolder lives in its own repo. Site CTAs that point at the
+// scaffolder source or its README use these; do not reuse RUNE_REPO_URL.
+export const RUNE_CLI_REPO     = 'mcp-rune/mcp-rune-cli';
+export const RUNE_CLI_REPO_URL = `https://github.com/${RUNE_CLI_REPO}`;
+
 // GitHub sub-URLs derived so a repo rename is a one-line change.
 export const RUNE_ISSUES_URL      = `${RUNE_REPO_URL}/issues/new`;
 export const RUNE_DISCUSSIONS_URL = `${RUNE_REPO_URL}/discussions`;
