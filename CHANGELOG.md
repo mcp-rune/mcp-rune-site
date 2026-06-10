@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.1] - 2026-06-10
+
+> Fixes the three CTAs at the bottom of `/cli` so they each point at the right target, and pulls in the rewritten Quickstart and the new Flags & prompts reference from upstream.
+
+### Added
+
+- **`RUNE_CLI_REPO` and `RUNE_CLI_REPO_URL` constants in `src/lib/site.ts`** — mirroring the existing `RUNE_REPO` / `RUNE_REPO_URL` centralization pattern so the scaffolder repo is identified once and consumed everywhere. The scaffolder lives in its own repo (`mcp-rune/mcp-rune-cli`); reusing `RUNE_REPO_URL` (the framework repo) for CLI-targeted links was the root cause of the broken "CLI source on GitHub" CTA.
+
+### Fixed
+
+- **`src/components/cli/CliCtaBand.astro` · "CLI source on GitHub"** — now points at `https://github.com/mcp-rune/mcp-rune-cli` (the scaffolder) instead of `https://github.com/mcp-rune/mcp-rune` (the framework). The CTA had silently shipped against the wrong repo since the band was introduced in v0.10.0.
+- **`src/components/cli/CliCtaBand.astro` · "All flags & prompts"** — now deep-links to `https://github.com/mcp-rune/mcp-rune-cli#flags--prompts` (a new exhaustive prompt+flag matrix added in `mcp-rune-cli` v0.10.2) instead of the generic on-site `/docs` index. Opens in a new tab with `noopener noreferrer`; arrow glyph changed from `→` to `↗` to match the other external-link CTA.
+
+### Changed
+
+- **`vendor/mcp-rune`** — bumped submodule to **v0.102.4**: rewritten Quickstart (`docs/guides/01-getting-started/quickstart.md`) now leads with the `rune` CLI — `npm install -g @mcp-rune/create` → `rune new my-server --preset simple --models Note` → `rune inspect` — instead of the bookshelf-via-`npx @mcp-rune/create` flow that never mentioned the `rune` command. The bookshelf demo survives as a one-paragraph "Want a fuller demo?" pointer.
+
+[0.11.1]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.11.0...v0.11.1
+
 ## [0.11.0] - 2026-06-09
 
 > Upgrades the framework dependency to v0.102.0 (DomainAdapter + InMemoryDomainAdapter + DomainModule), registers the new domain-adapters guide, and cleans up dead navigation links across the site.
