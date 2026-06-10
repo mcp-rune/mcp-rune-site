@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.2] - 2026-06-10
+
+> Surfaces the upstream docs reorganization (mcp-rune#305) in the docs hub sidebar/pager: the API family is consolidated in chapter VI, chapter II opens with its derivation primer, and chapter IX opens with its hands-on quickstart. Routing-only change on the site side; all the content moves live in the vendored `mcp-rune` submodule.
+
+### Changed
+
+- **`src/data/guides.ts`** — three placement moves so the sidebar and pager match the rewritten docs:
+  - **`api-config` removed from chapter I, added to chapter VI as `api-configuration`** (slug renamed). The static `api` block is consumed by `ModelService`, `ApiClient`, and `ApiConvention` — chapter VI's three other guides — so it now sits with them as the chapter's third entry. The slug rename keeps the sidebar's "API ..." family (`API client`, `API configuration`, `API convention`) sorted together.
+  - **`derivation-overview` promoted to lead chapter II** (was the closing entry). Now opens the chapter as a primer, with the five deep-dive guides following.
+  - **`analysis-quickstart` promoted to lead chapter IX** (was the fifth entry). It is Quickstart Part 2 and the chapter's only hands-on tutorial.
+- **`vendor/mcp-rune`** — bumped submodule to track the upstream PR (`mcp-rune/mcp-rune` PR #305, commit `051d8a0`). Final pointer will rebase onto the v0.102.6 tag once that PR merges; the feature-branch bump shipping with this PR is purely so site CI can build against the renamed `api-configuration.md` file.
+
+[0.11.2]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.11.1...v0.11.2
+
 ## [0.11.1] - 2026-06-10
 
 > Fixes the three CTAs at the bottom of `/cli` so they each point at the right target, and pulls in the rewritten Quickstart and the new Flags & prompts reference from upstream.
