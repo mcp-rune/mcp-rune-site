@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.3] - 2026-06-10
+
+> Pins the vendored `mcp-rune` submodule to the released **v0.102.6** tag. The 0.11.2 site change built against the feature-branch commit (`051d8a0`) so CI could see the renamed `api-configuration.md`; now that upstream PR #305 has merged and `v0.102.6` is tagged, the pointer moves to the tag. The tree is byte-identical to the feature-branch commit, so no doc content or `guides.ts` routing changes — this is purely the promised pin to a stable release.
+
+### Changed
+
+- **`vendor/mcp-rune`** — submodule pointer moved from feature-branch commit `051d8a0` to the **v0.102.6** release tag (`ecbb863`, the squash-merge of PR #304 via PR #305). Same tree, so the Chapter I–II/VI/IX docs reorganization already mirrored in `src/data/guides.ts` (0.11.2) remains aligned; the build was re-verified against the tag.
+
+[0.11.3]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.11.2...v0.11.3
+
 ## [0.11.2] - 2026-06-10
 
 > Surfaces the upstream docs reorganization (mcp-rune#305) in the docs hub sidebar/pager: the API family is consolidated in chapter VI, chapter II opens with its derivation primer, and chapter IX opens with its hands-on quickstart. Routing-only change on the site side; all the content moves live in the vendored `mcp-rune` submodule.
