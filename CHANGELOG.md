@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0] - 2026-06-19
+
+> Adds a real 404 page, makes broken internal doc links impossible to ship, and publishes the two "About" guides. Guides are authored in the `mcp-rune` submodule with relative `.md` links (correct for GitHub/terminal); those were passed through unchanged and 404'd on the site (`/docs/05-apps/mcp-apps.md` instead of `/docs/mcp-apps/`). A build-time rewriter now maps each to its real destination, and a fail-closed gate aborts the build on any link that resolves to nothing. The submodule moves to master `bcfaaae`, which carries the upstream dead-link fix (mcp-rune#341).
+
+### Added
+
+- **`src/pages/404.astro`** — Astro now emits `dist/404.html`, which `nginx.conf` already serves via `error_page 404 /404.html;` (previously missing, so unknown URLs hit nginx's built-in error). Designed page imported from the claude.ai/design project (`page-404.jsx`): a "No route derived." hero, a `router.resolve(path) → null` terminal panel (path injected client-side), and a 4-card suggestion grid, built on the site's own design tokens.
+- **Build-time cross-guide link resolution.** `resolveDocLink()` in `src/data/guides.ts` maps each relative `.md` link to a published page (`/docs/<slug>/`, anchors preserved), to its GitHub source (a path that escapes `docs/guides/`, or one declared source-only in the new `src/data/guide-links.ts` `SOURCE_ONLY` policy), or to `unresolved`. `src/lib/remark-doc-links.mjs` applies the rewrite at render time. `RUNE_REPO_BLOB_BASE` added to `src/lib/site.ts`.
+- **`src/lib/astro-doc-links-check.mjs`** — fail-closed gate: validates every published guide's links once at `astro:config:setup` and aborts `astro build`/`astro dev` with a non-zero exit on any unresolved link. (A throw inside the remark plugin alone does not fail the build — Astro's glob loader catches per-file render errors and still exits 0.)
+- **"About" section in the docs.** `00-about/philosophy.md` and `00-about/why-mcp-rune.md` are now published guides (new section 0, Philosophy → Why mcp-rune?), removed from `SOURCE_ONLY`.
+- **`src/lib/remark-doc-links.test.ts`** — covers `resolveDocLink` (site/source/unresolved + anchors) and the plugin's throw.
+
+### Changed
+
+- **`src/data/guides.ts` split for readability** — types moved to `src/data/guide-types.ts`, the ~570-line `SECTIONS` literal to `src/data/guide-sections.ts`; `guides.ts` stays the public API (re-exports both plus the routing/link helpers), so all importers are unchanged.
+- **`vendor/mcp-rune`** — submodule pointer moved to master `bcfaaae`, which includes the upstream dead-link fix (mcp-rune#341: 5 "Attribute Kinds" links repointed to `02-the-model/attributes-and-kinds.md` after the Ch I–II reorg moved the page).
+- **`AGENTS.md`** — new "Cross-guide links" section documenting the authoring contract, the rewrite, and the fail-closed gate.
+
+[0.12.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.11.3...v0.12.0
+
 ## [0.11.3] - 2026-06-10
 
 > Pins the vendored `mcp-rune` submodule to the released **v0.102.6** tag. The 0.11.2 site change built against the feature-branch commit (`051d8a0`) so CI could see the renamed `api-configuration.md`; now that upstream PR #305 has merged and `v0.102.6` is tagged, the pointer moves to the tag. The tree is byte-identical to the feature-branch commit, so no doc content or `guides.ts` routing changes — this is purely the promised pin to a stable release.
