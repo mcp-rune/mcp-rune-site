@@ -43,6 +43,17 @@ The guide markdown files have **no frontmatter**. All descriptive metadata (slug
 - Promote a `wip` guide: change its status to `'live'` and add the `file:` field.
 - A guide can exist in `guides.ts` with `status: 'wip'` or `'soon'` and no `file` — it appears in the sidebar/hub but does not generate a route.
 
+### Cross-guide links are rewritten at build time (fail-closed)
+
+Guides are authored in the mcp-rune repo and link siblings with **relative `.md` paths** (`[MCP apps](../05-apps/mcp-apps.md)`) — correct for GitHub/terminal readers, but they'd 404 on the site where pages live at `/docs/<slug>/`. The site rewrites them at build time; the link *targets* stay in the markdown (single source of truth, works standalone on GitHub) and the *file→slug* map stays in `guides.ts`. Nothing is hand-maintained in two places.
+
+- `resolveDocLink(fromFile, target)` in `src/data/guides.ts` decides each link's destination: a **published** guide → `/docs/<slug>/` (anchors preserved); a target that escapes `docs/guides/` (e.g. `../../../CHANGELOG.md`) or is declared **source-only** → the file on GitHub; anything else → `unresolved`.
+- `src/data/guide-links.ts` (`SOURCE_ONLY`) is the explicit, intentional list of in-tree targets we deliberately do **not** publish as pages (they link to GitHub source). Adding a link is a conscious publish-vs-source decision; registering a target in `guides.ts` instead flips its links to the on-site page.
+- `src/lib/remark-doc-links.mjs` does the actual rewrite during render.
+- `src/lib/astro-doc-links-check.mjs` is the **hard gate**: an integration that validates every published guide's links once at `astro:config:setup` and **aborts `astro build`/`astro dev` with a non-zero exit** on any unresolved link. (A throw inside the remark plugin alone does *not* fail the build — Astro's glob loader catches per-file render errors and still exits 0; hence the proactive integration.) Like a pending-migration check: the site won't build or start with a broken internal link.
+
+To clear a failure: fix the link in the source markdown, publish the target (add it to `SECTIONS` in `guides.ts`), or declare it source-only in `guide-links.ts`.
+
 ### Page structure
 
 - `src/pages/index.astro` — landing (Hero, Pillars, Architecture, Close)

@@ -1,0 +1,336 @@
+---
+// 404 page. Astro's static build emits this as dist/404.html, which
+// nginx.conf serves via `error_page 404 /404.html;`.
+//
+// Design imported from the claude.ai/design project (mcp-rune-site, page-404.jsx):
+// the error is framed as a route the framework couldn't derive — a model
+// lookup that returned null — consistent with the schema-driven product story.
+// Markup + scoped styles below; the design's pr-* classes and inline styles
+// are reproduced here against the site's own design tokens (src/styles/global.css).
+import DocsLayout from '../layouts/DocsLayout.astro';
+
+// Suggestion cards, adapted from the design to real site routes.
+const surfaces = [
+  ['docs', 'Quickstart', 'scaffold your first server', '/docs/quickstart/'],
+  ['guides', 'Browse the docs', 'every guide, by section', '/docs'],
+  ['cli', 'The rune CLI', 'scaffold · run · inspect', '/cli'],
+  ['roadmap', 'Roadmap', "what's shipping next", '/roadmap'],
+];
+---
+<DocsLayout title="Page not found · mcp-rune" description="No route derived — that page isn't in the spec.">
+  <section class="nf">
+    <div class="nf-glow" aria-hidden="true"></div>
+    <div class="nf-grid" aria-hidden="true"></div>
+
+    <div class="nf-hero">
+      <!-- message -->
+      <div class="nf-msg">
+        <div class="nf-eyebrow">
+          <span class="nf-tick"></span>
+          <span>HTTP 404</span>
+        </div>
+
+        <h1 class="nf-display">No route <span class="nf-grad">derived.</span></h1>
+
+        <p class="nf-lede">
+          This page isn't in the spec. There's no model that maps to it, so nothing
+          was generated here. Pick a surface that actually exists below.
+        </p>
+
+        <div class="nf-actions">
+          <a class="nf-btn acc" href="/">Back to home <span class="arr">→</span></a>
+          <a class="nf-btn ghost" href="/docs">Read the docs</a>
+        </div>
+      </div>
+
+      <!-- terminal-style lookup that returned null -->
+      <div class="nf-term">
+        <div class="nf-term-head">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="nf-term-title">rune router · resolve</span>
+          <span class="nf-term-status">● not found</span>
+        </div>
+        <pre class="nf-term-body"><span class="c">// resolving requested path</span>
+<span class="fn">router</span>.<span class="fn">resolve</span>(<span class="s">"<span id="nf-path">/unknown</span>"</span>)
+
+<span class="k">→</span> <span class="n">null</span>  <span class="c">// no matching model</span>
+<span class="k">throw</span> <span class="fn">RouteNotFound</span>(<span class="num">404</span>)</pre>
+      </div>
+    </div>
+
+    <!-- suggestion grid -->
+    <div class="nf-suggest">
+      <div class="nf-suggest-head">
+        <span class="nf-suggest-lead">↳ try one of these</span>
+        <span class="nf-rule"></span>
+        <span>{surfaces.length} surfaces</span>
+      </div>
+      <div class="nf-cards">
+        {surfaces.map(([key, name, sub, href]) => (
+          <a class="nf-card" href={href}>
+            <span class="nf-key">{key}</span>
+            <span class="nf-name">{name}</span>
+            <span class="nf-sub">{sub}</span>
+            <span class="nf-arrow">→</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</DocsLayout>
+
+<script is:inline>
+  // Surface the path the user actually hit inside the terminal panel.
+  const el = document.getElementById('nf-path');
+  if (el) el.textContent = window.location.pathname || '/unknown';
+</script>
+
+<style>
+  .nf {
+    position: relative;
+    overflow: hidden;
+    min-height: calc(100vh - 60px);
+  }
+
+  /* hero glow + faint grid, matching the landing system */
+  .nf-glow {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 520px;
+    background: radial-gradient(ellipse at center, var(--acc-glow), transparent 70%);
+    filter: blur(20px);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .nf-grid {
+    position: absolute;
+    inset: 0 0 40% 0;
+    z-index: 0;
+    opacity: 0.6;
+    pointer-events: none;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 25%, #000 30%, transparent 80%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 25%, #000 30%, transparent 80%);
+  }
+
+  .nf-hero {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 96px 32px 72px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  /* ── message ── */
+  .nf-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--acc-2);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.3px;
+    margin-bottom: 22px;
+  }
+  .nf-tick {
+    width: 16px;
+    height: 1px;
+    background: var(--acc);
+  }
+  .nf-display {
+    font-family: 'Geist', sans-serif;
+    font-weight: 600;
+    font-size: clamp(56px, 10vw, 96px);
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .nf-grad {
+    background-image: linear-gradient(180deg, #ffffff 0%, var(--acc-2) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .nf-lede {
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--ink-3);
+    margin-top: 26px;
+    max-width: 460px;
+    letter-spacing: -0.01em;
+  }
+  .nf-actions {
+    display: inline-flex;
+    gap: 12px;
+    margin-top: 34px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .nf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 20px;
+    border-radius: 8px;
+    font-family: 'Geist', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.18s;
+  }
+  .nf-btn .arr { transition: transform 0.18s; }
+  .nf-btn:hover .arr { transform: translateX(3px); }
+  .nf-btn.acc {
+    background: var(--acc);
+    color: #fff;
+  }
+  .nf-btn.acc:hover { background: var(--acc-2); }
+  .nf-btn.ghost {
+    padding: 0 18px;
+    background: var(--surface);
+    border-color: var(--line);
+    color: var(--ink-2);
+  }
+  .nf-btn.ghost:hover { border-color: var(--line-3); color: var(--ink); }
+
+  /* ── terminal ── */
+  .nf-term {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--acc-soft);
+  }
+  .nf-term-head {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 14px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-4);
+  }
+  .nf-term-head .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--line-3);
+  }
+  .nf-term-title { flex: 1; text-align: center; }
+  .nf-term-status { color: #ff8a8a; }
+  .nf-term-body {
+    margin: 0;
+    padding: 18px 16px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--c-plain);
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .nf-term-body .c { color: var(--c-com); }
+  .nf-term-body .fn { color: var(--c-fn); }
+  .nf-term-body .s { color: var(--c-str); }
+  .nf-term-body .k { color: var(--acc-2); }
+  .nf-term-body .n { color: #ff8a8a; }
+  .nf-term-body .num { color: var(--c-num); }
+
+  /* ── suggestion grid ── */
+  .nf-suggest {
+    position: relative;
+    z-index: 1;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px 96px;
+  }
+  .nf-suggest-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.3px;
+  }
+  .nf-suggest-lead { color: var(--acc-2); }
+  .nf-rule { flex: 1; height: 1px; background: var(--line-2); }
+  .nf-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .nf-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    text-decoration: none;
+    transition: border-color 0.18s, transform 0.18s, background 0.18s;
+  }
+  .nf-card:hover {
+    border-color: var(--acc-3);
+    background: var(--surface-2);
+    transform: translateY(-2px);
+  }
+  .nf-key {
+    align-self: flex-start;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10.5px;
+    color: var(--acc-2);
+    background: var(--acc-soft);
+    padding: 3px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+  .nf-name {
+    font-family: 'Geist', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .nf-sub {
+    font-size: 12.5px;
+    color: var(--ink-3);
+    flex: 1;
+  }
+  .nf-arrow {
+    color: var(--ink-4);
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    transition: transform 0.18s, color 0.18s;
+  }
+  .nf-card:hover .nf-arrow { transform: translateX(3px); color: var(--acc-2); }
+
+  @media (max-width: 860px) {
+    .nf-hero {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 64px 20px 48px;
+    }
+    .nf-cards { grid-template-columns: 1fr 1fr; }
+    .nf-suggest { padding: 0 20px 64px; }
+  }
+  @media (max-width: 520px) {
+    .nf-cards { grid-template-columns: 1fr; }
+    .nf-lede { font-size: 16px; }
+  }
+</style>

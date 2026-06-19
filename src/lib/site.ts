@@ -20,7 +20,11 @@ export const RUNE_CLI_REPO_URL = `https://github.com/${RUNE_CLI_REPO}`;
 export const RUNE_ISSUES_URL      = `${RUNE_REPO_URL}/issues/new`;
 export const RUNE_DISCUSSIONS_URL = `${RUNE_REPO_URL}/discussions`;
 export const RUNE_GUIDES_URL      = `${RUNE_REPO_URL}/tree/main/docs/guides`;
-export const RUNE_DOCS_BLOB_BASE  = `${RUNE_REPO_URL}/blob/main/docs/guides`;
+// Blob base for any file in the repo. `RUNE_DOCS_BLOB_BASE` narrows it to the
+// guides dir for on-site source links; `RUNE_REPO_BLOB_BASE` covers repo-root
+// files (CHANGELOG.md, AGENTS.md, …) that guides occasionally link out to.
+export const RUNE_REPO_BLOB_BASE  = `${RUNE_REPO_URL}/blob/main`;
+export const RUNE_DOCS_BLOB_BASE  = `${RUNE_REPO_BLOB_BASE}/docs/guides`;
 export const RUNE_DOCS_EDIT_BASE  = `${RUNE_REPO_URL}/edit/main/docs/guides`;
 export const RUNE_MILESTONES_URL  = `${RUNE_REPO_URL}/milestones`;
 export const RUNE_MILESTONES_NEW_URL = `${RUNE_REPO_URL}/milestones/new`;
