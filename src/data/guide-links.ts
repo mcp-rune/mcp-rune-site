@@ -30,7 +30,7 @@ export const SOURCE_ONLY: string[] = [
   // them in SECTIONS automatically flips its links to the on-site page and
   // it can be removed from this list.
 
-  // The 10 summary-strategy detail pages under one directory.
+  // The 9 summary-strategy detail pages under one directory.
   '09-retrieval-and-graphrag/summary-strategies/',
 
   // Standalone pages not yet on the site.
