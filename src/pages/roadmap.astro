@@ -12,13 +12,11 @@ import RoadmapSkeleton from '../components/roadmap/RoadmapSkeleton.astro';
 import RoadmapSuggestedStarters from '../components/roadmap/RoadmapSuggestedStarters.astro';
 import RoadmapInfluenceClose from '../components/roadmap/RoadmapInfluenceClose.astro';
 import { fetchRoadmap } from '../lib/github-milestones';
+import { RUNE_REPO } from '../lib/site';
 
 const token = import.meta.env.GITHUB_TOKEN;
-const data = await fetchRoadmap({
-  owner: 'mcp-rune',
-  repo: 'mcp-rune',
-  token,
-});
+const [owner, repo] = RUNE_REPO.split('/');
+const data = await fetchRoadmap({ owner, repo, token });
 const isEmpty = !data || data.milestones.length === 0;
 
 // In populated mode, decide which milestone block gets which section eyebrow.

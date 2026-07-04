@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { UMAMI_SRC, UMAMI_WEBSITE_ID } from '../lib/site';
 
 interface Props {
   title: string;
@@ -15,6 +16,12 @@ const { title, description = 'mcp-rune — the framework for model-driven MCP se
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {/* Umami — self-hosted, cookieless analytics (no consent banner needed).
+        Production only, so `astro dev` doesn't pollute stats. is:inline keeps
+        Astro from bundling the third-party tag. Config: src/lib/site.ts */}
+    {import.meta.env.PROD && (
+      <script is:inline defer src={UMAMI_SRC} data-website-id={UMAMI_WEBSITE_ID}></script>
+    )}
   </head>
   <body>
     <slot />

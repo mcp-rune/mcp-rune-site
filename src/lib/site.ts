@@ -1,6 +1,11 @@
-// Single source of truth for all project identity, package names, and
-// community links. Any component that references the GitHub repo, npm package,
-// or social channels should import from here — never hardcode.
+// Single source of truth for all site-wide configuration and project identity:
+// the site origin, package names, GitHub/community links, and web analytics.
+// Anything that references these must import from here — never hardcode a URL,
+// repo slug, package name, or ID in a component or page.
+
+// --- this site ---
+// Canonical origin. Consumed by astro.config.mjs (`site:`) for absolute URLs.
+export const SITE_URL = 'https://mcp-rune.dev';
 
 // --- npm ---
 export const NPM_PACKAGE   = '@mcp-rune/mcp-rune';
@@ -19,6 +24,10 @@ export const RUNE_REPO_BRANCH = 'master';
 // scaffolder source or its README use these; do not reuse RUNE_REPO_URL.
 export const RUNE_CLI_REPO     = 'mcp-rune/mcp-rune-cli';
 export const RUNE_CLI_REPO_URL = `https://github.com/${RUNE_CLI_REPO}`;
+
+// RFCs (roadmap shaping) live in their own repo.
+export const RUNE_RFCS_REPO    = 'mcp-rune/rfcs';
+export const RUNE_RFCS_URL      = `https://github.com/${RUNE_RFCS_REPO}`;
 
 // GitHub sub-URLs derived so a repo rename is a one-line change.
 export const RUNE_ISSUES_URL      = `${RUNE_REPO_URL}/issues/new`;
@@ -47,3 +56,11 @@ export const STAR_THRESHOLD = 50;
 // answers. Never fabricated — keep at 0 until the repo genuinely passes the
 // threshold and SSR-ing the real number becomes worth the build-time cost.
 export const STAR_SEED = 0;
+
+// --- web analytics ---
+// Umami is self-hosted (infra repo) at analytics.dsaenz.dev — cookieless, so no
+// consent banner is required. The tracker <script> lives in BaseLayout and
+// renders only in production builds (`import.meta.env.PROD`), so `astro dev`
+// never sends events. These values are public — they ship in the client tag.
+export const UMAMI_SRC        = 'https://analytics.dsaenz.dev/script.js';
+export const UMAMI_WEBSITE_ID = '99b34468-6fa3-4643-aa79-c36cd177aa2e';
