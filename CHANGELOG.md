@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.1] - 2026-07-04
+
+> Adds cookieless web analytics and consolidates every committed config value into `src/lib/site.ts`. The Umami tracker renders only in production builds; identity constants (site origin, GitHub repo/branch, npm package, analytics) now have exactly one home, and a page/component audit removed every remaining hardcoded `mcp-rune/…` URL.
+
+### Added
+
+- **Web analytics (Umami).** A prod-gated `<script is:inline>` in `src/layouts/BaseLayout.astro` loads the self-hosted, cookieless Umami tracker (`analytics.dsaenz.dev`) — no consent banner needed. Gated on `import.meta.env.PROD`, so `astro dev` never sends events. Config (`UMAMI_SRC`, `UMAMI_WEBSITE_ID`) lives in `src/lib/site.ts`.
+- **Configuration** section in `README.md` documenting every variable the site reads — the env `GITHUB_TOKEN`, the `src/lib/site.ts` constants, the `vendor/mcp-rune` submodule, and the Node version — each with its source file and required/optional status.
+
+### Changed
+
+- **All committed config consolidated into `src/lib/site.ts`.** Added `SITE_URL` (now imported by `astro.config.mjs` instead of an inline literal) and `RUNE_RFCS_REPO` / `RUNE_RFCS_URL`. A page/component audit rewired every hardcoded identity value to import from `site.ts`: `roadmap.astro` derives owner/repo from `RUNE_REPO`; `RoadmapSyncCard.astro` and `src/lib/github-milestones.ts` build the milestones source from `RUNE_REPO`; `RoadmapInfluenceClose.astro` uses `RUNE_RFCS_REPO` / `RUNE_REPO`. A short-lived `src/data/analytics.ts` was folded into `site.ts` and removed.
+- `README.md`: Node requirement corrected to `22.12+` (matching `package.json` `engines`) and the required `git submodule update --init` step added to the Develop instructions.
+
 ## [0.12.0] - 2026-06-19
 
 > Adds a real 404 page, makes broken internal doc links impossible to ship, and publishes the two "About" guides. Guides are authored in the `mcp-rune` submodule with relative `.md` links (correct for GitHub/terminal); those were passed through unchanged and 404'd on the site (`/docs/05-apps/mcp-apps.md` instead of `/docs/mcp-apps/`). A build-time rewriter now maps each to its real destination, and a fail-closed gate aborts the build on any link that resolves to nothing. The submodule moves to master `bcfaaae`, which carries the upstream dead-link fix (mcp-rune#341).
@@ -23,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`vendor/mcp-rune`** — submodule pointer moved to master `bcfaaae`, which includes the upstream dead-link fix (mcp-rune#341: 5 "Attribute Kinds" links repointed to `02-the-model/attributes-and-kinds.md` after the Ch I–II reorg moved the page).
 - **`AGENTS.md`** — new "Cross-guide links" section documenting the authoring contract, the rewrite, and the fail-closed gate.
 
+[0.12.1]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/mcp-rune/mcp-rune-site/compare/v0.11.3...v0.12.0
 
 ## [0.11.3] - 2026-06-10

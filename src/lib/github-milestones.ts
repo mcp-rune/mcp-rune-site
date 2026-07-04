@@ -5,6 +5,8 @@
 // researching / blocked). Issues without one are filtered out — the open/closed
 // state of the issue does not promote it onto the page.
 
+import { RUNE_REPO } from './site';
+
 export type RoadmapStatus =
   | 'shipped'
   | 'progress'
@@ -160,7 +162,7 @@ export function mapMilestonesToRoadmap(
   issuesByMilestone: Map<number, GithubIssue[]>,
   opts: { source?: string; now?: Date } = {},
 ): RoadmapData {
-  const source = opts.source ?? 'github.com/mcp-rune/mcp-rune/milestones';
+  const source = opts.source ?? `github.com/${RUNE_REPO}/milestones`;
   const fetchedAt = (opts.now ?? new Date()).toISOString();
 
   const open = milestones

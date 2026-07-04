@@ -4,13 +4,14 @@ import remarkCodePairs from './src/lib/remark-code-pairs.mjs';
 import remarkIllustrations from './src/lib/remark-illustrations.mjs';
 import remarkDocLinks from './src/lib/remark-doc-links.mjs';
 import docLinksCheck from './src/lib/astro-doc-links-check.mjs';
+import { SITE_URL } from './src/lib/site';
 
 export default defineConfig({
   // docLinksCheck fails `astro build`/`astro dev` at startup if any published
   // guide has an unresolved cross-guide link (the hard gate behind the
   // remark-doc-links rewriter — see src/lib/astro-doc-links-check.mjs).
   integrations: [react(), docLinksCheck()],
-  site: 'https://mcp-rune.dev',
+  site: SITE_URL,
   // We don't ship any images yet; sidestep the sharp dependency at build time.
   image: {
     service: { entrypoint: 'astro/assets/services/noop' },

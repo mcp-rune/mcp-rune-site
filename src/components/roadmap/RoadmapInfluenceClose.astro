@@ -1,9 +1,11 @@
 ---
+import { RUNE_REPO, RUNE_RFCS_REPO } from '../../lib/site';
+
 const CARDS: Array<{ title: string; body: string; link: string }> = [
   {
     title: 'Open an RFC',
     body: 'For shaping items in this list. Discussed in the open, decided by the maintainers + founding adopters.',
-    link: '↗ github.com/mcp-rune/rfcs',
+    link: `↗ github.com/${RUNE_RFCS_REPO}`,
   },
   {
     title: 'Vote on milestones',
@@ -13,7 +15,7 @@ const CARDS: Array<{ title: string; body: string; link: string }> = [
   {
     title: 'File an issue',
     body: 'Bugs, papercuts, and small papercuts. Use the milestone field to suggest a release.',
-    link: '↗ github.com/mcp-rune/mcp-rune/issues',
+    link: `↗ github.com/${RUNE_REPO}/issues`,
   },
 ];
 ---

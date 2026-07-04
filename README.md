@@ -12,13 +12,36 @@ each guide on disk.
 ## Develop
 
 ```bash
+git submodule update --init   # fetch the guides source (vendor/mcp-rune)
 npm install
 npm run dev      # http://localhost:4321
 npm run build    # → dist/
 npm run preview  # serve the built dist/
 ```
 
-Requires Node 20+.
+Requires Node **22.12+** (`package.json` `engines`). See [Configuration](#configuration) for every variable the site reads.
+
+## Configuration
+
+Every variable the site needs to build and run properly. Nearly all of it is committed constants in **`src/lib/site.ts`** — the single source of truth, imported everywhere (never hardcode these in a page or component). Only `GITHUB_TOKEN` comes from the environment; the submodule and Node version are toolchain requirements.
+
+| Variable | Defined in | Purpose | Required? |
+|----------|-----------|---------|-----------|
+| `GITHUB_TOKEN` | environment (build-time) | Fine-grained PAT read by `src/pages/roadmap.astro` (`import.meta.env.GITHUB_TOKEN`) to fetch milestones + issues from `mcp-rune/mcp-rune` for the **/roadmap** page. | Optional — without it, `/roadmap` renders its empty state and the build still succeeds. |
+| `UMAMI_WEBSITE_ID` | `src/lib/site.ts` | Umami website UUID (from the Umami dashboard) for cookieless **web analytics**. | Optional |
+| `UMAMI_SRC` | `src/lib/site.ts` | URL of the self-hosted Umami tracker script (`https://analytics.dsaenz.dev/script.js`). | Optional (pair with `UMAMI_WEBSITE_ID`) |
+| `SITE_URL` | `src/lib/site.ts` | Canonical site origin (`https://mcp-rune.dev`), imported by `astro.config.mjs` (`site:`) for absolute URLs. | Required — change when deploying elsewhere. |
+| `RUNE_REPO` | `src/lib/site.ts` | Framework repo `owner/repo` (`mcp-rune/mcp-rune`); every GitHub source / issue / discussion / milestone link derives from it. | Required |
+| `RUNE_REPO_BRANCH` | `src/lib/site.ts` | Branch the guide **source / tree / edit** links resolve against (`master`). Must match the framework repo's actual default branch — a wrong value 404s every source link. | Required |
+| `vendor/mcp-rune` submodule | git submodule | Source of every guide markdown, symlinked into `src/content/guides`. | **Required** — `git submodule update --init`, or the build fails on the dangling symlink. |
+| Node | `package.json` `engines` | Build/runtime Node version: `>=22.12.0`. | **Required** |
+
+Notes:
+
+- **`GITHUB_TOKEN`** needs only **Issues: Read-only** + **Metadata: Read-only** scoped to `mcp-rune/mcp-rune`. It is read at build time and baked into the static HTML — it never reaches the client. In production it is injected as a Kamal build secret (`config/deploy.yml` → `.kamal/secrets`); see [AGENTS.md](./AGENTS.md).
+- **Web analytics** (`UMAMI_*`) render only when `import.meta.env.PROD` is true, so `astro dev` never sends events. Point them at your own Umami instance if you fork the site.
+- **`src/lib/site.ts` holds every committed config value**: site origin (`SITE_URL`), GitHub repo + branch (`RUNE_REPO`, `RUNE_REPO_BRANCH`), RFCs/CLI repos, npm package (`NPM_PACKAGE`), web analytics (`UMAMI_*`), Discord/email, and star thresholds. Every page and component imports from it, and the derived source/tree/edit/issue/milestone URLs all recompute from those roots — so a fork or rebrand is a one-file edit. `RUNE_REPO_BRANCH` is the one most likely to bite if wrong (a stale value 404s every guide source link).
+- **Version labels** (`src/data/version.ts`) are *derived* from `package.json` (site) and `vendor/mcp-rune/package.json` (framework) — no manual configuration.
 
 ## Layout
 

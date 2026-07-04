@@ -1,5 +1,6 @@
 ---
 import type { RoadmapData } from '../../lib/github-milestones';
+import { RUNE_REPO } from '../../lib/site';
 
 interface Props {
   data: RoadmapData | null;
@@ -7,7 +8,7 @@ interface Props {
 const { data } = Astro.props;
 
 const connected = data !== null;
-const source = data?.source ?? 'github.com/mcp-rune/mcp-rune/milestones';
+const source = data?.source ?? `github.com/${RUNE_REPO}/milestones`;
 const milestonesCount = data ? String(data.milestones.length) : '—';
 const openIssues = data ? String(data.openIssueCount) : '—';
 const lastSync = data ? 'just now' : 'never';
