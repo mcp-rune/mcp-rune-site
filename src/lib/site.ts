@@ -10,6 +10,10 @@ export const NPM_CREATE    = '@mcp-rune/create';
 // --- GitHub repo ---
 export const RUNE_REPO     = 'mcp-rune/mcp-rune';
 export const RUNE_REPO_URL = `https://github.com/${RUNE_REPO}`;
+// Default branch of the framework repo. Source/tree/edit links resolve against
+// it, so it must track the repo's actual default branch (`master`) — pointing
+// at a nonexistent `main` 404s every guide source link.
+export const RUNE_REPO_BRANCH = 'master';
 
 // The CLI scaffolder lives in its own repo. Site CTAs that point at the
 // scaffolder source or its README use these; do not reuse RUNE_REPO_URL.
@@ -19,13 +23,13 @@ export const RUNE_CLI_REPO_URL = `https://github.com/${RUNE_CLI_REPO}`;
 // GitHub sub-URLs derived so a repo rename is a one-line change.
 export const RUNE_ISSUES_URL      = `${RUNE_REPO_URL}/issues/new`;
 export const RUNE_DISCUSSIONS_URL = `${RUNE_REPO_URL}/discussions`;
-export const RUNE_GUIDES_URL      = `${RUNE_REPO_URL}/tree/main/docs/guides`;
+export const RUNE_GUIDES_URL      = `${RUNE_REPO_URL}/tree/${RUNE_REPO_BRANCH}/docs/guides`;
 // Blob base for any file in the repo. `RUNE_DOCS_BLOB_BASE` narrows it to the
 // guides dir for on-site source links; `RUNE_REPO_BLOB_BASE` covers repo-root
 // files (CHANGELOG.md, AGENTS.md, …) that guides occasionally link out to.
-export const RUNE_REPO_BLOB_BASE  = `${RUNE_REPO_URL}/blob/main`;
+export const RUNE_REPO_BLOB_BASE  = `${RUNE_REPO_URL}/blob/${RUNE_REPO_BRANCH}`;
 export const RUNE_DOCS_BLOB_BASE  = `${RUNE_REPO_BLOB_BASE}/docs/guides`;
-export const RUNE_DOCS_EDIT_BASE  = `${RUNE_REPO_URL}/edit/main/docs/guides`;
+export const RUNE_DOCS_EDIT_BASE  = `${RUNE_REPO_URL}/edit/${RUNE_REPO_BRANCH}/docs/guides`;
 export const RUNE_MILESTONES_URL  = `${RUNE_REPO_URL}/milestones`;
 export const RUNE_MILESTONES_NEW_URL = `${RUNE_REPO_URL}/milestones/new`;
 
